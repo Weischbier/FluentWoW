@@ -1,0 +1,53 @@
+name: Control Request
+description: Request a new WinUI control to be ported to WoW
+title: "[Control]: "
+labels: ["enhancement", "new-control"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request a WinUI control to be ported to WinUILib.
+
+  - type: input
+    id: control-name
+    attributes:
+      label: WinUI Control Name
+      description: The official WinUI 3 control name
+      placeholder: "NavigationView"
+    validations:
+      required: true
+
+  - type: input
+    id: winui-docs
+    attributes:
+      label: WinUI Documentation Link
+      description: Link to the WinUI control docs on learn.microsoft.com
+      placeholder: "https://learn.microsoft.com/windows/apps/design/controls/navigationview"
+    validations:
+      required: false
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: How would you use this control in a WoW addon?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this control for your addon?
+      options:
+        - Nice to have
+        - Important — I have a workaround
+        - Critical — blocking my addon
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Any notes about WoW-specific challenges or desired adaptations.

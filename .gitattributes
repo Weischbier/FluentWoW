@@ -1,0 +1,25 @@
+# Normalize line endings to LF on commit
+* text=auto eol=lf
+
+# Lua source
+*.lua text eol=lf
+*.luacheckrc text eol=lf
+
+# XML templates
+*.xml text eol=lf
+
+# TOC manifests
+*.toc text eol=lf
+
+# Markdown / docs
+*.md text eol=lf
+
+# YAML
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary assets (if any textures are added later)
+*.tga binary
+*.blp binary
+*.png binary
+*.jpg binary

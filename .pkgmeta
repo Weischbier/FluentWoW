@@ -1,0 +1,24 @@
+package-as: WinUILib
+
+enable-nolib-creation: no
+
+ignore:
+  - .help
+  - .help/**
+  - .docs
+  - .docs/**
+  - .vscode
+  - .vscode/**
+  - .github
+  - .github/**
+  - .luacheckrc
+  - .gitattributes
+  - .gitignore
+  - ARCHITECTURE.md
+  - WinUILib-Gallery
+
+externals:
+  WinUILib/Libs/Ace3: https://repos.curseforge.com/wow/ace3/trunk
+
+move-folders:
+  WinUILib/WinUILib: WinUILib

@@ -1,0 +1,28 @@
+# ==== WinUILib .gitignore ====
+
+# Local reference materials (Blizzard source, WinUI source, Ace3, etc.)
+.help/
+
+# VS Code personal config
+.vscode/mcp.json
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+._*
+
+# Lua tooling
+luac.out
+*.luac
+
+# BigWigs packager output
+.release/
+.pkgmeta.bak
+
+# Editor swap / backup
+*~
+*.swp
+*.swo
+*.bak
+*.orig
