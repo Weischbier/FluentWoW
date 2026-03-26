@@ -1,0 +1,66 @@
+## Interface: 110002
+## Title: WinUILib
+## Notes: WinUI-inspired UI framework for World of Warcraft addon developers.
+## Version: 1.0.0
+## Author: WinUILib Contributors
+## X-Category: Library
+## X-License: MIT
+## DefaultState: enabled
+## LoadOnDemand: 0
+
+# Core runtime
+Core/Bootstrap.lua
+Core/Utils.lua
+Core/EventBus.lua
+Core/StateMachine.lua
+Core/FramePool.lua
+
+# Token / theme system
+Tokens/Registry.lua
+Tokens/DefaultTheme.lua
+
+# Base control mixin
+Controls/Base/ControlBase.lua
+
+# Controls – XML templates first, then behaviour
+Controls/Button/Button.xml
+Controls/Button/Button.lua
+Controls/CheckBox/CheckBox.xml
+Controls/CheckBox/CheckBox.lua
+Controls/RadioButton/RadioButton.xml
+Controls/RadioButton/RadioButton.lua
+Controls/ToggleSwitch/ToggleSwitch.xml
+Controls/ToggleSwitch/ToggleSwitch.lua
+Controls/TextBlock/TextBlock.xml
+Controls/TextBlock/TextBlock.lua
+Controls/TextBox/TextBox.xml
+Controls/TextBox/TextBox.lua
+Controls/Slider/Slider.xml
+Controls/Slider/Slider.lua
+Controls/ProgressBar/ProgressBar.xml
+Controls/ProgressBar/ProgressBar.lua
+Controls/ComboBox/ComboBox.xml
+Controls/ComboBox/ComboBox.lua
+Controls/InfoBar/InfoBar.xml
+Controls/InfoBar/InfoBar.lua
+Controls/ContentDialog/ContentDialog.xml
+Controls/ContentDialog/ContentDialog.lua
+Controls/Expander/Expander.xml
+Controls/Expander/Expander.lua
+Controls/TabView/TabView.xml
+Controls/TabView/TabView.lua
+Controls/ScrollFrame/ScrollFrame.xml
+Controls/ScrollFrame/ScrollFrame.lua
+
+# Layout primitives
+Layout/StackLayout.xml
+Layout/StackLayout.lua
+
+# Motion helpers
+Motion/Motion.lua
+
+# Settings controls
+Settings/SettingsCard.xml
+Settings/SettingsCard.lua
+Settings/SettingsExpander.xml
+Settings/SettingsExpander.lua

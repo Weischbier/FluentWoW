@@ -1,0 +1,62 @@
+<!-- WinUILib – Controls/ProgressBar/ProgressBar.xml
+     Design reference: WinUI ProgressBar, ProgressRing
+     https://learn.microsoft.com/windows/apps/design/controls/progress-controls
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- Determinate horizontal progress bar -->
+    <Frame name="WUILProgressBarTemplate" virtual="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_Track" setAllPoints="true">
+                    <Color r="0.22" g="0.22" b="0.24" a="1"/>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <!-- Fill – width driven by Lua -->
+                <Texture name="$parent_Fill">
+                    <Size x="0" y="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="BOTTOMLEFT"/>
+                    </Anchors>
+                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Size x="200" y="4"/>
+        <Scripts>
+            <OnLoad        function="WUILProgressBar_OnLoad"/>
+            <OnSizeChanged function="WUILProgressBar_OnSizeChanged"/>
+        </Scripts>
+    </Frame>
+
+    <!-- Indeterminate ("paused" shimmer) variant -->
+    <Frame name="WUILProgressBarIndeterminateTemplate" virtual="true"
+           inherits="WUILProgressBarTemplate">
+        <Scripts>
+            <OnLoad function="WUILProgressBarIndeterminate_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+    <!-- ProgressRing / spinner – rotating animation frame -->
+    <Frame name="WUILProgressRingTemplate" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <!-- Spinner arc segments drawn as textures; rotated by Lua -->
+                <Texture name="$parent_Arc1">
+                    <Size x="24" y="24"/>
+                    <Anchors><Anchor point="CENTER"/></Anchors>
+                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Size x="32" y="32"/>
+        <Scripts>
+            <OnLoad   function="WUILProgressRing_OnLoad"/>
+            <OnShow   function="WUILProgressRing_OnShow"/>
+            <OnHide   function="WUILProgressRing_OnHide"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

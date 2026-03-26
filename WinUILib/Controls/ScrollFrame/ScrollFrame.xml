@@ -1,0 +1,59 @@
+<!-- WinUILib – Controls/ScrollFrame/ScrollFrame.xml
+     Design reference: WinUI ScrollViewer
+     https://learn.microsoft.com/windows/apps/design/controls/scroll-controls
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <Frame name="WUILScrollFrameTemplate" virtual="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.10" g="0.10" b="0.11" a="0"/>
+                </Texture>
+            </Layer>
+            <!-- Scrollbar track -->
+            <Layer level="OVERLAY">
+                <Texture name="$parent_ScrollTrack">
+                    <Size x="4" y="1"/>
+                    <Anchors>
+                        <Anchor point="TOPRIGHT"    x="-2" y="-4"/>
+                        <Anchor point="BOTTOMRIGHT" x="-2" y="4"/>
+                    </Anchors>
+                    <Color r="0.22" g="0.22" b="0.24" a="1"/>
+                </Texture>
+                <!-- Scrollbar thumb (height driven by Lua) -->
+                <Texture name="$parent_ScrollThumb">
+                    <Size x="4" y="40"/>
+                    <Anchors><Anchor point="TOPRIGHT" x="-2" y="-4"/></Anchors>
+                    <Color r="0.50" g="0.50" b="0.55" a="0.8"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <!-- The WoW ScrollFrame widget -->
+        <ScrollFrame name="$parent_Scroll">
+            <Anchors>
+                <Anchor point="TOPLEFT"/>
+                <Anchor point="BOTTOMRIGHT" x="-8" y="0"/>
+            </Anchors>
+            <!-- Scroll child must be sized in Lua -->
+            <ScrollChild>
+                <Frame name="$parent_Child">
+                    <Size x="1" y="1"/>
+                </Frame>
+            </ScrollChild>
+            <Scripts>
+                <OnVerticalScroll function="WUILScrollFrame_OnScroll"/>
+                <OnScrollRangeChanged function="WUILScrollFrame_OnRangeChanged"/>
+                <OnMouseWheel function="WUILScrollFrame_OnMouseWheel"/>
+            </Scripts>
+        </ScrollFrame>
+
+        <Size x="300" y="200"/>
+
+        <Scripts>
+            <OnLoad function="WUILScrollFrame_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

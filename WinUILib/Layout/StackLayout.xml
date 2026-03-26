@@ -1,0 +1,24 @@
+<!-- WinUILib – Layout/StackLayout.xml
+     Design reference: WinUI StackPanel
+     https://learn.microsoft.com/windows/apps/design/layout/layout-panels
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- Vertical stack container -->
+    <Frame name="WUILStackLayoutTemplate" virtual="true">
+        <Size x="300" y="1"/>
+        <Scripts>
+            <OnLoad        function="WUILStackLayout_OnLoad"/>
+            <OnSizeChanged function="WUILStackLayout_OnSizeChanged"/>
+        </Scripts>
+    </Frame>
+
+    <!-- Horizontal stack container -->
+    <Frame name="WUILHStackLayoutTemplate" virtual="true">
+        <Size x="1" y="32"/>
+        <Scripts>
+            <OnLoad function="WUILHStackLayout_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

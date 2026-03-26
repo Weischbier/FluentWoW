@@ -1,0 +1,60 @@
+<!-- WinUILib – Controls/ToggleSwitch/ToggleSwitch.xml
+     Design reference: WinUI ToggleSwitch
+     https://learn.microsoft.com/windows/apps/design/controls/toggleswitch
+     A pill-track with a thumb circle that slides left/right.
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <Button name="WUILToggleSwitchTemplate" virtual="true"
+            enableMouse="true">
+
+        <Layers>
+            <!-- Track (pill background) -->
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_Track">
+                    <Size x="40" y="22"/>
+                    <Anchors><Anchor point="LEFT" x="0" y="0"/></Anchors>
+                    <Color r="0.28" g="0.28" b="0.32" a="1"/>
+                </Texture>
+                <!-- Track border line -->
+                <Texture name="$parent_TrackBorder">
+                    <Size x="40" y="22"/>
+                    <Anchors><Anchor point="LEFT" x="0" y="0"/></Anchors>
+                    <Color r="0.50" g="0.50" b="0.55" a="0.6"/>
+                </Texture>
+            </Layer>
+            <!-- Thumb -->
+            <Layer level="OVERLAY">
+                <Texture name="$parent_Thumb">
+                    <Size x="14" y="14"/>
+                    <Anchors>
+                        <!-- Positioned by Lua based on On/Off state -->
+                        <Anchor point="LEFT" x="4" y="0"/>
+                    </Anchors>
+                    <Color r="0.85" g="0.85" b="0.88" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <!-- "On" / "Off" header label (optional, to the right of track) -->
+        <FontString name="$parent_Label" inherits="GameFontNormal"
+                    justifyH="LEFT" justifyV="MIDDLE">
+            <Anchors>
+                <Anchor point="LEFT"  x="48" y="0"/>
+                <Anchor point="RIGHT" x="0"  y="0"/>
+            </Anchors>
+            <Color r="0.85" g="0.85" b="0.88"/>
+        </FontString>
+
+        <Size x="200" y="24"/>
+
+        <Scripts>
+            <OnLoad       function="WUILToggleSwitch_OnLoad"/>
+            <OnEnter      function="WUILToggleSwitch_OnEnter"/>
+            <OnLeave      function="WUILToggleSwitch_OnLeave"/>
+            <OnMouseDown  function="WUILToggleSwitch_OnMouseDown"/>
+            <OnClick      function="WUILToggleSwitch_OnClick"/>
+        </Scripts>
+    </Button>
+
+</Ui>
