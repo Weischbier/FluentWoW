@@ -32,6 +32,13 @@ applyTo: "WinUILib/Core/**"
 - `Release()` hides the frame and resets it
 - All list-like controls (ComboBox dropdown, future ListView, GridView) MUST use FramePool
 
+## Vendored Libraries
+
+- Vendored libs (`WinUILib/Libs/`) load BEFORE Core in the TOC
+- Core modules must NOT depend on vendored libs directly (Core is the lowest layer)
+- Other modules (Controls, Motion, Settings) may use vendored libs freely
+- Vendored lib files must NOT be modified — use as-is
+
 ## Prohibited Actions in Core/
 
 - No `CreateFrame()` calls in Core modules (except FramePool internals)

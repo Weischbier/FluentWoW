@@ -19,6 +19,13 @@ applyTo: "WinUILib/Layout/**"
 - Width must be set explicitly on vertical stacks; height is computed
 - Height must be set explicitly on horizontal stacks; width is computed
 
+## Pixel-Fidelity
+
+- Gap and padding values must match the WinUI design spec exactly
+- Cross-reference `.docs/DesignSpecs.md` for authoritative pixel measurements
+- Cross-reference `.help/.sources/microsoft-ui-xaml-main/specs/` for layout-specific specs (e.g., WrapPanel)
+- Map pixel values to spacing tokens: 8px→`Spacing.MD`, 12px→`Spacing.LG`, 16px→`Spacing.XL`, 24px→`Spacing.XXL`
+
 ## Future Layout Containers
 
 When implementing Grid, RelativePanel, or other layout containers:

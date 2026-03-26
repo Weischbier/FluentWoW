@@ -29,8 +29,16 @@ applyTo: ".docs/**,ARCHITECTURE.md,README.md,CHANGELOG.md"
 
 - `.docs/MasterPlan.md` — root orchestration; update control inventory after each port
 - `.docs/DesignRules.md` — authoritative rules; update only for actual rule changes
+- `.docs/DesignSpecs.md` — pixel measurements from WinUI design images; update when new controls are measured
 - `.docs/PortabilityMatrix.md` — update status when controls are assessed or ported
 - `.docs/TokenReference.md` — update when tokens are added or modified
+
+## Reference Directories
+
+- `.help/.sources/microsoft-ui-xaml-main/specs/` — WinUI control specifications
+- `.help/.sources/WinUI-Gallery-main/` — WinUI Gallery XAML source + design images
+- `.help/.helper/AddOns/` — Blizzard native addon source
+- `.help/.helper/Libs/` — Original library sources (vendored into `WinUILib/Libs/`)
 
 ## Style
 

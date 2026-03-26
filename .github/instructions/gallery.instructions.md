@@ -29,6 +29,12 @@ Each Gallery page corresponds to one control family and demonstrates:
 3. Register the page in `Gallery.lua` sidebar navigation
 4. Add the page to `WinUILib-Gallery/WinUILib-Gallery.toc`
 
+## Reference Sources
+
+- WinUI Gallery XAML source: `.help/.sources/WinUI-Gallery-main/WinUIGallery/Samples/ControlPages/`
+- WinUI design images: `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/`
+- Match the WinUI Gallery page structure and demo patterns as closely as possible
+
 ## Style Guidelines
 
 - Use `WinUILib:Create*()` factory methods — never raw `CreateFrame()`

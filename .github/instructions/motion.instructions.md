@@ -21,6 +21,19 @@ applyTo: "WinUILib/Motion/**"
 - Duration values MUST come from tokens — never hardcode timing
 - Easing values MUST come from tokens when available
 
+## Vendored Motion Libraries
+
+- `WinUILib/Libs/Motion/flux.lua` — tween engine (rxi/flux) via `__MetroLib_Load()` wrapper
+- `WinUILib/Libs/Motion/knife.base.lua` — OOP base class
+- `WinUILib/Libs/Motion/knife.timer.lua` — timer utilities
+- These libs must NOT be modified — use as-is
+- Exposed as `_G.MetroLibFlux`, `_G.MetroLibKnifeBase`, `_G.MetroLibKnifeTimer`
+
+## Design Spec References
+
+- WinUI specs: `.help/.sources/microsoft-ui-xaml-main/specs/` (for animation timing specs)
+- Cross-reference WinUI connected animation specs when implementing entrance/exit transitions
+
 ## Adding New Presets
 
 1. Add the method to `Motion.lua`

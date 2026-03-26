@@ -51,6 +51,13 @@ applyTo: "**/*.xml"
 | Container/layout | `Frame` | General-purpose |
 | Status bar | `StatusBar` | Built-in fill behavior |
 
+## Pixel-Fidelity
+
+- All `<Size>`, `<Anchor>`, and `<Inset>` values in XML must match the WinUI design spec
+- Cross-reference `.docs/DesignSpecs.md` and `.help/.sources/microsoft-ui-xaml-main/specs/`
+- Map pixel values to spacing tokens where applicable (e.g., `x="16"` → `Spacing.XL`)
+- Lua applies final token-driven sizes at runtime; XML provides the initial layout
+
 ## Load Order
 
 In the TOC file, XML files MUST be listed before their corresponding Lua files:
