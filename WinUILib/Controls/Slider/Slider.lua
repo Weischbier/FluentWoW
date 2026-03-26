@@ -136,13 +136,26 @@ function WUILSlider_OnLeave(self)
     GameTooltip:Hide()
 end
 
+function WUILSlider_OnMouseDown(self)
+    local parent = self:GetParent()
+    if not parent._enabled then return end
+    parent._vsm:SetState("Pressed")
+end
+
+function WUILSlider_OnMouseUp(self)
+    local parent = self:GetParent()
+    if not parent._enabled then return end
+    local isOver = self:IsMouseOver()
+    parent._vsm:SetState(isOver and "Hover" or "Normal")
+end
+
 -------------------------------------------------------------------------------
 -- Factory
 -------------------------------------------------------------------------------
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILSlider
 function lib:CreateSlider(parent, name)
     return CreateFrame("Frame", name, parent, "WUILSliderTemplate")
 end

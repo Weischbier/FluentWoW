@@ -52,6 +52,8 @@
                     <OnValueChanged function="WUILSlider_OnValueChanged"/>
                     <OnEnter function="WUILSlider_OnEnter"/>
                     <OnLeave function="WUILSlider_OnLeave"/>
+                    <OnMouseDown function="WUILSlider_OnMouseDown"/>
+                    <OnMouseUp function="WUILSlider_OnMouseUp"/>
                 </Scripts>
             </Slider>
         </Frames>
