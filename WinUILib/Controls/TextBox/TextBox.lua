@@ -106,7 +106,9 @@ end
 
 ---@param isPassword boolean
 function TextBoxMixin:SetPassword(isPassword)
-    self.EditBox:SetPassword(isPassword)
+    -- WoW EditBox does not support native password masking.
+    -- This is a no-op placeholder; implement character masking if needed.
+    lib:Debug("TextBox:SetPassword is not supported in WoW")
 end
 
 -------------------------------------------------------------------------------
