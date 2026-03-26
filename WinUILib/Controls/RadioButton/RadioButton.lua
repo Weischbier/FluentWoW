@@ -91,6 +91,10 @@ function RadioMixin:SetGroup(group)
     end
     self._group = group
     registerInGroup(self, group)
+    -- Enforce single selection in the new group
+    if self._selected then
+        deselectGroup(group, self)
+    end
 end
 
 ---@param text string

@@ -62,7 +62,8 @@ function StateMachine:SetFlag(flag, value)
             self._preDisableState = self._state
             self:SetState("Disabled")
         else
-            self:SetState(self._preDisableState or "Normal")
+            -- Always restore to Normal; mouse events will re-enter Hover if needed
+            self:SetState("Normal")
             self._preDisableState = nil
         end
     end
