@@ -9,7 +9,9 @@ local T   = lib.Tokens
 local Mot = lib.Motion
 
 -- Header height derived from tokens: XXXL(32) + MD(8) = 40
-local HEADER_H = T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")
+local function HEADER_H()
+    return T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")
+end
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -63,32 +65,34 @@ function ExpanderMixin:SetExpanded(expanded, instant)
     if expanded then
         self.Content:Show()
         local targetH = self._contentHeight or 100
+        local hdrH = HEADER_H()
         if instant or Mot.reducedMotion then
             self.Content:SetHeight(targetH)
-            self:SetHeight(HEADER_H + targetH)
+            self:SetHeight(hdrH + targetH)
         else
             Mot:HeightTo(self.Content, 1, targetH,
                 lib.Tokens:GetNumber("Motion.Duration.Normal"),
                 function()
-                    self:SetHeight(HEADER_H + targetH)
+                    self:SetHeight(hdrH + targetH)
                 end)
             -- animate container height in parallel
-            Mot:HeightTo(self, HEADER_H, HEADER_H + targetH)
+            Mot:HeightTo(self, hdrH, hdrH + targetH)
         end
         self._vsm:SetState("Expanded")
     else
         local fromH = self.Content:GetHeight()
+        local hdrH = HEADER_H()
         if instant or Mot.reducedMotion then
             self.Content:Hide()
             self.Content:SetHeight(1)
-            self:SetHeight(HEADER_H)
+            self:SetHeight(hdrH)
         else
             Mot:HeightTo(self.Content, fromH, 1,
                 lib.Tokens:GetNumber("Motion.Duration.Normal"),
                 function()
                     self.Content:Hide()
                 end)
-            Mot:HeightTo(self, self:GetHeight(), HEADER_H)
+            Mot:HeightTo(self, self:GetHeight(), hdrH)
         end
         self._vsm:SetState("Normal")
     end
@@ -104,7 +108,7 @@ function ExpanderMixin:SetContentHeight(height)
     self._contentHeight = height
     if self._expanded then
         self.Content:SetHeight(height)
-        self:SetHeight(HEADER_H + height)
+        self:SetHeight(HEADER_H() + height)
     end
 end
 

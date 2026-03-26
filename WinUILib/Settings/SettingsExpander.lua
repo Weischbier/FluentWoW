@@ -146,6 +146,7 @@ function ExpanderMixin:SetExpanded(expanded, instant)
             Mot:HeightTo(self.Content, 1, contentH, nil, function()
                 self:SetHeight(headerH + contentH)
             end)
+            Mot:HeightTo(self, headerH, headerH + contentH)
         end
     else
         if instant or Mot.reducedMotion then
@@ -157,6 +158,7 @@ function ExpanderMixin:SetExpanded(expanded, instant)
                 self.Content:Hide()
                 self:SetHeight(headerH)
             end)
+            Mot:HeightTo(self, headerH + contentH, headerH)
         end
     end
 
