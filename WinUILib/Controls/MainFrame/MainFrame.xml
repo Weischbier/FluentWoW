@@ -18,7 +18,7 @@
         </ResizeBounds>
 
         <!-- Backdrop (surface) -->
-        <Frame parentKey="Backdrop" setAllPoints="true" frameLevel="0">
+        <Frame name="$parent_Backdrop" parentKey="Backdrop" setAllPoints="true" frameLevel="0">
             <Layers>
                 <Layer level="BACKGROUND">
                     <Texture parentKey="BG" setAllPoints="true"/>
@@ -57,7 +57,7 @@
         </Frame>
 
         <!-- Title bar (drag handle) -->
-        <Frame parentKey="TitleBar" enableMouse="true">
+        <Frame name="$parent_TitleBar" parentKey="TitleBar" enableMouse="true">
             <Size y="40"/>
             <Anchors>
                 <Anchor point="TOPLEFT"/>
@@ -90,7 +90,7 @@
         </Frame>
 
         <!-- Close button (× in title bar) -->
-        <Button parentKey="CloseBtn">
+        <Button name="$parent_CloseBtn" parentKey="CloseBtn">
             <Size x="46" y="32"/>
             <Anchors>
                 <Anchor point="TOPRIGHT" x="0" y="-4"/>
@@ -115,7 +115,7 @@
         </Button>
 
         <!-- Content area -->
-        <Frame parentKey="ContentArea">
+        <Frame name="$parent_ContentArea" parentKey="ContentArea">
             <Anchors>
                 <Anchor point="TOPLEFT" x="16" y="-40"/>
                 <Anchor point="BOTTOMRIGHT" x="-16" y="28"/>
@@ -123,7 +123,7 @@
         </Frame>
 
         <!-- Status bar -->
-        <Frame parentKey="StatusBar">
+        <Frame name="$parent_StatusBar" parentKey="StatusBar">
             <Size y="24"/>
             <Anchors>
                 <Anchor point="BOTTOMLEFT"/>
@@ -154,7 +154,7 @@
         </Frame>
 
         <!-- Resize grippers -->
-        <Frame parentKey="SizerSE" enableMouse="true">
+        <Frame name="$parent_SizerSE" parentKey="SizerSE" enableMouse="true">
             <Size x="16" y="16"/>
             <Anchors>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -165,7 +165,7 @@
             </Scripts>
         </Frame>
 
-        <Frame parentKey="SizerS" enableMouse="true">
+        <Frame name="$parent_SizerS" parentKey="SizerS" enableMouse="true">
             <Size y="8"/>
             <Anchors>
                 <Anchor point="BOTTOMLEFT"/>
@@ -177,7 +177,7 @@
             </Scripts>
         </Frame>
 
-        <Frame parentKey="SizerE" enableMouse="true">
+        <Frame name="$parent_SizerE" parentKey="SizerE" enableMouse="true">
             <Size x="8"/>
             <Anchors>
                 <Anchor point="TOPRIGHT"/>

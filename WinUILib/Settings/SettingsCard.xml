@@ -46,7 +46,7 @@
         </Layers>
 
         <!-- Action control region (right side) -->
-        <Frame parentKey="Action">
+        <Frame name="$parent_Action" parentKey="Action">
             <Size x="80" y="32"/>
             <Anchors>
                 <Anchor point="RIGHT" x="-16" y="0"/>

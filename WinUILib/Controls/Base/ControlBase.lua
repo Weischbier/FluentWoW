@@ -65,7 +65,8 @@ end
 function ControlBase:ShowTooltip()
     if not self._tooltipTitle then return end
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    GameTooltip:SetText(self._tooltipTitle, 1, 1, 1, 1, true)
+    local r, g, b = lib.Tokens:GetColor("Color.Text.Primary")
+    GameTooltip:SetText(self._tooltipTitle, r, g, b, true)
     if self._tooltipText then
         GameTooltip:AddLine(self._tooltipText, nil, nil, nil, true)
     end

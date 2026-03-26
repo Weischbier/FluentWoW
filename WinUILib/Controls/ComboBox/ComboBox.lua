@@ -150,6 +150,7 @@ function WUILComboBox_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, ComboMixin)
     self:WUILInit()
     self._items = {}
+    self.Dropdown.Scroll:SetScrollChild(self.Dropdown.Scroll.Child)
     self:OnStateChanged("Normal")
 end
 

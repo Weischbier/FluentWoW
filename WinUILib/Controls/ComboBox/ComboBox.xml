@@ -64,9 +64,6 @@
                                 <Size x="192" y="1"/>
                             </Frame>
                         </Frames>
-                        <Scripts>
-                            <OnLoad>self:SetScrollChild(self.Child)</OnLoad>
-                        </Scripts>
                     </ScrollFrame>
                 </Frames>
             </Frame>

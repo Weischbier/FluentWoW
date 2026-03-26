@@ -49,7 +49,7 @@ Gallery:RegisterPage("layout", "Layout", function(parent)
         local t = lib:CreateTextBlock(f)
         t:SetText("Content for Tab " .. i)
         t:SetPoint("TOPLEFT", 12, -12)
-        tabs[i] = { label = "Tab " .. i, content = f }
+        tabs[i] = { text = "Tab " .. i, content = f }
     end
     tv:SetTabs(tabs)
     tv:SelectTab(1)

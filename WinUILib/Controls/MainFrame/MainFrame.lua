@@ -228,16 +228,16 @@ end
 
 function WUILMainFrame_OnShow(self)
     if Mot then Mot:FadeIn(self) end
-    if self._onShow then self._onShow(self) end
+    if self._onShow then lib.Utils.SafeCall(self._onShow, self) end
 end
 
 function WUILMainFrame_OnHide(self)
     self:_SaveStatus()
-    if self._onClose then self._onClose(self) end
+    if self._onClose then lib.Utils.SafeCall(self._onClose, self) end
 end
 
 function WUILMainFrame_OnSizeChanged(self, w, h)
-    if self._onResize then self._onResize(self, w, h) end
+    if self._onResize then lib.Utils.SafeCall(self._onResize, self, w, h) end
 end
 
 -- Title bar drag

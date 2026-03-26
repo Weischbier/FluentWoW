@@ -104,7 +104,6 @@ function WUILRadioButton_OnLoad(self)
     self:WUILInit()
     self._selected = false
     self._group = "default"
-    self.Dot:SetColorTexture(1, 1, 1)
     registerInGroup(self, "default")
     self:OnStateChanged("Normal")
 end

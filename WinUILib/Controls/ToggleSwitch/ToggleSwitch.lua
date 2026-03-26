@@ -79,7 +79,6 @@ function WUILToggleSwitch_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, ToggleSwitchMixin)
     self:WUILInit()
     self._isOn = false
-    self.Thumb.Dot:SetColorTexture(1, 1, 1)
     self:OnStateChanged("Normal")
 end
 

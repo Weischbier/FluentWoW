@@ -99,7 +99,12 @@ Gallery:RegisterPage("input", "Input Controls", function(parent)
     stack:AddChild(cxTitle)
 
     local cx = lib:CreateComboBox(stack)
-    cx:SetItems({"Red", "Green", "Blue", "Yellow"})
+    cx:SetItems({
+        { text = "Red", value = "red" },
+        { text = "Green", value = "green" },
+        { text = "Blue", value = "blue" },
+        { text = "Yellow", value = "yellow" },
+    })
     cx:SetSelectedIndex(1)
     stack:AddChild(cx)
 end)

@@ -11,7 +11,7 @@
         <Size x="400" y="48"/>
 
         <!-- Header (clickable) -->
-        <Button parentKey="Header" enableMouse="true">
+        <Button name="$parent_Header" parentKey="Header" enableMouse="true">
             <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="TOPRIGHT"/>
@@ -62,7 +62,7 @@
         </Button>
 
         <!-- Content container (hidden when collapsed) -->
-        <Frame parentKey="Content" hidden="true">
+        <Frame name="$parent_Content" parentKey="Content" hidden="true">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT"/>
                 <Anchor point="RIGHT"/>

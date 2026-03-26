@@ -143,7 +143,7 @@ function ExpanderMixin:SetExpanded(expanded, instant)
         else
             self.Content:SetHeight(1)
             self:SetHeight(headerH + 1)
-            Mot:HeightTo(self.Content, contentH, nil, function()
+            Mot:HeightTo(self.Content, 1, contentH, nil, function()
                 self:SetHeight(headerH + contentH)
             end)
         end
@@ -153,15 +153,15 @@ function ExpanderMixin:SetExpanded(expanded, instant)
             self.Content:SetHeight(1)
             self:SetHeight(headerH)
         else
-            Mot:HeightTo(self.Content, 1, nil, function()
+            Mot:HeightTo(self.Content, contentH, 1, nil, function()
                 self.Content:Hide()
                 self:SetHeight(headerH)
             end)
         end
     end
 
-    self._vsm:SetFlag("Expanded", expanded)
-    if self._onToggled then self._onToggled(self, expanded) end
+    self._vsm:SetState(expanded and "Expanded" or "Normal")
+    if self._onToggled then lib.Utils.SafeCall(self._onToggled, self, expanded) end
 end
 
 ---@return boolean
@@ -249,12 +249,16 @@ end
 function WUILSettingsExpander_Header_OnEnter(self)
     local expander = self:GetParent()
     if not expander._enabled then return end
-    expander._vsm:SetFlag("Hover", true)
+    expander._vsm:SetState("Hover")
 end
 
 function WUILSettingsExpander_Header_OnLeave(self)
     local expander = self:GetParent()
-    expander._vsm:SetFlag("Hover", false)
+    if expander._expanded then
+        expander._vsm:SetState("Expanded")
+    else
+        expander._vsm:SetState("Normal")
+    end
 end
 
 -------------------------------------------------------------------------------

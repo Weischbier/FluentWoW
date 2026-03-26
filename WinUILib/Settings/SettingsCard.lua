@@ -158,11 +158,12 @@ end
 
 function WUILSettingsCard_OnEnter(self)
     if not self._enabled then return end
-    self._vsm:SetFlag("Hover", true)
+    self._vsm:SetState("Hover")
 end
 
 function WUILSettingsCard_OnLeave(self)
-    self._vsm:SetFlag("Hover", false)
+    if not self._enabled then return end
+    self._vsm:SetState("Normal")
 end
 
 function WUILSettingsCard_OnMouseDown(self)
@@ -173,7 +174,7 @@ end
 function WUILSettingsCard_OnMouseUp(self)
     if not self._enabled or not self._clickable then return end
     self._vsm:SetState("Normal")
-    if self._onClick then self._onClick(self) end
+    if self._onClick then lib.Utils.SafeCall(self._onClick, self) end
 end
 
 -------------------------------------------------------------------------------
