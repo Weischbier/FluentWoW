@@ -37,12 +37,15 @@ Always follow the `scaffold-control` skill (`.github/skills/scaffold-control/SKI
 
 1. Read the WinUI Gallery XAML for the target control
 2. Read the WinUI spec if available
-3. Use MCP tools to verify the chosen WoW widget type supports needed methods
-4. Check `.docs/PortabilityMatrix.md` — if not yet assessed, assess first
-5. Read `WinUILib/Controls/Button/Button.lua` and `Button.xml` as the reference implementation
+3. Read `.docs/DesignSpecs.md` for pixel measurements from design images
+4. View design images in `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for visual reference
+5. Use MCP tools to verify the chosen WoW widget type supports needed methods
+6. Check `.docs/PortabilityMatrix.md` — if not yet assessed, assess first
+7. Read `WinUILib/Controls/Button/Button.lua` and `Button.xml` as the reference implementation
 
 ### Code Generation Rules
 
+- **Pixel-fidelity** — every spacing, padding, margin, gap must match `.docs/DesignSpecs.md` exactly
 - **Token-driven styling** — never hardcode colors, spacing, font sizes, or durations
 - **StateMachine** — every control gets a VSM via `lib.StateMachine:New()`
 - **ControlBase mixin** — every control calls `Mixin(self, lib._controls.ControlBase)` + `self:WUILInit()`
@@ -66,6 +69,7 @@ Always follow the `scaffold-control` skill (`.github/skills/scaffold-control/SKI
 |---|---|
 | `.docs/ControlPortingGuide.md` | 8-step porting workflow |
 | `.docs/DesignRules.md` | 10 non-negotiable rules |
+| `.docs/DesignSpecs.md` | Pixel measurements from WinUI design images |
 | `.docs/PortabilityMatrix.md` | Control portability inventory |
 | `.docs/TokenReference.md` | Token catalog |
 | `WinUILib/Controls/Button/Button.lua` | Reference control implementation |
@@ -74,10 +78,18 @@ Always follow the `scaffold-control` skill (`.github/skills/scaffold-control/SKI
 | `WinUILib/Core/StateMachine.lua` | Visual state machine |
 | `WinUILib/Tokens/Registry.lua` | Token resolution API |
 
+## Vendored Libraries
+
+Available in `WinUILib/Libs/` (loaded before Core, do NOT modify):
+- **Ace3** — LibStub, AceAddon, AceDB, AceEvent, AceGUI, AceConfig, etc.
+- **Motion** — flux (tweening), knife.base, knife.timer
+- **PureLua** — 30log (OOP), dkjson (JSON), i18n, inspect, lume (utils), serpent
+
 ## Quality Bar
 
 A control is not complete until:
 - All 10 design rules pass
+- Pixel-fidelity verified against `.docs/DesignSpecs.md`
 - Token compliance checklist passes
 - Combat safety verified (if applicable)
 - Gallery page demonstrates all variants

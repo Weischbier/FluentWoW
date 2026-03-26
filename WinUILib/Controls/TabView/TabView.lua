@@ -1,202 +1,133 @@
 --- WinUILib – Controls/TabView/TabView.lua
--- Tab strip + content panel container.
--- Design ref: WinUI TabView
---
--- Public API:
---   :AddTab(title, contentFrame?)  → tabIndex
---   :SelectTab(index)
---   :GetSelectedIndex()
---   :GetContentFrame(index)        → Frame
---   :RemoveTab(index)
---   OnTabSelected(self, index, title)
+-- Tabbed navigation container with dynamic tab strip.
+-- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/tab-view
+-- States: Normal | Disabled
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
+local T   = lib.Tokens
 local Mot = lib.Motion
 
-local STRIP_H       = 36
-local TAB_MIN_W     = 80
-local TAB_MAX_W     = 160
-local TAB_PADDING   = 12
-
-local TAB_NORMAL_BG  = { 0.13, 0.13, 0.14, 1 }
-local TAB_ACTIVE_BG  = { 0.10, 0.10, 0.11, 1 }
-local TAB_HOVER_BG   = { 0.17, 0.17, 0.19, 1 }
-local LABEL_NORMAL   = { 0.68, 0.68, 0.72 }
-local LABEL_ACTIVE   = { 0.95, 0.95, 0.97 }
-
 -------------------------------------------------------------------------------
--- TabItem scripts
+-- Mixin
 -------------------------------------------------------------------------------
 
-function WUILTabItem_OnLoad(self)
-    self._tabView  = nil
-    self._tabIndex = nil
-    self._active   = false
-end
+---@class WUILTabView
+local TabViewMixin = {}
 
-function WUILTabItem_OnEnter(self)
-    if not self._active then
-        local bg = _G[self:GetName() .. "_BG"]
-        if bg then bg:SetColorTexture(table.unpack(TAB_HOVER_BG)) end
+function TabViewMixin:OnStateChanged(newState, prevState)
+    if newState == "Disabled" then
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    else
+        self:SetAlpha(1)
     end
 end
 
-function WUILTabItem_OnLeave(self)
-    if not self._active then
-        local bg = _G[self:GetName() .. "_BG"]
-        if bg then bg:SetColorTexture(table.unpack(TAB_NORMAL_BG)) end
+function TabViewMixin:_ApplyTokens()
+    self.TabStrip.StripBG:SetColorTexture(T:GetColor("Color.Surface.Base"))
+    self.ContentArea.ContentBG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+end
+
+function TabViewMixin:_RefreshTabs()
+    -- release old tab buttons
+    if self._tabPool then
+        self._tabPool:ReleaseAll()
+    else
+        self._tabPool = lib.FramePool:New("Button", self.TabStrip, "WUILTabItemTemplate")
+    end
+
+    local xOff = 0
+    for i, tab in ipairs(self._tabs) do
+        local btn = self._tabPool:Acquire()
+        btn:SetParent(self.TabStrip)
+        btn:ClearAllPoints()
+        btn:SetPoint("LEFT", self.TabStrip, "LEFT", xOff, 0)
+        btn:SetHeight(32)
+        btn.Label:SetText(tab.text or "")
+        btn._tabIndex = i
+        btn._tabView = self
+        btn.Hover:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+
+        -- auto-width based on text
+        local textWidth = btn.Label:GetStringWidth() + 24
+        btn:SetWidth(math.max(80, textWidth))
+        xOff = xOff + btn:GetWidth()
+
+        if i == self._selectedIndex then
+            btn.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+            btn.Indicator:SetColorTexture(T:GetColor("Color.Accent.Primary"))
+            btn.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
+        else
+            btn.BG:SetColorTexture(T:GetColor("Color.Surface.Base"))
+            btn.Indicator:SetColorTexture(0, 0, 0, 0)
+            btn.Label:SetTextColor(T:GetColor("Color.Text.Secondary"))
+        end
     end
 end
 
-function WUILTabItem_OnClick(self, btn)
-    if btn ~= "LeftButton" then return end
-    if self._tabView and self._tabIndex then
-        self._tabView:SelectTab(self._tabIndex)
+---@param tabs table  array of { text=string, content=Frame|nil }
+function TabViewMixin:SetTabs(tabs)
+    self._tabs = tabs
+    self._selectedIndex = #tabs > 0 and 1 or nil
+    self:_RefreshTabs()
+    self:_ShowContent()
+end
+
+---@param index integer
+function TabViewMixin:SelectTab(index)
+    if index < 1 or index > #self._tabs then return end
+    if index == self._selectedIndex then return end
+    self._selectedIndex = index
+    self:_RefreshTabs()
+    self:_ShowContent()
+    if self._onTabChanged then
+        lib.Utils.SafeCall(self._onTabChanged, self, index)
     end
+end
+
+---@return integer|nil
+function TabViewMixin:GetSelectedIndex()
+    return self._selectedIndex
+end
+
+function TabViewMixin:_ShowContent()
+    -- hide all content frames
+    for _, tab in ipairs(self._tabs) do
+        if tab.content then tab.content:Hide() end
+    end
+    -- show selected
+    if self._selectedIndex then
+        local tab = self._tabs[self._selectedIndex]
+        if tab and tab.content then
+            tab.content:SetParent(self.ContentArea)
+            tab.content:ClearAllPoints()
+            tab.content:SetAllPoints(self.ContentArea)
+            tab.content:Show()
+        end
+    end
+end
+
+---@param fn function
+function TabViewMixin:SetOnTabChanged(fn)
+    self._onTabChanged = fn
 end
 
 -------------------------------------------------------------------------------
--- TabView scripts
+-- Script handlers
 -------------------------------------------------------------------------------
 
 function WUILTabView_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, lib._controls.TabView)
+    Mixin(self, lib._controls.ControlBase, TabViewMixin)
     self:WUILInit()
-    self._tabs         = {}   -- { title, tabBtn, contentFrame }
-    self._selectedIdx  = nil
-    self._tabPool      = lib.FramePool:New("Button", self, "WUILTabItemTemplate")
+    self._tabs = {}
+    self._selectedIndex = nil
+    self:_ApplyTokens()
 end
 
--------------------------------------------------------------------------------
--- TabView mixin
--------------------------------------------------------------------------------
-
----@class WUILTabView : WUILControlBase
-local TabView = {}
-lib._controls.TabView = TabView
-
---- Adds a tab. Returns the 1-based index.
----@param title         string
----@param contentFrame  Frame?  Supply a pre-created frame; or nil to create one.
----@return integer
-function TabView:AddTab(title, contentFrame)
-    -- Create tab button
-    local btn = self._tabPool:Acquire()
-    btn._tabView  = self
-    btn._tabIndex = #self._tabs + 1
-    btn._active   = false
-    local lbl = _G[btn:GetName() .. "_Label"]
-    if lbl then
-        lbl:SetText(title or "")
-        lbl:SetTextColor(table.unpack(LABEL_NORMAL))
-    end
-
-    -- Create content frame if not provided
-    if not contentFrame then
-        contentFrame = CreateFrame("Frame", nil, self)
-        contentFrame:SetPoint("TOPLEFT",     self, "TOPLEFT",     0, -STRIP_H - 1)
-        contentFrame:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 0, 0)
-        contentFrame:Hide()
-    end
-    contentFrame:SetParent(self)
-
-    local tabEntry = { title = title, btn = btn, content = contentFrame }
-    table.insert(self._tabs, tabEntry)
-
-    -- Layout tabs
-    self:_LayoutTabs()
-
-    -- Auto-select first tab
-    if #self._tabs == 1 then
-        self:SelectTab(1)
-    end
-
-    return #self._tabs
-end
-
----@param index integer  1-based
-function TabView:SelectTab(index)
-    if index < 1 or index > #self._tabs then return end
-    local prev = self._selectedIdx
-
-    -- Deactivate previous
-    if prev and self._tabs[prev] then
-        local old = self._tabs[prev]
-        old.btn._active = false
-        local bg  = _G[old.btn:GetName() .. "_BG"]
-        local ln  = _G[old.btn:GetName() .. "_ActiveLine"]
-        local lbl = _G[old.btn:GetName() .. "_Label"]
-        if bg  then bg:SetColorTexture(table.unpack(TAB_NORMAL_BG)) end
-        if ln  then ln:Hide() end
-        if lbl then lbl:SetTextColor(table.unpack(LABEL_NORMAL)) end
-        Mot:FadeOut(old.content, 0.10)
-    end
-
-    -- Activate new
-    self._selectedIdx = index
-    local new = self._tabs[index]
-    new.btn._active = true
-    local bg  = _G[new.btn:GetName() .. "_BG"]
-    local ln  = _G[new.btn:GetName() .. "_ActiveLine"]
-    local lbl = _G[new.btn:GetName() .. "_Label"]
-    if bg  then bg:SetColorTexture(table.unpack(TAB_ACTIVE_BG)) end
-    if ln  then ln:Show() end
-    if lbl then lbl:SetTextColor(table.unpack(LABEL_ACTIVE)) end
-    Mot:FadeIn(new.content, 0.15)
-
-    if self.OnTabSelected then
-        lib.Utils.SafeCall(self.OnTabSelected, self, index, new.title)
-    end
-end
-
----@return integer?
-function TabView:GetSelectedIndex()
-    return self._selectedIdx
-end
-
----@param index integer
----@return Frame?
-function TabView:GetContentFrame(index)
-    local entry = self._tabs[index]
-    return entry and entry.content
-end
-
---- Removes a tab. Selects the nearest remaining tab.
----@param index integer
-function TabView:RemoveTab(index)
-    local entry = self._tabs[index]
-    if not entry then return end
-    self._tabPool:Release(entry.btn)
-    entry.content:Hide()
-    table.remove(self._tabs, index)
-    -- Re-number remaining tabs
-    for i, t in ipairs(self._tabs) do t.btn._tabIndex = i end
-    self:_LayoutTabs()
-    -- Reselect
-    if self._selectedIdx == index then
-        self._selectedIdx = nil
-        local newIdx = math.min(index, #self._tabs)
-        if newIdx >= 1 then self:SelectTab(newIdx) end
-    elseif self._selectedIdx and self._selectedIdx > index then
-        self._selectedIdx = self._selectedIdx - 1
-    end
-end
-
---- Repositions all tab buttons evenly across the strip.
-function TabView:_LayoutTabs()
-    local count  = #self._tabs
-    if count == 0 then return end
-    local totalW = self:GetWidth()
-    local tabW   = math.max(TAB_MIN_W, math.min(TAB_MAX_W, totalW / count))
-    for i, entry in ipairs(self._tabs) do
-        entry.btn:SetWidth(tabW)
-        entry.btn:ClearAllPoints()
-        entry.btn:SetPoint("TOPLEFT", self, "TOPLEFT", (i - 1) * tabW, 0)
-        entry.btn:SetHeight(STRIP_H)
-        entry.btn:Show()
-    end
+function WUILTabItem_OnClick(self)
+    local tabView = self._tabView
+    if not tabView or not tabView._enabled then return end
+    tabView:SelectTab(self._tabIndex)
 end
 
 -------------------------------------------------------------------------------
@@ -204,12 +135,8 @@ end
 -------------------------------------------------------------------------------
 
 ---@param parent Frame
----@param width  number?
----@param height number?
+---@param name? string
 ---@return Frame
-function lib:CreateTabView(parent, width, height)
-    local tv = CreateFrame("Frame", nil, parent, "WUILTabViewTemplate")
-    if width  then tv:SetWidth(width) end
-    if height then tv:SetHeight(height) end
-    return tv
+function lib:CreateTabView(parent, name)
+    return CreateFrame("Frame", name, parent, "WUILTabViewTemplate")
 end

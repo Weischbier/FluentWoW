@@ -1,164 +1,143 @@
 --- WinUILib – Controls/ProgressBar/ProgressBar.lua
--- Determinate / indeterminate progress bar and spinner ring.
--- Design ref: WinUI ProgressBar, ProgressRing
---
--- ProgressBar API:
---   :SetValue(0-100)   :GetValue()
---   :SetIndeterminate(bool)
---   :SetColor(r,g,b,a)
---
--- ProgressRing API:
---   :Start()  :Stop()
---
--- Combat note: OnUpdate-driven indeterminate animation is combat-safe;
--- we never touch secure frames.
+-- Determinate + indeterminate progress bar, and progress ring spinner.
+-- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/progress-controls
+-- States: Normal | Disabled
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
+local T   = lib.Tokens
 
 -------------------------------------------------------------------------------
--- ProgressBar
+-- ProgressBar Mixin
 -------------------------------------------------------------------------------
 
-function WUILProgressBar_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, lib._controls.ProgressBar)
-    self:WUILInit()
-    self._value         = 0
+---@class WUILProgressBar
+local BarMixin = {}
+
+function BarMixin:OnStateChanged(newState, prevState)
+    if newState == "Disabled" then
+        self.Bar.Track:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
+        self.Bar.Fill:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    else
+        self:SetAlpha(1)
+        self.Bar.Track:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.Bar.Fill:SetColorTexture(T:GetColor("Color.Accent.Primary"))
+    end
+end
+
+---@param value number 0-100
+function BarMixin:SetValue(value)
     self._indeterminate = false
-    self:_UpdateFill()
-end
-
-function WUILProgressBarIndeterminate_OnLoad(self)
-    WUILProgressBar_OnLoad(self)
-    self:SetIndeterminate(true)
-end
-
-function WUILProgressBar_OnSizeChanged(self)
-    self:_UpdateFill()
-end
-
----@class WUILProgressBar : WUILControlBase
-local ProgressBar = {}
-lib._controls.ProgressBar = ProgressBar
-
----@param v number  0-100
-function ProgressBar:SetValue(v)
-    self._value = math.max(0, math.min(100, v))
-    self._indeterminate = false
-    self:_StopIndeterminateAnim()
-    self:_UpdateFill()
+    self.Bar:SetValue(value)
+    self:_StopIndeterminate()
 end
 
 ---@return number
-function ProgressBar:GetValue()
-    return self._value
+function BarMixin:GetValue()
+    return self.Bar:GetValue()
 end
 
----@param on boolean
-function ProgressBar:SetIndeterminate(on)
-    self._indeterminate = on
-    if on then
-        self:_StartIndeterminateAnim()
+---@param isIndeterminate boolean
+function BarMixin:SetIndeterminate(isIndeterminate)
+    self._indeterminate = isIndeterminate
+    if isIndeterminate then
+        self:_StartIndeterminate()
     else
-        self:_StopIndeterminateAnim()
-        self:_UpdateFill()
+        self:_StopIndeterminate()
     end
 end
 
----@param r number  @param g number  @param b number  @param a number?
-function ProgressBar:SetColor(r, g, b, a)
-    local fill = _G[self:GetName() .. "_Fill"]
-    if fill then fill:SetColorTexture(r, g, b, a or 1) end
+---@param text string
+function BarMixin:SetHeader(text)
+    self.HeaderLabel:SetText(text)
+    self.HeaderLabel:Show()
 end
 
-function ProgressBar:_UpdateFill()
-    local fill  = _G[self:GetName() .. "_Fill"]
-    if not fill then return end
-    local w = self:GetWidth() or 0
-    fill:SetWidth(math.max(0, w * (self._value / 100)))
-end
-
--- Indeterminate shimmer: a ~60% fill block that oscillates left-to-right
-local IND_SPEED = 0.8   -- full track width per second
-function ProgressBar:_StartIndeterminateAnim()
-    self._indPhase = 0
-    self:SetScript("OnUpdate", function(self, elapsed)
-        if not self._indeterminate then return end
-        self._indPhase = (self._indPhase or 0) + elapsed * IND_SPEED
-        if self._indPhase > 1.6 then self._indPhase = 0 end
-        local fill = _G[self:GetName() .. "_Fill"]
-        if not fill then return end
-        local w    = self:GetWidth() or 0
-        local fw   = w * 0.4
-        -- Animate offset as a triangle wave: 0 → 1 → 0
-        local t = self._indPhase <= 0.8 and (self._indPhase / 0.8)
-                                         or (1 - (self._indPhase - 0.8) / 0.8)
-        fill:SetWidth(fw)
-        fill:ClearAllPoints()
-        fill:SetPoint("LEFT", self, "LEFT", (w - fw) * t, 0)
-        fill:SetPoint("TOP")
-        fill:SetPoint("BOTTOM")
+function BarMixin:_StartIndeterminate()
+    if self._indeterminateRunning then return end
+    self._indeterminateRunning = true
+    self._indeterminatePhase = 0
+    self:SetScript("OnUpdate", function(_, elapsed)
+        self._indeterminatePhase = (self._indeterminatePhase + elapsed * 1.5) % 2
+        local pct = self._indeterminatePhase < 1
+            and self._indeterminatePhase
+            or (2 - self._indeterminatePhase)
+        self.Bar:SetValue(pct * 100)
     end)
 end
 
-function ProgressBar:_StopIndeterminateAnim()
+function BarMixin:_StopIndeterminate()
+    if not self._indeterminateRunning then return end
+    self._indeterminateRunning = false
     self:SetScript("OnUpdate", nil)
-    local fill = _G[self:GetName() .. "_Fill"]
-    if fill then
-        fill:ClearAllPoints()
-        fill:SetPoint("TOPLEFT")
-        fill:SetPoint("BOTTOMLEFT")
-    end
 end
 
 -------------------------------------------------------------------------------
--- ProgressRing (spinner)
+-- ProgressRing Mixin
+-------------------------------------------------------------------------------
+
+---@class WUILProgressRing
+local RingMixin = {}
+
+function RingMixin:OnStateChanged(newState, prevState)
+    if newState == "Disabled" then
+        self.Ring:SetVertexColor(T:GetColor("Color.Icon.Disabled"))
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    else
+        self:SetAlpha(1)
+        self.Ring:SetVertexColor(T:GetColor("Color.Accent.Primary"))
+    end
+end
+
+---@param active boolean
+function RingMixin:SetActive(active)
+    self._active = active
+    if active then
+        self:Show()
+    else
+        self:Hide()
+    end
+end
+
+---@return boolean
+function RingMixin:IsActive()
+    return self._active == true
+end
+
+-------------------------------------------------------------------------------
+-- Script handlers — ProgressBar
+-------------------------------------------------------------------------------
+
+function WUILProgressBar_OnLoad(self)
+    Mixin(self, lib._controls.ControlBase, BarMixin)
+    self:WUILInit()
+    self._indeterminate = false
+    self._indeterminateRunning = false
+    self.Bar:SetValue(0)
+    self:OnStateChanged("Normal")
+end
+
+-------------------------------------------------------------------------------
+-- Script handlers — ProgressRing
 -------------------------------------------------------------------------------
 
 function WUILProgressRing_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, lib._controls.ProgressRing)
+    Mixin(self, lib._controls.ControlBase, RingMixin)
     self:WUILInit()
-    self._angle    = 0
-    self._spinning = false
+    self._active = true
+    self._angle = 0
+    self.Ring:SetColorTexture(1, 1, 1)
+    self:OnStateChanged("Normal")
 end
 
-function WUILProgressRing_OnShow(self)
-    self:Start()
-end
-
-function WUILProgressRing_OnHide(self)
-    self:Stop()
-end
-
----@class WUILProgressRing : WUILControlBase
-local ProgressRing = {}
-lib._controls.ProgressRing = ProgressRing
-
-local SPIN_SPEED = 360  -- degrees per second
-
-function ProgressRing:Start()
-    self._spinning = true
-    self:SetScript("OnUpdate", function(self, elapsed)
-        if not self._spinning then return end
-        self._angle = (self._angle + SPIN_SPEED * elapsed) % 360
-        local arc = _G[self:GetName() .. "_Arc1"]
-        if arc then
-            -- WoW textures don't natively rotate; we approximate with
-            -- a pulsing alpha to convey activity without GPU-expensive rotation.
-            -- Full rotation requires a TextureCoordTranslation or SharedMedia atlas.
-            local pulse = math.abs(math.sin(math.rad(self._angle)))
-            arc:SetAlpha(0.4 + 0.6 * pulse)
-        end
-    end)
-end
-
-function ProgressRing:Stop()
-    self._spinning = false
-    self:SetScript("OnUpdate", nil)
-    local arc = _G[self:GetName() .. "_Arc1"]
-    if arc then arc:SetAlpha(1) end
+function WUILProgressRing_OnUpdate(self, elapsed)
+    if not self._active then return end
+    self._angle = (self._angle + elapsed * 360) % 360
+    local ag = self.Ring:GetParent()
+    if ag and ag.SetRotation then
+        ag:SetRotation(math.rad(self._angle))
+    end
 end
 
 -------------------------------------------------------------------------------
@@ -166,19 +145,15 @@ end
 -------------------------------------------------------------------------------
 
 ---@param parent Frame
----@param width  number?
+---@param name? string
 ---@return Frame
-function lib:CreateProgressBar(parent, width)
-    local pb = CreateFrame("Frame", nil, parent, "WUILProgressBarTemplate")
-    if width then pb:SetWidth(width) end
-    return pb
+function lib:CreateProgressBar(parent, name)
+    return CreateFrame("Frame", name, parent, "WUILProgressBarTemplate")
 end
 
 ---@param parent Frame
----@param size   number?
+---@param name? string
 ---@return Frame
-function lib:CreateProgressRing(parent, size)
-    local pr = CreateFrame("Frame", nil, parent, "WUILProgressRingTemplate")
-    if size then pr:SetSize(size, size) end
-    return pr
+function lib:CreateProgressRing(parent, name)
+    return CreateFrame("Frame", name, parent, "WUILProgressRingTemplate")
 end

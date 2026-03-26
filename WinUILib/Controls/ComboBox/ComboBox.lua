@@ -1,280 +1,205 @@
 --- WinUILib – Controls/ComboBox/ComboBox.lua
--- Dropdown selection control.
--- Design ref: WinUI ComboBox
---
--- Public API:
---   :AddItem(text, value?)
---   :SetItems({{ text=, value= }, ...})
---   :SetSelectedIndex(i)
---   :SetSelectedValue(v)
---   :GetSelected()          → text, value, index
---   :ClearItems()
---   :SetPlaceholder(text)
---   :SetEnabled(bool)
---   OnSelectionChanged(self, text, value, index)
---
--- Combat note: opening the dropdown in combat is blocked (CombatLockdown).
--- The frame strata is TOOLTIP to overlay other frames when open.
+-- Dropdown selection control with combat-safe popup.
+-- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/combo-box
+-- States: Normal | Hover | Expanded | Disabled
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
-local Pool = lib.FramePool
-
--- All open dropdowns – we close them when another opens or the user clicks away
-local _openDropdown = nil
-local ITEM_H        = 28
-local MAX_VISIBLE   = 8   -- max rows before the dropdown scrolls (future)
-local BORDER_NORM   = { 0.50, 0.50, 0.55, 1 }
-local BORDER_HOVER  = { 0.68, 0.68, 0.72, 1 }
-local BG_NORM       = { 0.10, 0.10, 0.11, 1 }
-local BG_HOVER      = { 0.13, 0.13, 0.14, 1 }
-local ITEM_HOVER_BG = { 0.05, 0.55, 0.88, 0.20 }
-
--- Click-away handler
-local _dismissFrame = CreateFrame("Frame")
-_dismissFrame:SetAllPoints(UIParent)
-_dismissFrame:EnableMouse(true)
-_dismissFrame:SetFrameStrata("DIALOG")
-_dismissFrame:Hide()
-_dismissFrame:SetScript("OnMouseDown", function()
-    if _openDropdown then _openDropdown:_CloseDropdown() end
-    _dismissFrame:Hide()
-end)
+local T   = lib.Tokens
+local Mot = lib.Motion
 
 -------------------------------------------------------------------------------
--- ComboBoxItem (dropdown row)
+-- Item pool
 -------------------------------------------------------------------------------
 
-function WUILComboBoxItem_OnLoad(self)
-    self._owner = nil
-    self._value = nil
-    self._index = nil
+local _itemPool
+
+local function getItemPool(parent)
+    if not _itemPool then
+        _itemPool = lib.FramePool:New("Button", parent, "WUILComboBoxItemTemplate")
+    end
+    return _itemPool
 end
 
-function WUILComboBoxItem_OnEnter(self)
-    local bg = _G[self:GetName() .. "_BG"]
-    if bg then bg:SetColorTexture(table.unpack(ITEM_HOVER_BG)) end
-end
+-------------------------------------------------------------------------------
+-- Mixin
+-------------------------------------------------------------------------------
 
-function WUILComboBoxItem_OnLeave(self)
-    local bg = _G[self:GetName() .. "_BG"]
-    if bg then bg:SetColorTexture(0, 0, 0, 0) end
-end
+---@class WUILComboBox
+local ComboMixin = {}
 
-function WUILComboBoxItem_OnClick(self, btn)
-    if btn ~= "LeftButton" then return end
-    if self._owner then
-        self._owner:_SelectItem(self._index)
+function ComboMixin:OnStateChanged(newState, prevState)
+    local state = newState
+
+    if state == "Disabled" then
+        self.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
+        self.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self.Arrow:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    elseif state == "Expanded" then
+        self:SetAlpha(1)
+        self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+        self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.BottomEdge:SetColorTexture(T:GetColor("Color.Accent.Primary"))
+        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.Arrow:SetTextColor(T:GetColor("Color.Accent.Primary"))
+    elseif state == "Hover" then
+        self:SetAlpha(1)
+        self.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
+        self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.Arrow:SetTextColor(T:GetColor("Color.Text.Primary"))
+    else
+        self:SetAlpha(1)
+        self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+        self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.Arrow:SetTextColor(T:GetColor("Color.Text.Secondary"))
     end
 end
 
+---@param items table array of { text=string, value=any }
+function ComboMixin:SetItems(items)
+    self._items = items
+    self._selectedIndex = nil
+    self.SelectedLabel:SetText("")
+end
+
+---@return table
+function ComboMixin:GetItems()
+    return self._items or {}
+end
+
+---@param index integer
+function ComboMixin:SetSelectedIndex(index)
+    local items = self._items or {}
+    if index < 1 or index > #items then return end
+    self._selectedIndex = index
+    self.SelectedLabel:SetText(items[index].text or "")
+end
+
+---@return integer|nil
+function ComboMixin:GetSelectedIndex()
+    return self._selectedIndex
+end
+
+---@return any|nil
+function ComboMixin:GetSelectedValue()
+    if not self._selectedIndex then return nil end
+    local item = (self._items or {})[self._selectedIndex]
+    return item and item.value
+end
+
+---@param fn function
+function ComboMixin:SetOnSelectionChanged(fn)
+    self._onSelectionChanged = fn
+end
+
+function ComboMixin:_Open()
+    if InCombatLockdown() then
+        lib:Debug("ComboBox: blocked in combat")
+        return
+    end
+    self:_BuildDropdown()
+    self.Dropdown.DropBG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
+    Mot:FadeIn(self.Dropdown)
+    self._vsm:SetState("Expanded")
+end
+
+function ComboMixin:_Close()
+    Mot:FadeOut(self.Dropdown)
+    self._vsm:SetState("Normal")
+end
+
+function ComboMixin:_BuildDropdown()
+    local pool = getItemPool(self.Dropdown.Scroll.Child)
+    pool:ReleaseAll()
+
+    local items = self._items or {}
+    local itemHeight = 28
+    local yOff = 0
+
+    for i, item in ipairs(items) do
+        local btn = pool:Acquire()
+        btn:SetParent(self.Dropdown.Scroll.Child)
+        btn:ClearAllPoints()
+        btn:SetPoint("TOPLEFT", 0, -yOff)
+        btn:SetPoint("RIGHT", 0, 0)
+        btn.Text:SetText(item.text or "")
+        btn.Text:SetTextColor(T:GetColor("Color.Text.Primary"))
+        btn.Highlight:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+        btn._comboParent = self
+        btn._itemIndex = i
+        yOff = yOff + itemHeight
+    end
+
+    self.Dropdown.Scroll.Child:SetHeight(math.max(1, yOff))
+    local maxVisible = math.min(#items, 8)
+    self.Dropdown:SetHeight(maxVisible * itemHeight + 8)
+end
+
 -------------------------------------------------------------------------------
--- ComboBox header scripts
+-- Script handlers
 -------------------------------------------------------------------------------
 
 function WUILComboBox_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, lib._controls.ComboBox)
+    Mixin(self, lib._controls.ControlBase, ComboMixin)
     self:WUILInit()
-    self._items        = {}
-    self._selectedIdx  = nil
-    self._placeholder  = "Select…"
-    self._dropdown     = nil
-    self._itemPool     = nil
-    -- Show placeholder initially
-    local st = _G[self:GetName() .. "_SelectedText"]
-    if st then st:SetText(self._placeholder) end
+    self._items = {}
+    self:OnStateChanged("Normal")
+end
+
+function WUILComboBox_OnClick(self)
+    if not self._enabled then return end
+    if self._vsm:GetState() == "Expanded" then
+        self:_Close()
+    else
+        self:_Open()
+    end
 end
 
 function WUILComboBox_OnEnter(self)
     if not self._enabled then return end
-    self._vsm:SetState("Hover")
-    local border = _G[self:GetName() .. "_Border"]
-    if border then border:SetColorTexture(table.unpack(BORDER_HOVER)) end
-    local bg = _G[self:GetName() .. "_BG"]
-    if bg then bg:SetColorTexture(table.unpack(BG_HOVER)) end
+    if self._vsm:GetState() ~= "Expanded" then
+        self._vsm:SetState("Hover")
+    end
+    self:ShowTooltip()
 end
 
 function WUILComboBox_OnLeave(self)
     if not self._enabled then return end
-    self._vsm:SetState("Normal")
-    local border = _G[self:GetName() .. "_Border"]
-    if border then border:SetColorTexture(table.unpack(BORDER_NORM)) end
-    local bg = _G[self:GetName() .. "_BG"]
-    if bg then bg:SetColorTexture(table.unpack(BG_NORM)) end
+    if self._vsm:GetState() ~= "Expanded" then
+        self._vsm:SetState("Normal")
+    end
+    GameTooltip:Hide()
 end
 
-function WUILComboBox_OnClick(self, btn)
-    if btn ~= "LeftButton" or not self._enabled then return end
-    if lib.Utils.InCombat() then
-        lib:Debug("ComboBox: blocked in combat")
-        return
-    end
-    if _openDropdown == self then
-        self:_CloseDropdown()
-    else
-        if _openDropdown then _openDropdown:_CloseDropdown() end
-        self:_OpenDropdown()
+function WUILComboBox_OnHide(self)
+    if self.Dropdown:IsShown() then
+        self.Dropdown:Hide()
     end
 end
 
--------------------------------------------------------------------------------
--- ComboBox mixin
--------------------------------------------------------------------------------
-
----@class WUILComboBox : WUILControlBase
-local ComboBox = {}
-lib._controls.ComboBox = ComboBox
-
----@param text  string
----@param value any?
-function ComboBox:AddItem(text, value)
-    table.insert(self._items, { text = text, value = value ~= nil and value or text })
-    -- If dropdown is currently open, rebuild it
-    if _openDropdown == self then
-        self:_CloseDropdown()
-        self:_OpenDropdown()
+function WUILComboBoxItem_OnClick(self)
+    local combo = self._comboParent
+    if not combo then return end
+    combo:SetSelectedIndex(self._itemIndex)
+    combo:_Close()
+    if combo._onSelectionChanged then
+        lib.Utils.SafeCall(combo._onSelectionChanged, combo, self._itemIndex)
     end
 end
 
----@param items { text: string, value: any? }[]
-function ComboBox:SetItems(items)
-    self._items = {}
-    for _, item in ipairs(items) do
-        self:AddItem(item.text, item.value)
-    end
+function WUILComboBoxItem_OnEnter(self)
+    self.Highlight:Show()
 end
 
-function ComboBox:ClearItems()
-    self._items = {}
-    self._selectedIdx = nil
-    self:_UpdateHeader()
-end
-
----@param i integer  1-based
-function ComboBox:SetSelectedIndex(i)
-    if i >= 1 and i <= #self._items then
-        self:_SelectItem(i, true)
-    end
-end
-
----@param v any
-function ComboBox:SetSelectedValue(v)
-    for i, item in ipairs(self._items) do
-        if item.value == v then
-            self:_SelectItem(i, true)
-            return
-        end
-    end
-end
-
---- Returns selected text, value, index (nil if nothing selected).
----@return string?, any?, integer?
-function ComboBox:GetSelected()
-    if not self._selectedIdx then return nil, nil, nil end
-    local item = self._items[self._selectedIdx]
-    return item and item.text, item and item.value, self._selectedIdx
-end
-
----@param text string
-function ComboBox:SetPlaceholder(text)
-    self._placeholder = text
-    if not self._selectedIdx then
-        local st = _G[self:GetName() .. "_SelectedText"]
-        if st then st:SetText(text) end
-    end
-end
-
---- Internal: select an item by index and fire callback.
----@param idx     integer
----@param silent  boolean?
-function ComboBox:_SelectItem(idx, silent)
-    self._selectedIdx = idx
-    self:_UpdateHeader()
-    self:_CloseDropdown()
-    if not silent and self.OnSelectionChanged then
-        local item = self._items[idx]
-        lib.Utils.SafeCall(self.OnSelectionChanged, self,
-            item.text, item.value, idx)
-    end
-end
-
-function ComboBox:_UpdateHeader()
-    local st = _G[self:GetName() .. "_SelectedText"]
-    if not st then return end
-    if self._selectedIdx then
-        local item = self._items[self._selectedIdx]
-        st:SetText(item and item.text or "")
-        st:SetTextColor(0.85, 0.85, 0.88)
-    else
-        st:SetText(self._placeholder)
-        st:SetTextColor(0.50, 0.50, 0.55)
-    end
-end
-
-function ComboBox:_OpenDropdown()
-    if not self._dropdown then
-        self._dropdown = CreateFrame("Frame", nil, UIParent,
-                                     "WUILComboBoxDropdownTemplate")
-        self._dropdown:SetWidth(self:GetWidth())
-        self._itemPool = lib.FramePool:New("Button", self._dropdown,
-                                            "WUILComboBoxItemTemplate")
-    end
-    local dd = self._dropdown
-    dd:SetWidth(self:GetWidth())
-
-    -- Populate item rows
-    self._itemPool:ReleaseAll()
-    local yOff = -2
-    for i, item in ipairs(self._items) do
-        local row = self._itemPool:Acquire()
-        row._owner = self
-        row._index = i
-        row._value = item.value
-        local txt = _G[row:GetName() .. "_Text"]
-        if txt then
-            txt:SetText(item.text)
-            if i == self._selectedIdx then
-                txt:SetTextColor(0.05, 0.55, 0.88)
-            else
-                txt:SetTextColor(0.85, 0.85, 0.88)
-            end
-        end
-        row:SetWidth(dd:GetWidth())
-        row:ClearAllPoints()
-        row:SetPoint("TOPLEFT", dd, "TOPLEFT", 0, yOff)
-        yOff = yOff - ITEM_H
-    end
-    dd:SetHeight(math.min(#self._items, MAX_VISIBLE) * ITEM_H + 4)
-
-    -- Position below header (flip up if no room)
-    dd:ClearAllPoints()
-    local screenH = GetScreenHeight()
-    local myBottom = self:GetBottom() or 0
-    if myBottom - dd:GetHeight() < 0 then
-        dd:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 4)
-    else
-        dd:SetPoint("TOPLEFT",    self, "BOTTOMLEFT", 0, -4)
-    end
-
-    lib.Motion:FadeIn(dd, 0.12)
-    _openDropdown = self
-    _dismissFrame:Show()
-end
-
-function ComboBox:_CloseDropdown()
-    if not self._dropdown then return end
-    lib.Motion:FadeOut(self._dropdown, 0.10)
-    _openDropdown = nil
-    _dismissFrame:Hide()
-end
-
-function ComboBox:OnStateChanged(newState, prevState)
-    if newState == "Disabled" then
-        self:SetAlpha(lib.Tokens:GetNumber("Opacity.Disabled"))
-    elseif prevState == "Disabled" then
-        self:SetAlpha(1)
-    end
+function WUILComboBoxItem_OnLeave(self)
+    self.Highlight:Hide()
 end
 
 -------------------------------------------------------------------------------
@@ -282,10 +207,8 @@ end
 -------------------------------------------------------------------------------
 
 ---@param parent Frame
----@param items  { text: string, value: any? }[]?
+---@param name? string
 ---@return Frame
-function lib:CreateComboBox(parent, items)
-    local cb = CreateFrame("Button", nil, parent, "WUILComboBoxTemplate")
-    if items then cb:SetItems(items) end
-    return cb
+function lib:CreateComboBox(parent, name)
+    return CreateFrame("Frame", name, parent, "WUILComboBoxTemplate")
 end

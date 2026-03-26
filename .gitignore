@@ -4,7 +4,7 @@
 .help/
 
 # VS Code personal config
-.vscode/mcp.json
+.vscode/
 
 # OS junk
 Thumbs.db

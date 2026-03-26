@@ -25,6 +25,8 @@ You are the Token Builder — responsible for the WinUILib token system. You man
 - `WinUILib/Tokens/DefaultTheme.lua` — canonical default values
 - `WinUILib/Tokens/Registry.lua` — resolution engine (do not modify unless adding new API methods)
 - `.docs/TokenReference.md` — documentation
+- `.docs/DesignSpecs.md` — pixel measurements from WinUI design images
+- `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` — dark/light theme design images for color reference
 
 ## Rules
 

@@ -1,78 +1,107 @@
-<!-- WinUILib – Controls/ContentDialog/ContentDialog.xml
-     Design reference: WinUI ContentDialog
-     https://learn.microsoft.com/windows/apps/design/controls/dialogs-and-flyouts/dialogs
-     Modal overlay dialog with primary + secondary actions.
--->
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
-    <Frame name="WUILContentDialogTemplate" virtual="true"
-           frameStrata="DIALOG" enableMouse="true" movable="false"
-           toplevel="true" hidden="true">
-
-        <!-- Scrim overlay (covers entire screen) -->
+    <!-- ================================================================
+         WUILContentDialogTemplate — Modal dialog overlay
+         Size: 480×auto  |  Parts: Overlay, Card, TitleLabel, BodyLabel,
+               ButtonRow, PrimaryBtn, SecondaryBtn, CloseBtn
+         Pixel-fidelity: DesignSpecs §2.2 (Dialog)
+         ================================================================ -->
+    <Frame name="WUILContentDialogTemplate" virtual="true" hidden="true"
+        frameStrata="DIALOG" enableMouse="true" toplevel="true">
+        <Anchors>
+            <Anchor point="TOPLEFT" relativeTo="UIParent"/>
+            <Anchor point="BOTTOMRIGHT" relativeTo="UIParent"/>
+        </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture name="$parent_Scrim">
-                    <Anchors>
-                        <Anchor point="TOPLEFT"     relativeTo="UIParent"/>
-                        <Anchor point="BOTTOMRIGHT" relativeTo="UIParent"/>
-                    </Anchors>
-                    <Color r="0" g="0" b="0" a="0.60"/>
-                </Texture>
-                <!-- Dialog card -->
-                <Texture name="$parent_BG">
-                    <Size x="440" y="240"/>
-                    <Anchors><Anchor point="CENTER" relativeTo="UIParent"/></Anchors>
-                    <Color r="0.13" g="0.13" b="0.14" a="0.98"/>
-                </Texture>
-                <!-- Dialog border -->
-                <Texture name="$parent_Border">
-                    <Size x="440" y="240"/>
-                    <Anchors><Anchor point="CENTER" relativeTo="UIParent"/></Anchors>
-                    <Color r="0.28" g="0.28" b="0.32" a="1"/>
-                </Texture>
+                <Texture name="$parent_Overlay" parentKey="Overlay" setAllPoints="true"/>
             </Layer>
         </Layers>
-
-        <!-- Title bar -->
-        <FontString name="$parent_Title" inherits="GameFontNormal"
-                    justifyH="LEFT" justifyV="TOP">
-            <Anchors>
-                <Anchor point="TOPLEFT"  relativeTo="$parent_BG" relativePoint="TOPLEFT"  x="24" y="-20"/>
-                <Anchor point="TOPRIGHT" relativeTo="$parent_BG" relativePoint="TOPRIGHT" x="-24" y="-20"/>
-            </Anchors>
-            <Color r="0.95" g="0.95" b="0.97"/>
-        </FontString>
-
-        <!-- Content area -->
-        <FontString name="$parent_Content" inherits="GameFontNormalSmall"
-                    justifyH="LEFT" justifyV="TOP" nonspacewrap="true">
-            <Anchors>
-                <Anchor point="TOPLEFT"  relativeTo="$parent_BG" relativePoint="TOPLEFT"  x="24" y="-52"/>
-                <Anchor point="TOPRIGHT" relativeTo="$parent_BG" relativePoint="TOPRIGHT" x="-24" y="-52"/>
-            </Anchors>
-            <Color r="0.68" g="0.68" b="0.72"/>
-        </FontString>
-
-        <!-- Primary action button -->
-        <Button name="$parent_PrimaryBtn" inherits="WUILButtonTemplate">
-            <Anchors>
-                <Anchor point="BOTTOMRIGHT" relativeTo="$parent_BG" relativePoint="BOTTOMRIGHT"
-                        x="-16" y="16"/>
-            </Anchors>
-        </Button>
-
-        <!-- Secondary action button -->
-        <Button name="$parent_SecondaryBtn" inherits="WUILButtonSubtleTemplate">
-            <Anchors>
-                <Anchor point="RIGHT" relativeTo="$parent_PrimaryBtn" relativePoint="LEFT"
-                        x="-8" y="0"/>
-            </Anchors>
-        </Button>
-
+        <Frames>
+            <Frame name="$parent_Card" parentKey="Card">
+                <Size x="480" y="260"/>
+                <Anchors>
+                    <Anchor point="CENTER"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <!-- Title: 32px from top -->
+                        <FontString name="$parent_TitleLabel" parentKey="TitleLabel"
+                            inherits="GameFontNormalLarge" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="24" y="-32"/>
+                                <Anchor point="RIGHT" x="-24" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <!-- Body: 24px below title -->
+                        <FontString name="$parent_BodyLabel" parentKey="BodyLabel"
+                            inherits="GameFontHighlight" justifyH="LEFT" justifyV="TOP">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeTo="$parent_TitleLabel"
+                                    relativePoint="BOTTOMLEFT" x="0" y="-24"/>
+                                <Anchor point="RIGHT" x="-24" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <!-- Button row: 24px from bottom -->
+                    <Frame name="$parent_ButtonRow" parentKey="ButtonRow">
+                        <Size x="0" y="32"/>
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT" x="24" y="24"/>
+                            <Anchor point="BOTTOMRIGHT" x="-24" y="24"/>
+                        </Anchors>
+                        <Frames>
+                            <Button name="$parent_PrimaryBtn" parentKey="PrimaryBtn"
+                                inherits="WUILButtonTemplate">
+                                <Size x="120" y="32"/>
+                                <Anchors>
+                                    <Anchor point="RIGHT" x="0" y="0"/>
+                                </Anchors>
+                            </Button>
+                            <!-- Secondary: 8px gap from primary -->
+                            <Button name="$parent_SecondaryBtn" parentKey="SecondaryBtn"
+                                inherits="WUILButtonSubtleTemplate">
+                                <Size x="120" y="32"/>
+                                <Anchors>
+                                    <Anchor point="RIGHT" relativeTo="$parent_PrimaryBtn"
+                                        relativePoint="LEFT" x="-8" y="0"/>
+                                </Anchors>
+                            </Button>
+                        </Frames>
+                    </Frame>
+                    <!-- Close X button -->
+                    <Button name="$parent_CloseBtn" parentKey="CloseBtn">
+                        <Size x="20" y="20"/>
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" x="-12" y="-12"/>
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <FontString name="$parent_X" parentKey="X"
+                                    inherits="GameFontNormal" justifyH="CENTER" text="×">
+                                    <Anchors>
+                                        <Anchor point="CENTER"/>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                        <Scripts>
+                            <OnClick function="WUILContentDialog_OnCloseClick"/>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnLoad function="WUILContentDialog_OnLoad"/>
-            <OnKeyDown function="WUILContentDialog_OnKeyDown"/>
+            <OnMouseDown function="WUILContentDialog_OnOverlayClick"/>
         </Scripts>
     </Frame>
 

@@ -21,6 +21,7 @@ You are the Docs Builder — responsible for keeping all WinUILib documentation 
 | `.docs/MasterPlan.md` | Project orchestration | Phase changes, control inventory changes |
 | `.docs/DesignRules.md` | 10 rules + enforcement | Rule additions or modifications (rare) |
 | `.docs/ControlPortingGuide.md` | Porting workflow | Process improvements |
+| `.docs/DesignSpecs.md` | Pixel measurements from design images | New control measurements, design image analysis |
 | `.docs/PortabilityMatrix.md` | Control inventory + ratings | New assessments, new ports |
 | `.docs/TokenReference.md` | Token catalog | New tokens, modified values |
 | `.docs/ReviewMaster.md` | Review framework | Process changes |
@@ -34,7 +35,8 @@ You are the Docs Builder — responsible for keeping all WinUILib documentation 
 2. **MasterPlan §4** control inventory must match ARCHITECTURE.md
 3. **PortabilityMatrix** must have an entry for every control in WinUI Gallery
 4. **TokenReference** must document every token in `DefaultTheme.lua`
-5. **CHANGELOG** must document every user-visible change
+5. **DesignSpecs** must have pixel measurements for every implemented control family
+6. **CHANGELOG** must document every user-visible change
 
 ## Style Rules
 

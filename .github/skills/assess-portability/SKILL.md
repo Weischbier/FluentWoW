@@ -31,6 +31,8 @@ description: >
 - Open `.help/.sources/WinUI-Gallery-main/WinUIGallery/Samples/ControlPages/{controlName}Page.xaml`
 - Open the `.xaml.cs` code-behind if it exists
 - Optionally read the spec: `.help/.sources/microsoft-ui-xaml-main/specs/{controlName}/`
+- View design images: `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for visual measurements
+- Read `.docs/DesignSpecs.md` for already-extracted pixel measurements
 - Identify: visual states, properties, events, child elements, data binding, animations
 
 ### 2. Identify WoW Barriers

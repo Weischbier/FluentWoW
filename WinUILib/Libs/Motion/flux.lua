@@ -1,6 +1,3 @@
--- Vendored upstream wrapper for MetroLib / WoW embedding
--- Source: rxi/flux
-local function __MetroLib_Load()
 --
 -- flux
 --
@@ -225,9 +222,3 @@ local bound = {
 setmetatable(bound, flux)
 
 return bound
-
-end
-
-local module = __MetroLib_Load()
-_G.MetroLibFlux = module
-return module

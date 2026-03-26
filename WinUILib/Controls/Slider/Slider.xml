@@ -1,61 +1,72 @@
-<!-- WinUILib – Controls/Slider/Slider.xml
-     Design reference: WinUI Slider
-     https://learn.microsoft.com/windows/apps/design/controls/slider
--->
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
-    <Frame name="WUILSliderTemplate" virtual="true">
+    <!-- ================================================================
+         WUILSliderTemplate — Range slider with track, fill, thumb, and labels
+         Size: 200×20 (track) + labels
+         Parts: Track, Fill, Thumb, MinLabel, MaxLabel, ValueLabel, HeaderLabel
+         ================================================================ -->
+    <Frame name="WUILSliderTemplate" virtual="true" enableMouse="true">
+        <Size x="200" y="44"/>
         <Layers>
-            <!-- Track background (inactive portion) -->
-            <Layer level="BACKGROUND">
-                <Texture name="$parent_TrackBG">
-                    <Size x="1" y="4"/>
-                    <Anchors>
-                        <Anchor point="LEFT"  x="8"  y="0"/>
-                        <Anchor point="RIGHT" x="-8" y="0"/>
-                    </Anchors>
-                    <Color r="0.28" g="0.28" b="0.32" a="1"/>
-                </Texture>
-            </Layer>
-            <!-- Track fill (active/accent portion – sized by Lua) -->
             <Layer level="ARTWORK">
-                <Texture name="$parent_TrackFill">
-                    <Size x="0" y="4"/>
+                <FontString name="$parent_HeaderLabel" parentKey="HeaderLabel"
+                    inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="LEFT" x="8" y="0"/>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
                     </Anchors>
-                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
-                </Texture>
-            </Layer>
-            <!-- Thumb -->
-            <Layer level="OVERLAY">
-                <Texture name="$parent_Thumb">
-                    <Size x="16" y="16"/>
-                    <Anchors><Anchor point="LEFT" x="0" y="0"/></Anchors>
-                    <Color r="1.00" g="1.00" b="1.00" a="1"/>
-                </Texture>
+                </FontString>
             </Layer>
         </Layers>
-
-        <!-- Optional value label above thumb -->
-        <FontString name="$parent_ValueLabel" inherits="GameFontNormalSmall"
-                    justifyH="CENTER" hidden="true">
-            <Anchors>
-                <Anchor point="BOTTOM" relativeTo="$parent_Thumb" relativePoint="TOP"
-                        x="0" y="4"/>
-            </Anchors>
-            <Color r="0.85" g="0.85" b="0.88"/>
-        </FontString>
-
-        <Size x="200" y="20"/>
-
+        <Frames>
+            <Slider name="$parent_SliderFrame" parentKey="SliderFrame"
+                orientation="HORIZONTAL" minValue="0" maxValue="100" defaultValue="0"
+                valueStep="1" obeyStepOnDrag="true">
+                <Size x="0" y="20"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="0" y="0"/>
+                    <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Track" parentKey="Track">
+                            <Size x="0" y="4"/>
+                            <Anchors>
+                                <Anchor point="LEFT" x="0" y="0"/>
+                                <Anchor point="RIGHT" x="0" y="0"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture name="$parent_Fill" parentKey="Fill">
+                            <Size x="0" y="4"/>
+                            <Anchors>
+                                <Anchor point="LEFT" relativeTo="$parent_Track" relativePoint="LEFT"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <ThumbTexture name="$parent_Thumb" parentKey="Thumb">
+                    <Size x="16" y="16"/>
+                </ThumbTexture>
+                <Scripts>
+                    <OnValueChanged function="WUILSlider_OnValueChanged"/>
+                    <OnEnter function="WUILSlider_OnEnter"/>
+                    <OnLeave function="WUILSlider_OnLeave"/>
+                </Scripts>
+            </Slider>
+        </Frames>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString name="$parent_ValueLabel" parentKey="ValueLabel"
+                    inherits="GameFontNormalSmall" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Scripts>
-            <OnLoad        function="WUILSlider_OnLoad"/>
-            <OnEnter       function="WUILSlider_OnEnter"/>
-            <OnLeave       function="WUILSlider_OnLeave"/>
-            <OnMouseDown   function="WUILSlider_OnMouseDown"/>
-            <OnMouseUp     function="WUILSlider_OnMouseUp"/>
-            <OnSizeChanged function="WUILSlider_OnSizeChanged"/>
+            <OnLoad function="WUILSlider_OnLoad"/>
         </Scripts>
     </Frame>
 

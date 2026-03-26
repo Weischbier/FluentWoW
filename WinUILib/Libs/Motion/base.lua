@@ -1,6 +1,3 @@
--- Vendored upstream wrapper for MetroLib / WoW embedding
--- Source: airstruck/knife (base)
-local function __MetroLib_Load()
 return {
     extend = function (self, subtype)
         subtype = subtype or {}
@@ -16,9 +13,3 @@ return {
     constructor = function () end,
 }
 
-
-end
-
-local module = __MetroLib_Load()
-_G.MetroLibKnifeBase = module
-return module

@@ -1,56 +1,55 @@
-<!-- WinUILib – Controls/ScrollFrame/ScrollFrame.xml
-     Design reference: WinUI ScrollViewer
-     https://learn.microsoft.com/windows/apps/design/controls/scroll-controls
--->
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
+    <!-- ================================================================
+         WUILScrollFrameTemplate — Scrollable container with scrollbar
+         Size: 300×200  |  Parts: ScrollFrame, Child, ScrollBar (Track, Thumb)
+         ================================================================ -->
     <Frame name="WUILScrollFrameTemplate" virtual="true">
-        <Layers>
-            <Layer level="BACKGROUND">
-                <Texture name="$parent_BG" setAllPoints="true">
-                    <Color r="0.10" g="0.10" b="0.11" a="0"/>
-                </Texture>
-            </Layer>
-            <!-- Scrollbar track -->
-            <Layer level="OVERLAY">
-                <Texture name="$parent_ScrollTrack">
-                    <Size x="4" y="1"/>
-                    <Anchors>
-                        <Anchor point="TOPRIGHT"    x="-2" y="-4"/>
-                        <Anchor point="BOTTOMRIGHT" x="-2" y="4"/>
-                    </Anchors>
-                    <Color r="0.22" g="0.22" b="0.24" a="1"/>
-                </Texture>
-                <!-- Scrollbar thumb (height driven by Lua) -->
-                <Texture name="$parent_ScrollThumb">
-                    <Size x="4" y="40"/>
-                    <Anchors><Anchor point="TOPRIGHT" x="-2" y="-4"/></Anchors>
-                    <Color r="0.50" g="0.50" b="0.55" a="0.8"/>
-                </Texture>
-            </Layer>
-        </Layers>
-
-        <!-- The WoW ScrollFrame widget -->
-        <ScrollFrame name="$parent_Scroll">
-            <Anchors>
-                <Anchor point="TOPLEFT"/>
-                <Anchor point="BOTTOMRIGHT" x="-8" y="0"/>
-            </Anchors>
-            <!-- Scroll child must be sized in Lua -->
-            <ScrollChild>
-                <Frame name="$parent_Child">
-                    <Size x="1" y="1"/>
-                </Frame>
-            </ScrollChild>
-            <Scripts>
-                <OnVerticalScroll function="WUILScrollFrame_OnScroll"/>
-                <OnScrollRangeChanged function="WUILScrollFrame_OnRangeChanged"/>
-                <OnMouseWheel function="WUILScrollFrame_OnMouseWheel"/>
-            </Scripts>
-        </ScrollFrame>
-
         <Size x="300" y="200"/>
-
+        <Frames>
+            <ScrollFrame name="$parent_ScrollFrame" parentKey="ScrollFrame">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="BOTTOMRIGHT" x="-12" y="0"/>
+                </Anchors>
+                <Frames>
+                    <Frame name="$parent_Child" parentKey="Child">
+                        <Size x="288" y="1"/>
+                    </Frame>
+                </Frames>
+                <Scripts>
+                    <OnLoad function="WUILScrollFrame_OnScrollLoad"/>
+                    <OnScrollRangeChanged function="WUILScrollFrame_OnRangeChanged"/>
+                    <OnVerticalScroll function="WUILScrollFrame_OnVerticalScroll"/>
+                    <OnMouseWheel function="WUILScrollFrame_OnMouseWheel"/>
+                </Scripts>
+            </ScrollFrame>
+            <Frame name="$parent_ScrollBar" parentKey="ScrollBar">
+                <Size x="6" y="0"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="0" y="-2"/>
+                    <Anchor point="BOTTOMRIGHT" x="0" y="2"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Track" parentKey="Track" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Frame name="$parent_Thumb" parentKey="Thumb" enableMouse="true">
+                        <Size x="6" y="40"/>
+                        <Anchors>
+                            <Anchor point="TOP"/>
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                            </Layer>
+                        </Layers>
+                    </Frame>
+                </Frames>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnLoad function="WUILScrollFrame_OnLoad"/>
         </Scripts>

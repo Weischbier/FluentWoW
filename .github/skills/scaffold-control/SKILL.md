@@ -40,6 +40,13 @@ Use the wow-api MCP tools to confirm the chosen `baseWidget` and its methods:
 - `mcp_wow-api_lookup_api` for any specific API you need
 - `mcp_wow-api_list_deprecated` to check for deprecated APIs you might accidentally use
 
+### 1b. Read Design Specs
+
+- Read `.docs/DesignSpecs.md` for pixel measurements from WinUI design images
+- If `specRef` is provided, read the WinUI spec for control-specific measurements
+- Read design images in `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for visual reference
+- Map pixel values to spacing tokens: 8px→`Spacing.MD`, 12px→`Spacing.LG`, 16px→`Spacing.XL`
+
 ### 2. Create XML Template
 
 Create `WinUILib/Controls/{controlName}/{controlName}.xml`:
@@ -117,6 +124,14 @@ Create or update the appropriate `WinUILib-Gallery/Pages/{Family}Page.lua`:
 ### 8. Review
 
 Run through the review checklist in `.docs/ControlPortingGuide.md` Step 8.
+Verify pixel-fidelity: all spacing, padding, gap values match `.docs/DesignSpecs.md`.
+
+## Vendored Libraries
+
+Available in `WinUILib/Libs/` (loaded before Core, do NOT modify):
+- **Ace3** — LibStub, AceAddon, AceDB, AceEvent, AceGUI, AceConfig, etc.
+- **Motion** — flux (tweening), knife.base, knife.timer
+- **PureLua** — 30log (OOP), dkjson (JSON), i18n, inspect, lume (utils), serpent
 
 ## Outputs
 

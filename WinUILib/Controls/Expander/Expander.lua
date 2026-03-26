@@ -1,151 +1,155 @@
 --- WinUILib – Controls/Expander/Expander.lua
--- Collapsible section control with animated height reveal.
--- Design ref: WinUI Expander
---
--- Public API:
---   :SetHeader(text)
---   :SetExpanded(bool, animate?)
---   :IsExpanded()
---   :GetContentFrame()  → Frame (place child widgets here)
---   :SetContentHeight(n)
---   OnExpandedChanged(self, expanded)
+-- Collapsible panel with animated expand/collapse.
+-- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/expander
+-- States: Normal | Hover | Expanded | Disabled
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
+local T   = lib.Tokens
 local Mot = lib.Motion
 
-local HEADER_H    = 40
-local EXPAND_DUR  = 0.20
-local COLLAPSE_DUR = 0.15
-
 -------------------------------------------------------------------------------
--- Script handler
+-- Mixin
 -------------------------------------------------------------------------------
 
-function WUILExpander_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, lib._controls.Expander)
-    self:WUILInit()
-    self._expanded     = false
-    self._contentH     = 120
-    self._animating    = false
+---@class WUILExpander
+local ExpanderMixin = {}
 
-    -- Make header area clickable
-    local header = CreateFrame("Button", nil, self)
-    header:SetPoint("TOPLEFT")
-    header:SetPoint("TOPRIGHT")
-    header:SetHeight(HEADER_H)
-    header:EnableMouse(true)
-    header:RegisterForClicks("LeftButtonUp")
-    header:SetScript("OnClick", function()
-        self:SetExpanded(not self._expanded, true)
-    end)
-    header:SetScript("OnEnter", function()
-        local hbg = _G[self:GetName() .. "_HeaderBG"]
-        if hbg then hbg:SetColorTexture(0.22, 0.22, 0.24, 1) end
-    end)
-    header:SetScript("OnLeave", function()
-        local hbg = _G[self:GetName() .. "_HeaderBG"]
-        if hbg then hbg:SetColorTexture(0.17, 0.17, 0.19, 1) end
-    end)
-    self._headerBtn = header
+function ExpanderMixin:OnStateChanged(newState, prevState)
+    local state = newState
 
-    -- Initial collapsed state
-    local clip = _G[self:GetName() .. "_ContentClip"]
-    if clip then
-        clip:SetHeight(0)
-        -- Stretch clip width to match container
-        clip:SetPoint("TOPLEFT",  self, "TOPLEFT",  0, -HEADER_H)
-        clip:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, -HEADER_H)
+    if state == "Disabled" then
+        self.Header.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+        self.Header.Label:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self.Header.Chevron:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    else
+        self:SetAlpha(1)
+        local bgKey = (state == "Hover") and "Color.Surface.Elevated" or "Color.Surface.Raised"
+        self.Header.BG:SetColorTexture(T:GetColor(bgKey))
+        self.Header.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.Header.Chevron:SetTextColor(T:GetColor("Color.Text.Secondary"))
+        self.Header.Hover:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+    end
+
+    self.Content.ContentBG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+
+    if self._expanded then
+        self.Header.Chevron:SetText("▾")
+    else
+        self.Header.Chevron:SetText("▸")
     end
 end
-
--------------------------------------------------------------------------------
--- Expander mixin
--------------------------------------------------------------------------------
-
----@class WUILExpander : WUILControlBase
-local Expander = {}
-lib._controls.Expander = Expander
 
 ---@param text string
-function Expander:SetHeader(text)
-    local ht = _G[self:GetName() .. "_HeaderTitle"]
-    if ht then ht:SetText(text or "") end
+function ExpanderMixin:SetTitle(text)
+    self.Header.Label:SetText(text)
 end
 
---- Expands or collapses the content section.
+---@return string
+function ExpanderMixin:GetTitle()
+    return self.Header.Label:GetText() or ""
+end
+
 ---@param expanded boolean
----@param animate  boolean?  default true
-function Expander:SetExpanded(expanded, animate)
+---@param instant? boolean
+function ExpanderMixin:SetExpanded(expanded, instant)
     if self._expanded == expanded then return end
     self._expanded = expanded
-    local clip     = _G[self:GetName() .. "_ContentClip"]
-    if not clip then return end
 
-    local targetH = expanded and self._contentH or 0
-    local dur     = (animate ~= false) and (expanded and EXPAND_DUR or COLLAPSE_DUR) or 0
-
-    if dur == 0 or Mot.reducedMotion then
-        clip:SetHeight(targetH)
-        self:SetHeight(HEADER_H + targetH)
-        self:_UpdateChevron()
+    if expanded then
+        self.Content:Show()
+        local targetH = self._contentHeight or 100
+        if instant or Mot.reducedMotion then
+            self.Content:SetHeight(targetH)
+            self:SetHeight(40 + targetH)
+        else
+            Mot:HeightTo(self.Content, 1, targetH,
+                lib.Tokens:GetNumber("Motion.Duration.Normal"),
+                function()
+                    self:SetHeight(40 + targetH)
+                end)
+            -- animate container height in parallel
+            Mot:HeightTo(self, 40, 40 + targetH)
+        end
+        self._vsm:SetState("Expanded")
     else
-        -- Animate height via OnUpdate
-        local startH = clip:GetHeight()
-        local elapsed = 0
-        clip:SetScript("OnUpdate", function(c, dt)
-            elapsed = elapsed + dt
-            local t   = math.min(1, elapsed / dur)
-            -- Simple ease-out
-            local ease = 1 - (1 - t) * (1 - t)
-            local h    = startH + (targetH - startH) * ease
-            c:SetHeight(h)
-            self:SetHeight(HEADER_H + h)
-            if t >= 1 then
-                c:SetScript("OnUpdate", nil)
-                self:_UpdateChevron()
-            end
-        end)
-    end
-
-    if self.OnExpandedChanged then
-        lib.Utils.SafeCall(self.OnExpandedChanged, self, expanded)
+        local fromH = self.Content:GetHeight()
+        if instant or Mot.reducedMotion then
+            self.Content:Hide()
+            self.Content:SetHeight(1)
+            self:SetHeight(40)
+        else
+            Mot:HeightTo(self.Content, fromH, 1,
+                lib.Tokens:GetNumber("Motion.Duration.Normal"),
+                function()
+                    self.Content:Hide()
+                end)
+            Mot:HeightTo(self, self:GetHeight(), 40)
+        end
+        self._vsm:SetState("Normal")
     end
 end
 
 ---@return boolean
-function Expander:IsExpanded()
+function ExpanderMixin:IsExpanded()
     return self._expanded == true
 end
 
---- Returns the inner content Frame where child widgets should be placed.
----@return Frame
-function Expander:GetContentFrame()
-    return _G[self:GetName() .. "_Content"]
-end
-
---- Sets the height of the content area when fully expanded.
----@param h number
-function Expander:SetContentHeight(h)
-    self._contentH = h
-    local content = _G[self:GetName() .. "_Content"]
-    if content then content:SetHeight(h) end
+---@param height number
+function ExpanderMixin:SetContentHeight(height)
+    self._contentHeight = height
     if self._expanded then
-        local clip = _G[self:GetName() .. "_ContentClip"]
-        if clip then clip:SetHeight(h) end
-        self:SetHeight(HEADER_H + h)
+        self.Content:SetHeight(height)
+        self:SetHeight(40 + height)
     end
 end
 
-function Expander:_UpdateChevron()
-    local ch = _G[self:GetName() .. "_Chevron"]
-    if not ch then return end
-    -- Tint chevron to accent when expanded
-    if self._expanded then
-        ch:SetColorTexture(0.05, 0.55, 0.88, 1)
-    else
-        ch:SetColorTexture(0.68, 0.68, 0.72, 1)
+---@param fn function
+function ExpanderMixin:SetOnToggled(fn)
+    self._onToggled = fn
+end
+
+--- Returns the content frame for embedding child controls.
+---@return Frame
+function ExpanderMixin:GetContentFrame()
+    return self.Content
+end
+
+-------------------------------------------------------------------------------
+-- Script handlers
+-------------------------------------------------------------------------------
+
+function WUILExpander_OnLoad(self)
+    Mixin(self, lib._controls.ControlBase, ExpanderMixin)
+    self:WUILInit()
+    self._expanded = false
+    self._contentHeight = 100
+    self:OnStateChanged("Normal")
+end
+
+function WUILExpander_OnHeaderClick(self)
+    local expander = self:GetParent()
+    if not expander._enabled then return end
+    expander:SetExpanded(not expander._expanded)
+    if expander._onToggled then
+        lib.Utils.SafeCall(expander._onToggled, expander, expander._expanded)
+    end
+end
+
+function WUILExpander_OnHeaderEnter(self)
+    local expander = self:GetParent()
+    if not expander._enabled then return end
+    if not expander._expanded then
+        expander._vsm:SetState("Hover")
+    end
+end
+
+function WUILExpander_OnHeaderLeave(self)
+    local expander = self:GetParent()
+    if not expander._enabled then return end
+    if not expander._expanded then
+        expander._vsm:SetState("Normal")
     end
 end
 
@@ -153,13 +157,9 @@ end
 -- Factory
 -------------------------------------------------------------------------------
 
----@param parent        Frame
----@param headerText    string?
----@param contentHeight number?
+---@param parent Frame
+---@param name? string
 ---@return Frame
-function lib:CreateExpander(parent, headerText, contentHeight)
-    local ex = CreateFrame("Frame", nil, parent, "WUILExpanderTemplate")
-    if headerText    then ex:SetHeader(headerText) end
-    if contentHeight then ex:SetContentHeight(contentHeight) end
-    return ex
+function lib:CreateExpander(parent, name)
+    return CreateFrame("Frame", name, parent, "WUILExpanderTemplate")
 end

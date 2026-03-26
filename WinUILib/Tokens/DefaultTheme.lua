@@ -1,34 +1,17 @@
 --- WinUILib – Tokens/DefaultTheme.lua
--- Default "Dark" theme token table – the baseline design language.
--- Colour values are {r, g, b, a} tables with components in [0,1].
---
--- Raw tokens use numeric constants; semantic tokens reference raw tokens by
--- value (Lua has no lazy alias, so we define raws first and copy into semantic
--- slots to keep the file maintainable).
---
--- Token categories:
---   Color.*        Surface, Border, Text, Icon, Accent, Feedback, Overlay
---   Spacing.*      XS/SM/MD/LG/XL/XXL
---   Typography.*   Display/Header/Title/Body/Caption/Mono
---   Radii.*        None/SM/MD/LG/Full
---   Motion.*       Duration.*/Easing.*
---   Opacity.*      Disabled/Overlay/Ghost
---   Layer.*        Base/Overlay/Dialog/Toast
---   Density.*      Compact/Normal/Comfortable
---   Icon.*         SM/MD/LG
+-- Default dark theme token table. All color values are {r, g, b, a} in 0-1.
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
 
--- Helper: creates a colour table.
-local function c(r, g, b, a) return {r, g, b, a or 1} end
+local function c(r, g, b, a) return { r, g, b, a or 1 } end
 
 -------------------------------------------------------------------------------
--- RAW colour palette
+-- Raw colour palette
 -------------------------------------------------------------------------------
+
 local RAW = {
-    -- Neutral grays (dark-mode system surface scale)
-    Gray0   = c(0.07, 0.07, 0.08),   -- deepest background
+    Gray0   = c(0.07, 0.07, 0.08),
     Gray1   = c(0.10, 0.10, 0.11),
     Gray2   = c(0.13, 0.13, 0.14),
     Gray3   = c(0.17, 0.17, 0.19),
@@ -41,13 +24,11 @@ local RAW = {
     Gray10  = c(0.95, 0.95, 0.97),
     White   = c(1.00, 1.00, 1.00),
 
-    -- Accent – WinUI "Cornflower Blue" mapped to a warcraft-appropriate teal/blue
     Accent0 = c(0.00, 0.45, 0.75),
-    Accent1 = c(0.05, 0.55, 0.88),   -- primary
-    Accent2 = c(0.15, 0.65, 1.00),   -- hover
-    Accent3 = c(0.40, 0.78, 1.00),   -- light
+    Accent1 = c(0.05, 0.55, 0.88),
+    Accent2 = c(0.15, 0.65, 1.00),
+    Accent3 = c(0.40, 0.78, 1.00),
 
-    -- Feedback
     Green   = c(0.20, 0.80, 0.40),
     Yellow  = c(1.00, 0.80, 0.10),
     Orange  = c(1.00, 0.50, 0.10),
@@ -56,77 +37,69 @@ local RAW = {
 }
 
 -------------------------------------------------------------------------------
--- SEMANTIC token table (default / dark theme)
+-- Semantic token table
 -------------------------------------------------------------------------------
+
 local tokens = {
     Color = {
-        -- Surface layers
         Surface = {
-            Base        = RAW.Gray0,   -- Window / dialog background
-            Raised      = RAW.Gray1,   -- Cards, panels one level above base
-            Overlay     = RAW.Gray2,   -- Flyouts, tooltips, dropdowns
-            Elevated    = RAW.Gray3,   -- Active/selected items
-            Stroke      = RAW.Gray4,   -- Dividers, outlines
+            Base     = RAW.Gray0,
+            Raised   = RAW.Gray1,
+            Overlay  = RAW.Gray2,
+            Elevated = RAW.Gray3,
+            Stroke   = RAW.Gray4,
         },
-        -- Border
         Border = {
-            Default     = RAW.Gray4,
-            Subtle      = RAW.Gray3,
-            Focus       = RAW.Accent2,
-            Error       = RAW.Red,
+            Default = RAW.Gray4,
+            Subtle  = RAW.Gray3,
+            Focus   = RAW.Accent2,
+            Error   = RAW.Red,
         },
-        -- Text
         Text = {
-            Primary     = RAW.Gray10,
-            Secondary   = RAW.Gray8,
-            Disabled    = RAW.Gray6,
-            OnAccent    = RAW.White,
-            Error       = RAW.Red,
-            Warning     = RAW.Yellow,
-            Success     = RAW.Green,
+            Primary   = RAW.Gray10,
+            Secondary = RAW.Gray8,
+            Disabled  = RAW.Gray6,
+            OnAccent  = RAW.White,
+            Error     = RAW.Red,
+            Warning   = RAW.Yellow,
+            Success   = RAW.Green,
         },
-        -- Icon
         Icon = {
-            Default     = RAW.Gray9,
-            Subtle      = RAW.Gray7,
-            Disabled    = RAW.Gray5,
-            OnAccent    = RAW.White,
+            Default  = RAW.Gray9,
+            Subtle   = RAW.Gray7,
+            Disabled = RAW.Gray5,
+            OnAccent = RAW.White,
         },
-        -- Accent
         Accent = {
-            Primary     = RAW.Accent1,
-            Hover       = RAW.Accent2,
-            Pressed     = RAW.Accent0,
-            Light       = RAW.Accent3,
+            Primary = RAW.Accent1,
+            Hover   = RAW.Accent2,
+            Pressed = RAW.Accent0,
+            Light   = RAW.Accent3,
         },
-        -- Feedback/status
         Feedback = {
-            Success     = RAW.Green,
-            Warning     = RAW.Yellow,
-            Error       = RAW.Red,
-            ErrorHover  = RAW.RedHov,
-            Info        = RAW.Accent1,
+            Success    = RAW.Green,
+            Warning    = RAW.Yellow,
+            Error      = RAW.Red,
+            ErrorHover = RAW.RedHov,
+            Info       = RAW.Accent1,
         },
-        -- Overlay scrim
         Overlay = {
-            Dialog  = c(0, 0, 0, 0.60),
-            Hover   = c(1, 1, 1, 0.06),
-            Press   = c(1, 1, 1, 0.12),
+            Dialog = c(0, 0, 0, 0.60),
+            Hover  = c(1, 1, 1, 0.06),
+            Press  = c(1, 1, 1, 0.12),
         },
     },
 
-    -- Spacing (pixels at 1:1 UI scale)
     Spacing = {
-        XS  = 2,
-        SM  = 4,
-        MD  = 8,
-        LG  = 12,
-        XL  = 16,
-        XXL = 24,
-        XXXL= 32,
+        XS   = 2,
+        SM   = 4,
+        MD   = 8,
+        LG   = 12,
+        XL   = 16,
+        XXL  = 24,
+        XXXL = 32,
     },
 
-    -- Typography
     Typography = {
         Display  = { font = "Fonts\\MORPHEUS.ttf",  size = 28, flags = "" },
         Header   = { font = "Fonts\\FRIZQT__.TTF",  size = 20, flags = "" },
@@ -137,7 +110,6 @@ local tokens = {
         Mono     = { font = "Fonts\\ARIALN.TTF",    size = 11, flags = "" },
     },
 
-    -- Corner radii (pixels)
     Radii = {
         None = 0,
         SM   = 2,
@@ -146,7 +118,6 @@ local tokens = {
         Full = 999,
     },
 
-    -- Motion / animation
     Motion = {
         Duration = {
             Instant  = 0,
@@ -157,7 +128,6 @@ local tokens = {
             Exit     = 0.15,
         },
         Easing = {
-            -- WoW animation API uses "Smooth"/"Linear" keywords
             Standard   = "Smooth",
             Decelerate = "Smooth",
             Accelerate = "Linear",
@@ -165,14 +135,12 @@ local tokens = {
         },
     },
 
-    -- Opacity
     Opacity = {
         Disabled = 0.40,
         Overlay  = 0.60,
         Ghost    = 0.70,
     },
 
-    -- Z-order / layer (WoW frame levels)
     Layer = {
         Base    = 1,
         Raised  = 2,
@@ -181,14 +149,12 @@ local tokens = {
         Toast   = 5,
     },
 
-    -- Density – vertical padding multipliers for compact/normal/comfortable
     Density = {
         Compact     = 0.75,
         Normal      = 1.00,
         Comfortable = 1.30,
     },
 
-    -- Icon sizes (pixels)
     Icon = {
         SM = 12,
         MD = 16,
@@ -196,6 +162,4 @@ local tokens = {
     },
 }
 
--- Register as the "Default" (dark) theme.
 lib.Tokens:RegisterTheme("Default", tokens)
-lib.Tokens:SetTheme("Default")

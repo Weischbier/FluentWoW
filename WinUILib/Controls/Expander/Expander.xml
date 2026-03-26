@@ -1,70 +1,64 @@
-<!-- WinUILib – Controls/Expander/Expander.xml
-     Design reference: WinUI Expander
-     https://learn.microsoft.com/windows/apps/design/controls/expander
-     Collapsible section with a header and animated body reveal.
--->
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
-    <Frame name="WUILExpanderTemplate" virtual="true">
-        <!-- Header button -->
-        <Layers>
-            <Layer level="BACKGROUND">
-                <Texture name="$parent_HeaderBG">
-                    <Size x="1" y="40"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT"/>
-                        <Anchor point="TOPRIGHT"/>
-                    </Anchors>
-                    <Color r="0.17" g="0.17" b="0.19" a="1"/>
-                </Texture>
-            </Layer>
-            <Layer level="OVERLAY">
-                <!-- Chevron indicator -->
-                <Texture name="$parent_Chevron">
-                    <Size x="10" y="10"/>
-                    <Anchors><Anchor point="RIGHT" x="-12" y="0" relativePoint="RIGHT"
-                             relativeTo="$parent_HeaderBG"/></Anchors>
-                    <Color r="0.68" g="0.68" b="0.72" a="1"/>
-                </Texture>
-            </Layer>
-        </Layers>
-
-        <!-- Header title -->
-        <FontString name="$parent_HeaderTitle" inherits="GameFontNormal"
-                    justifyH="LEFT" justifyV="MIDDLE">
-            <Anchors>
-                <Anchor point="LEFT"  x="12" y="-10" relativeTo="$parent" relativePoint="TOPLEFT"/>
-                <Anchor point="RIGHT" x="-32" y="-10" relativeTo="$parent" relativePoint="TOPRIGHT"/>
-            </Anchors>
-            <Color r="0.85" g="0.85" b="0.88"/>
-        </FontString>
-
-        <!-- Expandable content clipping frame -->
-        <Frame name="$parent_ContentClip" clipChildren="true">
-            <Anchors>
-                <Anchor point="TOPLEFT"  x="0" y="-40"/>
-                <Anchor point="TOPRIGHT" x="0" y="-40"/>
-            </Anchors>
-            <Size x="1" y="0"/>
-            <!-- Inner content frame (placed here by Lua) -->
-            <Frame name="$parent_Content">
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture name="$parent_ContentBG" setAllPoints="true">
-                            <Color r="0.10" g="0.10" b="0.11" a="1"/>
-                        </Texture>
-                    </Layer>
-                </Layers>
+    <!-- ================================================================
+         WUILExpanderTemplate — Collapsible content container with header
+         Size: 400×auto  |  Parts: Header (BG, Label, Chevron), Content
+         ================================================================ -->
+    <Frame name="WUILExpanderTemplate" virtual="true" enableMouse="true">
+        <Size x="400" y="40"/>
+        <Frames>
+            <Button name="$parent_Header" parentKey="Header">
+                <Size x="0" y="40"/>
                 <Anchors>
                     <Anchor point="TOPLEFT"/>
                     <Anchor point="TOPRIGHT"/>
                 </Anchors>
-                <Size x="1" y="120"/>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Label" parentKey="Label"
+                            inherits="GameFontNormal" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="LEFT" x="16" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Chevron" parentKey="Chevron"
+                            inherits="GameFontNormal" justifyH="CENTER" text="▸">
+                            <Anchors>
+                                <Anchor point="RIGHT" x="-16" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                    <Layer level="HIGHLIGHT">
+                        <Texture name="$parent_Hover" parentKey="Hover"
+                            setAllPoints="true" alphaMode="ADD"/>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick function="WUILExpander_OnHeaderClick"/>
+                    <OnEnter function="WUILExpander_OnHeaderEnter"/>
+                    <OnLeave function="WUILExpander_OnHeaderLeave"/>
+                </Scripts>
+            </Button>
+            <Frame name="$parent_Content" parentKey="Content" hidden="true">
+                <Size x="0" y="1"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_Header"
+                        relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="RIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_ContentBG" parentKey="ContentBG"
+                            setAllPoints="true"/>
+                    </Layer>
+                </Layers>
             </Frame>
-        </Frame>
-
-        <Size x="300" y="40"/>
-
+        </Frames>
         <Scripts>
             <OnLoad function="WUILExpander_OnLoad"/>
         </Scripts>

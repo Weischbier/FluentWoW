@@ -1,51 +1,20 @@
-<!-- WinUILib – Controls/TextBlock/TextBlock.xml
-     Design reference: WinUI TextBlock
-     https://learn.microsoft.com/windows/apps/design/controls/text-block
-     Read-only text display with semantic style variants.
--->
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
-    <!-- Base read-only text block -->
+    <!-- ================================================================
+         WUILTextBlockTemplate — Styled text label (non-interactive)
+         Parts: Label
+         ================================================================ -->
     <Frame name="WUILTextBlockTemplate" virtual="true">
+        <Size x="200" y="16"/>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString name="$parent_Text" inherits="GameFontNormal"
-                            justifyH="LEFT" justifyV="TOP" nonspacewrap="true">
-                    <Anchors>
-                        <Anchor point="TOPLEFT"/>
-                        <Anchor point="BOTTOMRIGHT"/>
-                    </Anchors>
-                    <Color r="0.85" g="0.85" b="0.88"/>
-                </FontString>
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE"
+                    setAllPoints="true"/>
             </Layer>
         </Layers>
-        <Size x="200" y="20"/>
         <Scripts>
             <OnLoad function="WUILTextBlock_OnLoad"/>
-        </Scripts>
-    </Frame>
-
-    <!-- Display – large headline -->
-    <Frame name="WUILTextBlockDisplayTemplate" virtual="true"
-           inherits="WUILTextBlockTemplate">
-        <Scripts>
-            <OnLoad function="WUILTextBlock_Display_OnLoad"/>
-        </Scripts>
-    </Frame>
-
-    <!-- Title -->
-    <Frame name="WUILTextBlockTitleTemplate" virtual="true"
-           inherits="WUILTextBlockTemplate">
-        <Scripts>
-            <OnLoad function="WUILTextBlock_Title_OnLoad"/>
-        </Scripts>
-    </Frame>
-
-    <!-- Caption – small helper text -->
-    <Frame name="WUILTextBlockCaptionTemplate" virtual="true"
-           inherits="WUILTextBlockTemplate">
-        <Scripts>
-            <OnLoad function="WUILTextBlock_Caption_OnLoad"/>
         </Scripts>
     </Frame>
 

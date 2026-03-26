@@ -1,209 +1,376 @@
 --- WinUILib – Controls/Button/Button.lua
--- Behaviour layer for WUILButtonTemplate, WUILIconButtonTemplate,
--- WUILToggleButtonTemplate.
---
--- Design reference: WinUI Button, AppBarButton, ToggleButton
--- https://learn.microsoft.com/windows/apps/design/controls/buttons
---
--- States: Normal | Hover | Pressed | Disabled
--- ToggleButton adds: Checked | CheckedHover | CheckedPressed
+-- Button family: Accent (primary), Subtle (secondary), Destructive, Icon, Toggle.
+-- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/buttons
+-- States: Normal | Hover | Pressed | Disabled | Checked (Toggle only)
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
--- Colour lookups (resolved at runtime so theme changes apply immediately)
-local function accentR()  return T:GetColor("Color.Accent.Primary") end
-local function accentH()  return T:GetColor("Color.Accent.Hover") end
-local function accentP()  return T:GetColor("Color.Accent.Pressed") end
+-------------------------------------------------------------------------------
+-- Style definitions (token key maps)
+-------------------------------------------------------------------------------
 
--- Overlay alpha values matching WinUI fill-button interaction states
-local HOVER_ALPHA   = 0.08
-local PRESS_ALPHA   = 0.14
-local DISABLED_MULT = 0.40   -- opacity factor for disabled state
+local STYLES = {
+    Accent = {
+        bg       = "Color.Accent.Primary",
+        bgHover  = "Color.Accent.Hover",
+        bgPress  = "Color.Accent.Pressed",
+        label    = "Color.Text.OnAccent",
+        topEdge  = "Color.Accent.Light",
+    },
+    Subtle = {
+        bg       = "Color.Surface.Elevated",
+        bgHover  = "Color.Overlay.Hover",
+        bgPress  = "Color.Overlay.Press",
+        label    = "Color.Text.Primary",
+        topEdge  = "Color.Border.Subtle",
+    },
+    Destructive = {
+        bg       = "Color.Feedback.Error",
+        bgHover  = "Color.Feedback.ErrorHover",
+        bgPress  = "Color.Feedback.Error",
+        label    = "Color.Text.OnAccent",
+        topEdge  = "Color.Feedback.Error",
+    },
+}
 
 -------------------------------------------------------------------------------
--- Shared script handlers (used by all button variants)
+-- Shared apply-style helper
+-------------------------------------------------------------------------------
+
+local function applyVisuals(self)
+    local style = self._style or STYLES.Accent
+    local state = self._vsm:GetState()
+
+    local bgKey, labelKey
+    if state == "Disabled" then
+        bgKey    = style.bg
+        labelKey = "Color.Text.Disabled"
+    elseif state == "Pressed" then
+        bgKey    = style.bgPress
+        labelKey = style.label
+    elseif state == "Hover" then
+        bgKey    = style.bgHover
+        labelKey = style.label
+    else
+        bgKey    = style.bg
+        labelKey = style.label
+    end
+
+    self.BG:SetColorTexture(T:GetColor(bgKey))
+    self.Label:SetTextColor(T:GetColor(labelKey))
+    self.TopEdge:SetColorTexture(T:GetColor(style.topEdge))
+
+    if state == "Disabled" then
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    else
+        self:SetAlpha(1)
+    end
+end
+
+-------------------------------------------------------------------------------
+-- Toggle-specific visuals
+-------------------------------------------------------------------------------
+
+local function applyToggleVisuals(self)
+    local state = self._vsm:GetState()
+    local checked = self._checked
+
+    local bgKey, labelKey, topKey
+    if state == "Disabled" then
+        bgKey    = "Color.Surface.Elevated"
+        labelKey = "Color.Text.Disabled"
+        topKey   = "Color.Border.Subtle"
+    elseif checked then
+        if state == "Pressed" then
+            bgKey = "Color.Accent.Pressed"
+        elseif state == "Hover" then
+            bgKey = "Color.Accent.Hover"
+        else
+            bgKey = "Color.Accent.Primary"
+        end
+        labelKey = "Color.Text.OnAccent"
+        topKey   = "Color.Accent.Light"
+    else
+        if state == "Pressed" then
+            bgKey = "Color.Overlay.Press"
+        elseif state == "Hover" then
+            bgKey = "Color.Overlay.Hover"
+        else
+            bgKey = "Color.Surface.Elevated"
+        end
+        labelKey = "Color.Text.Primary"
+        topKey   = "Color.Border.Subtle"
+    end
+
+    self.BG:SetColorTexture(T:GetColor(bgKey))
+    self.Label:SetTextColor(T:GetColor(labelKey))
+    self.TopEdge:SetColorTexture(T:GetColor(topKey))
+
+    if state == "Disabled" then
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    else
+        self:SetAlpha(1)
+    end
+end
+
+-------------------------------------------------------------------------------
+-- Shared mixin
+-------------------------------------------------------------------------------
+
+---@class WUILButton
+local ButtonMixin = {}
+
+function ButtonMixin:OnStateChanged(newState, prevState)
+    if self._isToggle then
+        applyToggleVisuals(self)
+    else
+        applyVisuals(self)
+    end
+end
+
+---@param text string
+function ButtonMixin:SetText(text)
+    self.Label:SetText(text)
+end
+
+---@return string
+function ButtonMixin:GetText()
+    return self.Label:GetText() or ""
+end
+
+---@param styleName string "Accent"|"Subtle"|"Destructive"
+function ButtonMixin:SetStyle(styleName)
+    self._style = STYLES[styleName] or STYLES.Accent
+    applyVisuals(self)
+end
+
+---@param fn function
+function ButtonMixin:SetOnClick(fn)
+    self._onClick = fn
+end
+
+-------------------------------------------------------------------------------
+-- Icon-button mixin additions
+-------------------------------------------------------------------------------
+
+---@class WUILIconButton
+local IconMixin = {}
+
+function IconMixin:OnStateChanged(newState, prevState)
+    local state = newState
+    local bgKey
+    if state == "Disabled" then
+        bgKey = "Color.Surface.Elevated"
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    elseif state == "Pressed" then
+        bgKey = "Color.Overlay.Press"
+        self:SetAlpha(1)
+    elseif state == "Hover" then
+        bgKey = "Color.Overlay.Hover"
+        self:SetAlpha(1)
+    else
+        bgKey = "Color.Surface.Elevated"
+        self:SetAlpha(1)
+    end
+    self.BG:SetColorTexture(T:GetColor(bgKey))
+
+    local iconKey = (state == "Disabled") and "Color.Icon.Disabled" or "Color.Icon.Default"
+    self.Icon:SetVertexColor(T:GetColor(iconKey))
+end
+
+---@param path string atlas or file path
+---@param isAtlas? boolean
+function IconMixin:SetIcon(path, isAtlas)
+    if isAtlas then
+        self.Icon:SetAtlas(path)
+    else
+        self.Icon:SetTexture(path)
+    end
+end
+
+function IconMixin:SetOnClick(fn)
+    self._onClick = fn
+end
+
+-------------------------------------------------------------------------------
+-- Toggle-button mixin additions
+-------------------------------------------------------------------------------
+
+---@class WUILToggleButton
+local ToggleMixin = {}
+
+function ToggleMixin:OnStateChanged(newState, prevState)
+    applyToggleVisuals(self)
+end
+
+---@param checked boolean
+function ToggleMixin:SetChecked(checked)
+    self._checked = checked
+    applyToggleVisuals(self)
+end
+
+---@return boolean
+function ToggleMixin:IsChecked()
+    return self._checked == true
+end
+
+---@param fn function
+function ToggleMixin:SetOnToggle(fn)
+    self._onToggle = fn
+end
+
+function ToggleMixin:SetText(text)
+    self.Label:SetText(text)
+end
+
+function ToggleMixin:GetText()
+    return self.Label:GetText() or ""
+end
+
+function ToggleMixin:SetOnClick(fn)
+    self._onClick = fn
+end
+
+-------------------------------------------------------------------------------
+-- Global script handlers (shared)
 -------------------------------------------------------------------------------
 
 function WUILButton_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
+    Mixin(self, lib._controls.ControlBase, ButtonMixin)
     self:WUILInit()
+    self._style = STYLES.Accent
+    self._isToggle = false
+    applyVisuals(self)
+end
+
+function WUILButtonSubtle_OnLoad(self)
+    Mixin(self, lib._controls.ControlBase, ButtonMixin)
+    self:WUILInit()
+    self._style = STYLES.Subtle
+    self._isToggle = false
+    applyVisuals(self)
+end
+
+function WUILButtonDestructive_OnLoad(self)
+    Mixin(self, lib._controls.ControlBase, ButtonMixin)
+    self:WUILInit()
+    self._style = STYLES.Destructive
+    self._isToggle = false
+    applyVisuals(self)
+end
+
+function WUILIconButton_OnLoad(self)
+    Mixin(self, lib._controls.ControlBase, IconMixin)
+    self:WUILInit()
+    self.BG:SetColorTexture(T:GetColor("Color.Surface.Elevated"))
+    self.Icon:SetVertexColor(T:GetColor("Color.Icon.Default"))
+end
+
+function WUILToggleButton_OnLoad(self)
+    Mixin(self, lib._controls.ControlBase, ToggleMixin)
+    self:WUILInit()
+    self._isToggle = true
+    self._checked  = false
+    applyToggleVisuals(self)
 end
 
 function WUILButton_OnEnter(self)
     if not self._enabled then return end
     self._vsm:SetState("Hover")
-    local ov = self["$parent_Overlay"] or self:GetParent() and nil
-    -- Use named child lookup via frame API
-    local overlay = _G[self:GetName() .. "_Overlay"]
-    if overlay then overlay:SetAlpha(HOVER_ALPHA) end
+    self:ShowTooltip()
 end
 
 function WUILButton_OnLeave(self)
     if not self._enabled then return end
-    self._vsm:SetState("Normal")
-    local overlay = _G[self:GetName() .. "_Overlay"]
-    if overlay then overlay:SetAlpha(0) end
+    if self._isToggle and self._checked then
+        self._vsm:SetState("Checked")
+    else
+        self._vsm:SetState("Normal")
+    end
     GameTooltip:Hide()
 end
 
-function WUILButton_OnMouseDown(self, button)
-    if button ~= "LeftButton" or not self._enabled then return end
+function WUILButton_OnMouseDown(self)
+    if not self._enabled then return end
     self._vsm:SetState("Pressed")
-    local overlay = _G[self:GetName() .. "_Overlay"]
-    if overlay then overlay:SetAlpha(PRESS_ALPHA) end
     Mot:ScalePress(self)
 end
 
-function WUILButton_OnMouseUp(self, button)
-    if button ~= "LeftButton" then return end
+function WUILButton_OnMouseUp(self)
     if not self._enabled then return end
-    local state = MouseIsOver(self) and "Hover" or "Normal"
-    self._vsm:SetState(state)
-    local overlay = _G[self:GetName() .. "_Overlay"]
-    if overlay then
-        overlay:SetAlpha(state == "Hover" and HOVER_ALPHA or 0)
+    if MouseIsOver(self) then
+        self._vsm:SetState("Hover")
+    elseif self._isToggle and self._checked then
+        self._vsm:SetState("Checked")
+    else
+        self._vsm:SetState("Normal")
     end
 end
 
 function WUILButton_OnClick(self, button)
-    if button ~= "LeftButton" or not self._enabled then return end
-    if self.OnActivated then
-        lib.Utils.SafeCall(self.OnActivated, self)
+    if not self._enabled then return end
+    if self._onClick then
+        lib.Utils.SafeCall(self._onClick, self, button)
     end
-end
-
--------------------------------------------------------------------------------
--- WUILButton public API mixin
--------------------------------------------------------------------------------
-
----@class WUILButton : WUILControlBase
-local WUILButton = {}
-lib._controls.Button = WUILButton
-
---- Sets the button label text.
----@param text string
-function WUILButton:SetLabel(text)
-    local label = _G[self:GetName() .. "_Label"]
-    if label then label:SetText(text) end
-end
-
---- Sets an atlas icon (for WUILIconButtonTemplate).
----@param atlas  string  Atlas name
----@param size   number? Icon size in pixels (default 16)
-function WUILButton:SetIcon(atlas, size)
-    local icon = _G[self:GetName() .. "_Icon"]
-    if not icon then return end
-    icon:SetAtlas(atlas)
-    if size then icon:SetSize(size, size) end
-    icon:Show()
-end
-
---- Overrides base colour for this button instance (optional customisation).
----@param r number  @param g number  @param b number  @param a number?
-function WUILButton:SetAccentColor(r, g, b, a)
-    local bg = _G[self:GetName() .. "_BG"]
-    if bg then bg:SetColorTexture(r, g, b, a or 1) end
-end
-
---- Applies disabled visual state.
-function WUILButton:OnStateChanged(newState, prevState)
-    local alpha = (newState == "Disabled") and DISABLED_MULT or 1
-    self:SetAlpha(alpha)
-    if newState == "Normal" then
-        local overlay = _G[self:GetName() .. "_Overlay"]
-        if overlay then overlay:SetAlpha(0) end
-    end
-end
-
--------------------------------------------------------------------------------
--- ToggleButton
--------------------------------------------------------------------------------
-
-local TOGGLE_CHECKED_BG = { 0.05, 0.55, 0.88, 1 }
-local TOGGLE_NORMAL_BG  = { 0.13, 0.13, 0.14, 1 }
-
-function WUILToggleButton_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, WUILButton)
-    self:WUILInit()
-    self._checked = false
 end
 
 function WUILToggleButton_OnClick(self, button)
-    if button ~= "LeftButton" or not self._enabled then return end
+    if not self._enabled then return end
     self._checked = not self._checked
-    self:_UpdateChecked()
-    if self.OnToggled then
-        lib.Utils.SafeCall(self.OnToggled, self, self._checked)
-    end
-end
-
-function WUILButton:_UpdateChecked()
-    local bg = _G[self:GetName() .. "_BG"]
-    if not bg then return end
     if self._checked then
-        bg:SetColorTexture(table.unpack(TOGGLE_CHECKED_BG))
-        local label = _G[self:GetName() .. "_Label"]
-        if label then label:SetTextColor(1, 1, 1) end
+        self._vsm:SetState("Checked")
     else
-        bg:SetColorTexture(table.unpack(TOGGLE_NORMAL_BG))
-        local label = _G[self:GetName() .. "_Label"]
-        if label then label:SetTextColor(0.85, 0.85, 0.88) end
+        self._vsm:SetState("Normal")
+    end
+    if self._onToggle then
+        lib.Utils.SafeCall(self._onToggle, self, self._checked)
+    end
+    if self._onClick then
+        lib.Utils.SafeCall(self._onClick, self, button)
     end
 end
 
---- Returns the checked state of a ToggleButton.
----@return boolean
-function WUILButton:IsChecked()
-    return self._checked == true
+function WUILButton_OnEnable(self)
+    self._enabled = true
+    self._vsm:SetFlag("Disabled", false)
 end
 
---- Programmatically sets the checked state.
----@param checked boolean
-function WUILButton:SetChecked(checked)
-    self._checked = checked
-    self:_UpdateChecked()
+function WUILButton_OnDisable(self)
+    self._enabled = false
+    self._vsm:SetFlag("Disabled", true)
 end
 
 -------------------------------------------------------------------------------
--- Factory helpers (alternative to XML instantiation)
+-- Factory methods
 -------------------------------------------------------------------------------
 
---- Creates a new Button frame programmatically.
 ---@param parent Frame
----@param variant string?  "Accent"|"Subtle"|"Destructive" (default "Accent")
----@param label   string?
----@return Frame
-function lib:CreateButton(parent, variant, label)
+---@param name? string
+---@param style? string  "Accent"|"Subtle"|"Destructive"
+---@return Button
+function lib:CreateButton(parent, name, style)
     local template = "WUILButtonTemplate"
-    if variant == "Subtle"      then template = "WUILButtonSubtleTemplate"
-    elseif variant == "Destructive" then template = "WUILButtonDestructiveTemplate"
+    if style == "Subtle" then
+        template = "WUILButtonSubtleTemplate"
+    elseif style == "Destructive" then
+        template = "WUILButtonDestructiveTemplate"
     end
-    local btn = CreateFrame("Button", nil, parent, template)
-    if label then btn:SetLabel(label) end
-    return btn
+    return CreateFrame("Button", name, parent, template)
 end
 
---- Creates a new IconButton frame.
 ---@param parent Frame
----@param atlas  string
----@param size   number?
----@return Frame
-function lib:CreateIconButton(parent, atlas, size)
-    local btn = CreateFrame("Button", nil, parent, "WUILIconButtonTemplate")
-    btn:SetIcon(atlas, size)
-    return btn
+---@param name? string
+---@return Button
+function lib:CreateIconButton(parent, name)
+    return CreateFrame("Button", name, parent, "WUILIconButtonTemplate")
 end
 
---- Creates a new ToggleButton frame.
 ---@param parent Frame
----@param label  string?
----@return Frame
-function lib:CreateToggleButton(parent, label)
-    local btn = CreateFrame("CheckButton", nil, parent, "WUILToggleButtonTemplate")
-    if label then btn:SetLabel(label) end
-    return btn
+---@param name? string
+---@return Button
+function lib:CreateToggleButton(parent, name)
+    return CreateFrame("Button", name, parent, "WUILToggleButtonTemplate")
 end

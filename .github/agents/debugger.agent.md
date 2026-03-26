@@ -84,6 +84,14 @@ Follow `.docs/DebugMaster.md` for detailed failure mode playbooks.
 3. Check height recalculation
 4. Check motion preset completion
 
+## Vendored Libraries
+
+When debugging issues related to vendored libs (`WinUILib/Libs/`):
+- Libs must NOT be modified — if a lib has a bug, work around it in WinUILib code
+- Ace3 libs: check LibStub versioning and callback registration
+- Motion libs (flux, knife): check `__MetroLib_Load()` wrapper globals
+- PureLua libs: check `_G.MetroLib*` global availability
+
 ## MCP Tools for Debugging
 
 - `mcp_wow-api_lookup_api` — verify function signatures

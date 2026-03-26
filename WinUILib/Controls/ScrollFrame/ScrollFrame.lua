@@ -1,160 +1,112 @@
 --- WinUILib – Controls/ScrollFrame/ScrollFrame.lua
--- Styled scroll container with an auto-hiding scrollbar.
--- Design ref: WinUI ScrollViewer
---
--- Public API:
---   :GetScrollChild()      → Frame (place content inside)
---   :SetScrollStep(n)
---   :ScrollToTop()
---   :ScrollToBottom()
---   :ScrollBy(delta)       positive = down, negative = up
+-- Scrollable container with thin scrollbar thumb.
+-- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/scroll-controls
+-- States: Normal | Disabled
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
+local T   = lib.Tokens
 
-local SCROLL_STEP   = 20
-local THUMB_MIN_H   = 20
-local THUMB_FADE_IN  = 0.15
-local THUMB_FADE_OUT = 0.80  -- seconds of inactivity before fade
+local SCROLL_STEP = 40
+
+-------------------------------------------------------------------------------
+-- Mixin
+-------------------------------------------------------------------------------
+
+---@class WUILScrollFrame
+local ScrollMixin = {}
+
+function ScrollMixin:OnStateChanged(newState, prevState)
+    if newState == "Disabled" then
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    else
+        self:SetAlpha(1)
+    end
+end
+
+function ScrollMixin:_ApplyTokens()
+    self.ScrollBar.Track:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
+    self.ScrollBar.Thumb.BG:SetColorTexture(T:GetColor("Color.Border.Default"))
+end
+
+function ScrollMixin:_UpdateThumb()
+    local sf = self.ScrollFrame
+    local scrollRange = sf:GetVerticalScrollRange()
+    local barHeight = self.ScrollBar:GetHeight()
+
+    if scrollRange <= 0 then
+        self.ScrollBar:Hide()
+        return
+    end
+    self.ScrollBar:Show()
+
+    local contentRatio = sf:GetHeight() / (sf:GetHeight() + scrollRange)
+    local thumbHeight = math.max(20, barHeight * contentRatio)
+    self.ScrollBar.Thumb:SetHeight(thumbHeight)
+
+    local scrollOffset = sf:GetVerticalScroll()
+    local trackSpace = barHeight - thumbHeight
+    local thumbOffset = (scrollOffset / scrollRange) * trackSpace
+
+    self.ScrollBar.Thumb:ClearAllPoints()
+    self.ScrollBar.Thumb:SetPoint("TOP", self.ScrollBar, "TOP", 0, -thumbOffset)
+end
+
+--- Returns the scroll child for embedding content.
+---@return Frame
+function ScrollMixin:GetScrollChild()
+    return self.ScrollFrame.Child
+end
+
+---@param height number
+function ScrollMixin:SetContentHeight(height)
+    self.ScrollFrame.Child:SetHeight(height)
+    self:_UpdateThumb()
+end
+
+---@param offset number
+function ScrollMixin:SetScrollOffset(offset)
+    self.ScrollFrame:SetVerticalScroll(offset)
+    self:_UpdateThumb()
+end
+
+---@return number
+function ScrollMixin:GetScrollOffset()
+    return self.ScrollFrame:GetVerticalScroll()
+end
 
 -------------------------------------------------------------------------------
 -- Script handlers
 -------------------------------------------------------------------------------
 
 function WUILScrollFrame_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, lib._controls.ScrollFrame)
+    Mixin(self, lib._controls.ControlBase, ScrollMixin)
     self:WUILInit()
-    self._scrollStep    = SCROLL_STEP
-    self._thumbVisible  = false
-    self._fadeTimer     = 0
-
-    -- Mouse-wheel
-    local sf = _G[self:GetName() .. "_Scroll"]
-    if sf then sf:EnableMouseWheel(true) end
-
-    -- Auto-hide: make scrollbar visible on hover
-    self:HookScript("OnEnter", function(self)
-        self:_ShowThumb()
-    end)
-    self:HookScript("OnLeave", function(self)
-        self._fadeTimer = THUMB_FADE_OUT
-        self:SetScript("OnUpdate", function(s, dt)
-            s._fadeTimer = s._fadeTimer - dt
-            if s._fadeTimer <= 0 then
-                s:SetScript("OnUpdate", nil)
-                s:_HideThumb()
-            end
-        end)
-    end)
+    self:_ApplyTokens()
 end
 
-function WUILScrollFrame_OnScroll(self, offset)
-    -- self = inner ScrollFrame widget; get container
-    local container = self:GetParent()
-    if container and container._wuil then
-        container:_UpdateThumb()
-    end
+function WUILScrollFrame_OnScrollLoad(self)
+    self:SetScrollChild(self.Child)
 end
 
 function WUILScrollFrame_OnRangeChanged(self, xRange, yRange)
-    local container = self:GetParent()
-    if container and container._wuil then
-        container:_UpdateThumb()
-    end
+    local parent = self:GetParent()
+    parent:_UpdateThumb()
+end
+
+function WUILScrollFrame_OnVerticalScroll(self, offset)
+    local parent = self:GetParent()
+    parent:_UpdateThumb()
 end
 
 function WUILScrollFrame_OnMouseWheel(self, delta)
-    local container = self:GetParent()
-    if not container then return end
-    local step = (container._scrollStep or SCROLL_STEP) * -delta
-    self:SetVerticalScroll(
-        math.max(0, math.min(self:GetVerticalScrollRange(),
-                             self:GetVerticalScroll() + step)))
-    container:_ShowThumb()
-end
-
--------------------------------------------------------------------------------
--- ScrollFrame mixin
--------------------------------------------------------------------------------
-
----@class WUILScrollFrame : WUILControlBase
-local ScrollFrame = {}
-lib._controls.ScrollFrame = ScrollFrame
-
----@return Frame
-function ScrollFrame:GetScrollChild()
-    return _G[self:GetName() .. "_Scroll_Child"]
-end
-
----@param n number  pixels per mouse-wheel tick
-function ScrollFrame:SetScrollStep(n)
-    self._scrollStep = n
-end
-
-function ScrollFrame:ScrollToTop()
-    local sf = _G[self:GetName() .. "_Scroll"]
-    if sf then sf:SetVerticalScroll(0) end
-end
-
-function ScrollFrame:ScrollToBottom()
-    local sf = _G[self:GetName() .. "_Scroll"]
-    if sf then sf:SetVerticalScroll(sf:GetVerticalScrollRange()) end
-end
-
----@param delta number  Positive = scroll down
-function ScrollFrame:ScrollBy(delta)
-    local sf = _G[self:GetName() .. "_Scroll"]
-    if not sf then return end
-    sf:SetVerticalScroll(
-        math.max(0, math.min(sf:GetVerticalScrollRange(),
-                             sf:GetVerticalScroll() + delta)))
-end
-
---- Recalculates and repositions the scrollbar thumb.
-function ScrollFrame:_UpdateThumb()
-    local sf    = _G[self:GetName() .. "_Scroll"]
-    local thumb = _G[self:GetName() .. "_ScrollThumb"]
-    local track = _G[self:GetName() .. "_ScrollTrack"]
-    if not (sf and thumb and track) then return end
-
-    local scrollRange = sf:GetVerticalScrollRange()
-    if scrollRange <= 0 then
-        thumb:Hide()
-        return
-    end
-    thumb:Show()
-
-    local trackH  = track:GetHeight()
-    local visible = sf:GetHeight()
-    local content = visible + scrollRange
-    local ratio   = visible / content
-    local thumbH  = math.max(THUMB_MIN_H, trackH * ratio)
-    thumb:SetHeight(thumbH)
-
-    local scrolled   = sf:GetVerticalScroll()
-    local thumbRange = trackH - thumbH
-    local thumbY     = -(scrolled / scrollRange) * thumbRange
-
-    thumb:ClearAllPoints()
-    thumb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -2, thumbY - 4)
-end
-
-function ScrollFrame:_ShowThumb()
-    self._thumbVisible = true
-    local thumb = _G[self:GetName() .. "_ScrollThumb"]
-    if thumb then
-        thumb:SetAlpha(0.8)
-    end
-    self:_UpdateThumb()
-end
-
-function ScrollFrame:_HideThumb()
-    self._thumbVisible = false
-    local thumb = _G[self:GetName() .. "_ScrollThumb"]
-    if thumb then
-        lib.Motion:FadeOut(thumb, 0.30)
-    end
+    local parent = self:GetParent()
+    local current = self:GetVerticalScroll()
+    local maxScroll = self:GetVerticalScrollRange()
+    local newScroll = current - (delta * SCROLL_STEP)
+    newScroll = math.max(0, math.min(newScroll, maxScroll))
+    self:SetVerticalScroll(newScroll)
+    parent:_UpdateThumb()
 end
 
 -------------------------------------------------------------------------------
@@ -162,12 +114,8 @@ end
 -------------------------------------------------------------------------------
 
 ---@param parent Frame
----@param width  number?
----@param height number?
+---@param name? string
 ---@return Frame
-function lib:CreateScrollFrame(parent, width, height)
-    local sf = CreateFrame("Frame", nil, parent, "WUILScrollFrameTemplate")
-    if width  then sf:SetWidth(width) end
-    if height then sf:SetHeight(height) end
-    return sf
+function lib:CreateScrollFrame(parent, name)
+    return CreateFrame("Frame", name, parent, "WUILScrollFrameTemplate")
 end

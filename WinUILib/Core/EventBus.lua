@@ -1,11 +1,5 @@
 --- WinUILib – Core/EventBus.lua
 -- Lightweight publish/subscribe event bus for internal framework use.
--- Decouples modules without creating direct dependencies.
---
--- Usage:
---   WinUILib.EventBus:On("ThemeChanged", function(theme) … end)
---   WinUILib.EventBus:Emit("ThemeChanged", newTheme)
---   WinUILib.EventBus:Off("ThemeChanged", handler)
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
@@ -13,19 +7,17 @@ local lib = WinUILib
 local EventBus = {}
 lib:RegisterModule("EventBus", EventBus)
 
-local _listeners = {}  -- [event] = {fn, ...}
+local _listeners = {}
 
---- Subscribe to an event.
 ---@param event string
----@param fn    function
+---@param fn function
 function EventBus:On(event, fn)
     if not _listeners[event] then _listeners[event] = {} end
     table.insert(_listeners[event], fn)
 end
 
---- Unsubscribe a specific handler from an event.
 ---@param event string
----@param fn    function
+---@param fn function
 function EventBus:Off(event, fn)
     local list = _listeners[event]
     if not list then return end
@@ -34,9 +26,8 @@ function EventBus:Off(event, fn)
     end
 end
 
---- Subscribe to an event; automatically unsubscribes after first call.
 ---@param event string
----@param fn    function
+---@param fn function
 function EventBus:Once(event, fn)
     local wrapper
     wrapper = function(...)
@@ -46,20 +37,17 @@ function EventBus:Once(event, fn)
     self:On(event, wrapper)
 end
 
---- Emit an event, invoking all registered handlers with given args.
 ---@param event string
----@param ...   any
+---@param ... any
 function EventBus:Emit(event, ...)
     local list = _listeners[event]
     if not list then return end
-    -- Iterate a snapshot to allow handlers to unsubscribe themselves safely.
-    local snapshot = {table.unpack(list)}
+    local snapshot = { unpack(list) }
     for _, fn in ipairs(snapshot) do
         lib.Utils.SafeCall(fn, ...)
     end
 end
 
---- Remove all handlers for an event.
 ---@param event string
 function EventBus:Clear(event)
     _listeners[event] = nil

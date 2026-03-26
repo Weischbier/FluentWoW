@@ -36,6 +36,10 @@ Read `WinUILib-Gallery/Pages/ButtonPage.lua` for the canonical page pattern:
 - Control instantiation via factory methods
 - StackLayout arrangement
 
+Also reference the WinUI Gallery XAML source for the equivalent page:
+- `.help/.sources/WinUI-Gallery-main/WinUIGallery/Samples/ControlPages/{controlName}Page.xaml`
+- Match demo structure and variants as closely as possible
+
 ### 2. Create Page File
 
 Create `WinUILib-Gallery/Pages/{pageName}.lua`:

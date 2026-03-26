@@ -1,150 +1,148 @@
 --- WinUILib – Controls/RadioButton/RadioButton.lua
--- RadioButton with group management.
--- Design ref: WinUI RadioButton
---
--- Usage:
---   local rb1 = lib:CreateRadioButton(parent, "Option A", "groupName")
---   local rb2 = lib:CreateRadioButton(parent, "Option B", "groupName")
---   rb1.OnSelected = function(rb) print("selected:", rb._label) end
---
--- Group semantics: only one button in a named group may be Selected at a time.
--- Groups are identified by a string key scoped to the current UI session.
+-- Mutually exclusive selection within a group.
+-- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/radio-button
+-- States: Normal | Hover | Pressed | Disabled | Selected
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
+local T   = lib.Tokens
 
--- Global group registry: [groupKey] = { button, ... }
+-------------------------------------------------------------------------------
+-- Group tracking
+-------------------------------------------------------------------------------
+
 local _groups = {}
 
-local RING_NORMAL  = { 0.50, 0.50, 0.55, 1 }
-local RING_HOVER   = { 0.68, 0.68, 0.72, 1 }
-local RING_CHECKED = { 0.05, 0.55, 0.88, 1 }
-local FILL_NORMAL  = { 0.10, 0.10, 0.11, 1 }
+local function deselectGroup(group, except)
+    if not _groups[group] then return end
+    for _, rb in ipairs(_groups[group]) do
+        if rb ~= except and rb._selected then
+            rb._selected = false
+            rb._vsm:SetState("Normal")
+        end
+    end
+end
+
+local function registerInGroup(self, group)
+    if not _groups[group] then _groups[group] = {} end
+    table.insert(_groups[group], self)
+end
+
+-------------------------------------------------------------------------------
+-- Mixin
+-------------------------------------------------------------------------------
+
+---@class WUILRadioButton
+local RadioMixin = {}
+
+function RadioMixin:OnStateChanged(newState, prevState)
+    local state = newState
+
+    if state == "Disabled" then
+        self.Circle:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Label:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+    else
+        self:SetAlpha(1)
+        self.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
+        if self._selected then
+            local cKey = (state == "Hover") and "Color.Accent.Hover" or "Color.Accent.Primary"
+            self.Circle:SetColorTexture(T:GetColor(cKey))
+            self.Dot:Show()
+            self.Dot:SetColorTexture(T:GetColor("Color.Icon.OnAccent"))
+        else
+            local cKey = (state == "Hover") and "Color.Border.Focus" or "Color.Border.Default"
+            self.Circle:SetColorTexture(T:GetColor(cKey))
+            self.Dot:Hide()
+        end
+    end
+end
+
+---@param selected boolean
+function RadioMixin:SetSelected(selected)
+    self._selected = selected
+    if selected then
+        deselectGroup(self._group, self)
+        self._vsm:SetState("Selected")
+    else
+        self._vsm:SetState("Normal")
+    end
+end
+
+---@return boolean
+function RadioMixin:IsSelected()
+    return self._selected == true
+end
+
+---@param group string
+function RadioMixin:SetGroup(group)
+    self._group = group
+    registerInGroup(self, group)
+end
+
+---@param text string
+function RadioMixin:SetText(text)
+    self.Label:SetText(text)
+end
+
+---@return string
+function RadioMixin:GetText()
+    return self.Label:GetText() or ""
+end
+
+---@param fn function
+function RadioMixin:SetOnSelected(fn)
+    self._onSelected = fn
+end
 
 -------------------------------------------------------------------------------
 -- Script handlers
 -------------------------------------------------------------------------------
 
 function WUILRadioButton_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, lib._controls.RadioButton)
+    Mixin(self, lib._controls.ControlBase, RadioMixin)
     self:WUILInit()
-    self._selected  = false
-    self._groupKey  = nil
-    self:_UpdateVisuals()
+    self._selected = false
+    self._group = "default"
+    self.Dot:SetColorTexture(1, 1, 1)
+    registerInGroup(self, "default")
+    self:OnStateChanged("Normal")
+end
+
+function WUILRadioButton_OnClick(self)
+    if not self._enabled then return end
+    if self._selected then return end
+    deselectGroup(self._group, self)
+    self._selected = true
+    self._vsm:SetState("Selected")
+    if self._onSelected then
+        lib.Utils.SafeCall(self._onSelected, self)
+    end
 end
 
 function WUILRadioButton_OnEnter(self)
     if not self._enabled then return end
     self._vsm:SetState("Hover")
-    local ring = _G[self:GetName() .. "_Ring"]
-    if ring and not self._selected then
-        ring:SetColorTexture(table.unpack(RING_HOVER))
-    end
-    if self._tooltipTitle then
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(self._tooltipTitle, 1, 1, 1, 1, true)
-        GameTooltip:Show()
-    end
+    self:ShowTooltip()
 end
 
 function WUILRadioButton_OnLeave(self)
     if not self._enabled then return end
-    self._vsm:SetState("Normal")
-    self:_UpdateVisuals()
-    GameTooltip:Hide()
-end
-
-function WUILRadioButton_OnClick(self, button)
-    if button ~= "LeftButton" or not self._enabled then return end
-    self:Select()
-end
-
--------------------------------------------------------------------------------
--- RadioButton mixin
--------------------------------------------------------------------------------
-
----@class WUILRadioButton : WUILControlBase
-local RadioButton = {}
-lib._controls.RadioButton = RadioButton
-
---- Selects this radio button, deselecting all others in the same group.
-function RadioButton:Select()
-    if self._selected then return end
-    -- Deselect siblings
-    if self._groupKey and _groups[self._groupKey] then
-        for _, rb in ipairs(_groups[self._groupKey]) do
-            if rb ~= self and rb._selected then
-                rb._selected = false
-                rb:_UpdateVisuals()
-            end
-        end
-    end
-    self._selected = true
-    self:_UpdateVisuals()
-    if self.OnSelected then
-        lib.Utils.SafeCall(self.OnSelected, self)
-    end
-end
-
---- Sets the group this radio button belongs to.
----@param groupKey string
-function RadioButton:SetGroup(groupKey)
-    -- Remove from old group
-    if self._groupKey and _groups[self._groupKey] then
-        for i, rb in ipairs(_groups[self._groupKey]) do
-            if rb == self then table.remove(_groups[self._groupKey], i); break end
-        end
-    end
-    self._groupKey = groupKey
-    if not _groups[groupKey] then _groups[groupKey] = {} end
-    table.insert(_groups[groupKey], self)
-end
-
----@return boolean
-function RadioButton:IsSelected()
-    return self._selected == true
-end
-
---- Sets the label text.
----@param text string
-function RadioButton:SetLabel(text)
-    self._label = text
-    local label = _G[self:GetName() .. "_Label"]
-    if label then label:SetText(text) end
-end
-
-function RadioButton:_UpdateVisuals()
-    local ring = _G[self:GetName() .. "_Ring"]
-    local dot  = _G[self:GetName() .. "_Dot"]
-    if not (ring and dot) then return end
-
     if self._selected then
-        ring:SetColorTexture(table.unpack(RING_CHECKED))
-        dot:Show()
+        self._vsm:SetState("Selected")
     else
-        ring:SetColorTexture(table.unpack(RING_NORMAL))
-        dot:Hide()
+        self._vsm:SetState("Normal")
     end
-    local disabled = not self._enabled
-    self:SetAlpha(disabled and lib.Tokens:GetNumber("Opacity.Disabled") or 1)
-end
-
-function RadioButton:OnStateChanged(newState, prevState)
-    if newState ~= "Hover" then self:_UpdateVisuals() end
+    GameTooltip:Hide()
 end
 
 -------------------------------------------------------------------------------
 -- Factory
 -------------------------------------------------------------------------------
 
----@param parent   Frame
----@param label    string?
----@param groupKey string?
----@return Frame
-function lib:CreateRadioButton(parent, label, groupKey)
-    local rb = CreateFrame("CheckButton", nil, parent, "WUILRadioButtonTemplate")
-    if label    then rb:SetLabel(label) end
-    if groupKey then rb:SetGroup(groupKey) end
-    return rb
+---@param parent Frame
+---@param name? string
+---@return Button
+function lib:CreateRadioButton(parent, name)
+    return CreateFrame("Button", name, parent, "WUILRadioButtonTemplate")
 end

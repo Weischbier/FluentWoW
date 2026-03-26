@@ -1,83 +1,75 @@
-<!-- WinUILib – Controls/TabView/TabView.xml
-     Design reference: WinUI TabView
-     https://learn.microsoft.com/windows/apps/design/controls/tab-view
-     Horizontal tab strip with swappable content panels.
--->
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
-    <!-- Individual tab button -->
-    <Button name="WUILTabItemTemplate" virtual="true" enableMouse="true">
-        <Layers>
-            <Layer level="BACKGROUND">
-                <Texture name="$parent_BG" setAllPoints="true">
-                    <Color r="0.13" g="0.13" b="0.14" a="1"/>
-                </Texture>
-                <!-- Bottom indicator line (active only) -->
-                <Texture name="$parent_ActiveLine" hidden="true">
-                    <Size x="1" y="2"/>
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT"  x="8"  y="0"/>
-                        <Anchor point="BOTTOMRIGHT" x="-8" y="0"/>
-                    </Anchors>
-                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
-                </Texture>
-            </Layer>
-        </Layers>
-        <FontString name="$parent_Label" inherits="GameFontNormal"
-                    justifyH="CENTER" justifyV="MIDDLE">
-            <Anchors>
-                <Anchor point="LEFT"  x="12" y="0"/>
-                <Anchor point="RIGHT" x="-12" y="0"/>
-            </Anchors>
-            <Color r="0.68" g="0.68" b="0.72"/>
-        </FontString>
-        <Size x="100" y="36"/>
-        <Scripts>
-            <OnLoad  function="WUILTabItem_OnLoad"/>
-            <OnEnter function="WUILTabItem_OnEnter"/>
-            <OnLeave function="WUILTabItem_OnLeave"/>
-            <OnClick function="WUILTabItem_OnClick"/>
-        </Scripts>
-    </Button>
-
-    <!-- TabView container -->
+    <!-- ================================================================
+         WUILTabViewTemplate — Tabbed container with tab strip + content area
+         Size: 400×300  |  Parts: TabStrip, ContentArea
+         ================================================================ -->
     <Frame name="WUILTabViewTemplate" virtual="true">
-        <Layers>
-            <!-- Tab strip background -->
-            <Layer level="BACKGROUND">
-                <Texture name="$parent_StripBG">
-                    <Size x="1" y="36"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT"/>
-                        <Anchor point="TOPRIGHT"/>
-                    </Anchors>
-                    <Color r="0.10" g="0.10" b="0.11" a="1"/>
-                </Texture>
-                <!-- Strip bottom border -->
-                <Texture name="$parent_StripBorder">
-                    <Size x="1" y="1"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT"  x="0" y="-36"/>
-                        <Anchor point="TOPRIGHT" x="0" y="-36"/>
-                    </Anchors>
-                    <Color r="0.28" g="0.28" b="0.32" a="1"/>
-                </Texture>
-                <!-- Content panel background -->
-                <Texture name="$parent_ContentBG">
-                    <Anchors>
-                        <Anchor point="TOPLEFT"     x="0" y="-37"/>
-                        <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
-                    </Anchors>
-                    <Color r="0.10" g="0.10" b="0.11" a="1"/>
-                </Texture>
-            </Layer>
-        </Layers>
-
-        <Size x="400" y="280"/>
-
+        <Size x="400" y="300"/>
+        <Frames>
+            <Frame name="$parent_TabStrip" parentKey="TabStrip">
+                <Size x="0" y="32"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="TOPRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_StripBG" parentKey="StripBG" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Frame name="$parent_ContentArea" parentKey="ContentArea">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_TabStrip"
+                        relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_ContentBG" parentKey="ContentBG"
+                            setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnLoad function="WUILTabView_OnLoad"/>
         </Scripts>
     </Frame>
+
+    <!-- Tab item template (used by FramePool) -->
+    <Button name="WUILTabItemTemplate" virtual="true">
+        <Size x="100" y="32"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture name="$parent_Indicator" parentKey="Indicator">
+                    <Size x="0" y="2"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture name="$parent_Hover" parentKey="Hover"
+                    setAllPoints="true" alphaMode="ADD"/>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnClick function="WUILTabItem_OnClick"/>
+        </Scripts>
+    </Button>
 
 </Ui>

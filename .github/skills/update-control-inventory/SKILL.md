@@ -58,6 +58,10 @@ Count controls in each surface and verify they match:
 - ARCHITECTURE.md §5 catalog rows
 - Filesystem: count directories under `WinUILib/Controls/`
 
+Also verify pixel-fidelity:
+- Check `.docs/DesignSpecs.md` has measurements for the control (if applicable)
+- Ensure the control's spacing values use design-spec-aligned tokens
+
 Report any discrepancies.
 
 ## Outputs

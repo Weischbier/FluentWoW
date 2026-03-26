@@ -1,6 +1,3 @@
--- Vendored upstream wrapper for MetroLib / WoW embedding
--- Source: airstruck/knife (timer)
-local function __MetroLib_Load()
 local Timer = {}
 
 -- group management
@@ -245,9 +242,3 @@ end
 Timer.defaultGroup = defaultGroup
 
 return Timer
-
-end
-
-local module = __MetroLib_Load()
-_G.MetroLibKnifeTimer = module
-return module

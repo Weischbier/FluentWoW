@@ -55,6 +55,14 @@ Verify public API methods haven't changed signatures:
 - Compare current public methods against documented API in ARCHITECTURE.md
 - Flag any renamed, removed, or signature-changed methods
 
+### 7. Pixel-Fidelity Audit
+
+Scan controls for spacing/sizing values that don't match `.docs/DesignSpecs.md`:
+- `SetSize()`, `SetWidth()`, `SetHeight()` values must match design-spec pixels
+- Anchor offsets must match design-spec gaps
+- Padding/gap values must use the correct spacing tokens
+- Cross-reference `.help/.sources/microsoft-ui-xaml-main/specs/` for control-specific measurements
+
 ## Report Format
 
 ```markdown

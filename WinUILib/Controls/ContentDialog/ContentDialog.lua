@@ -1,197 +1,140 @@
 --- WinUILib – Controls/ContentDialog/ContentDialog.lua
--- Modal dialog with title, body content, primary + secondary + close actions.
--- Design ref: WinUI ContentDialog
---
--- Public API:
---   :SetTitle(text)
---   :SetContent(text)
---   :SetPrimaryButton(text, callback)
---   :SetSecondaryButton(text, callback)
---   :SetCloseOnPrimary(bool)    default true
---   :SetCloseOnSecondary(bool)  default true
---   :Open()
---   :Close()
---   OnOpened(self)  OnClosed(self, result)   result = "Primary"|"Secondary"|"Close"
---
--- Combat note: dialogs MUST NOT be shown during combat as they disable mouse
--- on the secure UI.  Callers should guard with InCombatLockdown().
--- This implementation blocks Show() in combat and queues it for post-combat.
+-- Modal dialog with title, body, primary/secondary buttons, and overlay.
+-- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/dialogs-and-flyouts/dialogs
+-- Pixel-fidelity: DesignSpecs §2.2 — title top 32px, title-body 24px,
+--   button row bottom 24px, inter-button 8px.
+-- States: Normal | Disabled
+-- COMBAT SAFE: Show() blocked during InCombatLockdown (Rule #2, #4).
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
+local T   = lib.Tokens
 local Mot = lib.Motion
 
--- Singleton: only one dialog may be open at a time in WoW.
-local _activeDialog = nil
+-------------------------------------------------------------------------------
+-- Mixin
+-------------------------------------------------------------------------------
+
+---@class WUILContentDialog
+local DialogMixin = {}
+
+function DialogMixin:OnStateChanged(newState, prevState)
+    -- dialog visuals are mostly static; just handle overlay colors
+end
+
+function DialogMixin:_ApplyTokens()
+    self.Overlay:SetColorTexture(T:GetColor("Color.Overlay.Dialog"))
+    self.Card.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
+    self.Card.TitleLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
+    self.Card.BodyLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
+    self.Card.CloseBtn.X:SetTextColor(T:GetColor("Color.Text.Secondary"))
+end
+
+---@param title string
+function DialogMixin:SetTitle(title)
+    self.Card.TitleLabel:SetText(title)
+end
+
+---@param body string
+function DialogMixin:SetBody(body)
+    self.Card.BodyLabel:SetText(body)
+    self.Card.BodyLabel:SetWordWrap(true)
+end
+
+---@param text string
+---@param callback? function
+function DialogMixin:SetPrimaryButton(text, callback)
+    self.Card.ButtonRow.PrimaryBtn:SetText(text)
+    self._primaryCallback = callback
+    self.Card.ButtonRow.PrimaryBtn:SetOnClick(function()
+        if callback then lib.Utils.SafeCall(callback) end
+        self:Close("Primary")
+    end)
+end
+
+---@param text string
+---@param callback? function
+function DialogMixin:SetSecondaryButton(text, callback)
+    self.Card.ButtonRow.SecondaryBtn:SetText(text)
+    self._secondaryCallback = callback
+    self.Card.ButtonRow.SecondaryBtn:SetOnClick(function()
+        if callback then lib.Utils.SafeCall(callback) end
+        self:Close("Secondary")
+    end)
+end
+
+---@param closable boolean
+function DialogMixin:SetClosable(closable)
+    self._closable = closable
+    if closable then
+        self.Card.CloseBtn:Show()
+    else
+        self.Card.CloseBtn:Hide()
+    end
+end
+
+---@param dismissOnOverlay boolean
+function DialogMixin:SetDismissOnOverlay(dismissOnOverlay)
+    self._dismissOnOverlay = dismissOnOverlay
+end
+
+---@param fn function  receives (self, result) where result = "Primary"|"Secondary"|"Close"|"Overlay"
+function DialogMixin:SetOnClosed(fn)
+    self._onClosed = fn
+end
+
+function DialogMixin:Open()
+    if InCombatLockdown() then
+        lib:Debug("ContentDialog: blocked in combat")
+        return
+    end
+    self:_ApplyTokens()
+    Mot:FadeIn(self, nil, nil)
+    Mot:SlideIn(self.Card, "UP", 16)
+end
+
+---@param result? string
+function DialogMixin:Close(result)
+    result = result or "Close"
+    Mot:FadeOut(self, nil, function()
+        if self._onClosed then
+            lib.Utils.SafeCall(self._onClosed, self, result)
+        end
+    end)
+end
 
 -------------------------------------------------------------------------------
 -- Script handlers
 -------------------------------------------------------------------------------
 
 function WUILContentDialog_OnLoad(self)
-    Mixin(self, lib._controls.ControlBase)
-    Mixin(self, lib._controls.ContentDialog)
+    Mixin(self, lib._controls.ControlBase, DialogMixin)
     self:WUILInit()
-    self._pendingOpen       = false
-    self._closeOnPrimary    = true
-    self._closeOnSecondary  = true
-    self._result            = nil
-
-    -- Wire built-in buttons
-    local pri = _G[self:GetName() .. "_PrimaryBtn"]
-    if pri then
-        Mixin(pri, lib._controls.ControlBase)
-        pri:WUILInit()
-        pri:SetLabel("OK")
-        pri:SetScript("OnClick", function(btn, b)
-            if b == "LeftButton" then self:_OnPrimary() end
-        end)
-    end
-
-    local sec = _G[self:GetName() .. "_SecondaryBtn"]
-    if sec then
-        Mixin(sec, lib._controls.ControlBase)
-        sec:WUILInit()
-        sec:SetLabel("Cancel")
-        sec:SetScript("OnClick", function(btn, b)
-            if b == "LeftButton" then self:_OnSecondary() end
-        end)
-    end
-
-    -- Register for PLAYER_REGEN_ENABLED to auto-show queued dialogs
-    self:RegisterEvent("PLAYER_REGEN_ENABLED")
-    self:SetScript("OnEvent", function(s, event)
-        if event == "PLAYER_REGEN_ENABLED" and s._pendingOpen then
-            s._pendingOpen = false
-            s:Open()
-        end
-    end)
+    self._closable = true
+    self._dismissOnOverlay = false
+    self:_ApplyTokens()
 end
 
-function WUILContentDialog_OnKeyDown(self, key)
-    if key == "ESCAPE" then
-        self:Close()
-    elseif key == "RETURN" then
-        self:_OnPrimary()
+function WUILContentDialog_OnCloseClick(self)
+    local dialog = self:GetParent():GetParent()
+    if dialog._closable then
+        dialog:Close("Close")
     end
 end
 
--------------------------------------------------------------------------------
--- ContentDialog mixin
--------------------------------------------------------------------------------
-
----@class WUILContentDialog : WUILControlBase
-local ContentDialog = {}
-lib._controls.ContentDialog = ContentDialog
-
----@param text string
-function ContentDialog:SetTitle(text)
-    local t = _G[self:GetName() .. "_Title"]
-    if t then t:SetText(text or "") end
-end
-
----@param text string
-function ContentDialog:SetContent(text)
-    local c = _G[self:GetName() .. "_Content"]
-    if c then
-        c:SetText(text or "")
-        -- Resize dialog card to fit content
-        self:_AutoSize()
+function WUILContentDialog_OnOverlayClick(self)
+    if self._dismissOnOverlay then
+        self:Close("Overlay")
     end
-end
-
----@param text string
----@param cb   function?
-function ContentDialog:SetPrimaryButton(text, cb)
-    local btn = _G[self:GetName() .. "_PrimaryBtn"]
-    if btn then
-        btn:SetLabel(text or "OK")
-        btn:SetShown((text or "") ~= "")
-    end
-    self._primaryCallback = cb
-end
-
----@param text string
----@param cb   function?
-function ContentDialog:SetSecondaryButton(text, cb)
-    local btn = _G[self:GetName() .. "_SecondaryBtn"]
-    if btn then
-        btn:SetLabel(text or "Cancel")
-        btn:SetShown((text or "") ~= "")
-    end
-    self._secondaryCallback = cb
-end
-
----@param v boolean
-function ContentDialog:SetCloseOnPrimary(v)   self._closeOnPrimary   = v end
-
----@param v boolean
-function ContentDialog:SetCloseOnSecondary(v) self._closeOnSecondary = v end
-
---- Opens the dialog; defers if in combat.
-function ContentDialog:Open()
-    if lib.Utils.InCombat() then
-        self._pendingOpen = true
-        lib:Debug("ContentDialog: deferred (in combat)")
-        return
-    end
-    if _activeDialog and _activeDialog ~= self then
-        _activeDialog:Close()
-    end
-    _activeDialog = self
-    Mot:FadeIn(self, 0.20)
-    self:SetPropagateKeyboardInput(false)  -- capture Escape / Enter
-    if self.OnOpened then lib.Utils.SafeCall(self.OnOpened, self) end
-end
-
---- Closes the dialog with an optional result string.
----@param result string?
-function ContentDialog:Close(result)
-    self._result = result or "Close"
-    Mot:FadeOut(self, 0.15, function()
-        if _activeDialog == self then _activeDialog = nil end
-        if self.OnClosed then
-            lib.Utils.SafeCall(self.OnClosed, self, self._result)
-        end
-    end)
-end
-
-function ContentDialog:_OnPrimary()
-    if self._primaryCallback then
-        lib.Utils.SafeCall(self._primaryCallback, self)
-    end
-    if self._closeOnPrimary then self:Close("Primary") end
-end
-
-function ContentDialog:_OnSecondary()
-    if self._secondaryCallback then
-        lib.Utils.SafeCall(self._secondaryCallback, self)
-    end
-    if self._closeOnSecondary then self:Close("Secondary") end
-end
-
-function ContentDialog:_AutoSize()
-    local content = _G[self:GetName() .. "_Content"]
-    local bg      = _G[self:GetName() .. "_BG"]
-    local border  = _G[self:GetName() .. "_Border"]
-    if not (content and bg) then return end
-    local textH = content:GetStringHeight()
-    local h     = math.max(160, 80 + textH + 60)
-    bg:SetHeight(h)
-    if border then border:SetHeight(h) end
 end
 
 -------------------------------------------------------------------------------
 -- Factory
 -------------------------------------------------------------------------------
 
---- Creates a ContentDialog (attached to UIParent; there should be few of these).
----@param title   string?
----@param content string?
+---@param parent? Frame  defaults to UIParent
+---@param name? string
 ---@return Frame
-function lib:CreateContentDialog(title, content)
-    local d = CreateFrame("Frame", nil, UIParent, "WUILContentDialogTemplate")
-    if title   then d:SetTitle(title) end
-    if content then d:SetContent(content) end
-    return d
+function lib:CreateContentDialog(parent, name)
+    return CreateFrame("Frame", name, parent or UIParent, "WUILContentDialogTemplate")
 end

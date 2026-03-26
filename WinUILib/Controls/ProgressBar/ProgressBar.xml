@@ -1,61 +1,56 @@
-<!-- WinUILib – Controls/ProgressBar/ProgressBar.xml
-     Design reference: WinUI ProgressBar, ProgressRing
-     https://learn.microsoft.com/windows/apps/design/controls/progress-controls
--->
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
-    <!-- Determinate horizontal progress bar -->
+    <!-- ================================================================
+         WUILProgressBarTemplate — Determinate / indeterminate progress bar
+         Size: 200×4 (bar) + header area
+         Parts: Track, Fill, HeaderLabel
+         ================================================================ -->
     <Frame name="WUILProgressBarTemplate" virtual="true">
+        <Size x="200" y="24"/>
         <Layers>
-            <Layer level="BACKGROUND">
-                <Texture name="$parent_Track" setAllPoints="true">
-                    <Color r="0.22" g="0.22" b="0.24" a="1"/>
-                </Texture>
-            </Layer>
             <Layer level="ARTWORK">
-                <!-- Fill – width driven by Lua -->
-                <Texture name="$parent_Fill">
-                    <Size x="0" y="1"/>
+                <FontString name="$parent_HeaderLabel" parentKey="HeaderLabel"
+                    inherits="GameFontNormalSmall" justifyH="LEFT" hidden="true">
                     <Anchors>
-                        <Anchor point="TOPLEFT"/>
-                        <Anchor point="BOTTOMLEFT"/>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
                     </Anchors>
-                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
-                </Texture>
+                </FontString>
             </Layer>
         </Layers>
-        <Size x="200" y="4"/>
+        <Frames>
+            <StatusBar name="$parent_Bar" parentKey="Bar" minValue="0" maxValue="100">
+                <Size x="0" y="4"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="0" y="0"/>
+                    <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Track" parentKey="Track" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+                <BarTexture name="$parent_Fill" parentKey="Fill"/>
+            </StatusBar>
+        </Frames>
         <Scripts>
-            <OnLoad        function="WUILProgressBar_OnLoad"/>
-            <OnSizeChanged function="WUILProgressBar_OnSizeChanged"/>
+            <OnLoad function="WUILProgressBar_OnLoad"/>
         </Scripts>
     </Frame>
 
-    <!-- Indeterminate ("paused" shimmer) variant -->
-    <Frame name="WUILProgressBarIndeterminateTemplate" virtual="true"
-           inherits="WUILProgressBarTemplate">
-        <Scripts>
-            <OnLoad function="WUILProgressBarIndeterminate_OnLoad"/>
-        </Scripts>
-    </Frame>
-
-    <!-- ProgressRing / spinner – rotating animation frame -->
+    <!-- ================================================================
+         WUILProgressRingTemplate — Circular indeterminate spinner
+         Size: 32×32  |  Parts: Ring (spinning texture)
+         ================================================================ -->
     <Frame name="WUILProgressRingTemplate" virtual="true">
+        <Size x="32" y="32"/>
         <Layers>
             <Layer level="ARTWORK">
-                <!-- Spinner arc segments drawn as textures; rotated by Lua -->
-                <Texture name="$parent_Arc1">
-                    <Size x="24" y="24"/>
-                    <Anchors><Anchor point="CENTER"/></Anchors>
-                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
-                </Texture>
+                <Texture name="$parent_Ring" parentKey="Ring" setAllPoints="true"/>
             </Layer>
         </Layers>
-        <Size x="32" y="32"/>
         <Scripts>
-            <OnLoad   function="WUILProgressRing_OnLoad"/>
-            <OnShow   function="WUILProgressRing_OnShow"/>
-            <OnHide   function="WUILProgressRing_OnHide"/>
+            <OnLoad function="WUILProgressRing_OnLoad"/>
+            <OnUpdate function="WUILProgressRing_OnUpdate"/>
         </Scripts>
     </Frame>
 
