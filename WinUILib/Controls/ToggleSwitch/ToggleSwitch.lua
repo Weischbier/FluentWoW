@@ -42,11 +42,12 @@ function ToggleSwitchMixin:OnStateChanged(newState, prevState)
 end
 
 function ToggleSwitchMixin:_UpdateThumbPosition()
+    local inset = T:GetNumber("Spacing.XS") + 1  -- 3px thumb inset
     self.Thumb:ClearAllPoints()
     if self._isOn then
-        self.Thumb:SetPoint("RIGHT", self.Track, "RIGHT", -3, 0)
+        self.Thumb:SetPoint("RIGHT", self.Track, "RIGHT", -inset, 0)
     else
-        self.Thumb:SetPoint("LEFT", self.Track, "LEFT", 3, 0)
+        self.Thumb:SetPoint("LEFT", self.Track, "LEFT", inset, 0)
     end
 end
 

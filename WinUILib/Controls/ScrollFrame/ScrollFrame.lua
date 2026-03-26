@@ -7,7 +7,7 @@
 local lib = WinUILib
 local T   = lib.Tokens
 
-local SCROLL_STEP = 40
+local SCROLL_STEP = T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")  -- 40
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -41,7 +41,7 @@ function ScrollMixin:_UpdateThumb()
     self.ScrollBar:Show()
 
     local contentRatio = sf:GetHeight() / (sf:GetHeight() + scrollRange)
-    local thumbHeight = math.max(20, barHeight * contentRatio)
+    local thumbHeight = math.max(T:GetNumber("Spacing.XL") + T:GetNumber("Spacing.SM"), barHeight * contentRatio)  -- min 20
     self.ScrollBar.Thumb:SetHeight(thumbHeight)
 
     local scrollOffset = sf:GetVerticalScroll()

@@ -78,7 +78,10 @@ function CardMixin:SetDescription(text)
         self.DescLabel:SetText(text)
         self.DescLabel:Show()
         -- Expand height for two-line card
-        local h = 12 + self.TitleLabel:GetStringHeight() + 2 + self.DescLabel:GetStringHeight() + 16
+        local padT  = T:GetNumber("Spacing.LG")   -- 12
+        local gap   = T:GetNumber("Spacing.XS")    -- 2
+        local padB  = T:GetNumber("Spacing.XL")    -- 16
+        local h = padT + self.TitleLabel:GetStringHeight() + gap + self.DescLabel:GetStringHeight() + padB
         self:SetHeight(math.max(52, h))
     else
         self.DescLabel:Hide()
@@ -95,8 +98,8 @@ function CardMixin:SetIconTexture(path)
         self.Icon:Hide()
         -- Re-anchor title to left edge
         self.TitleLabel:ClearAllPoints()
-        self.TitleLabel:SetPoint("TOPLEFT", self, "TOPLEFT", 16, -12)
-        self.TitleLabel:SetPoint("RIGHT", self.Action, "LEFT", -8, 0)
+        self.TitleLabel:SetPoint("TOPLEFT", self, "TOPLEFT", T:GetNumber("Spacing.XL"), -T:GetNumber("Spacing.LG"))
+        self.TitleLabel:SetPoint("RIGHT", self.Action, "LEFT", -T:GetNumber("Spacing.MD"), 0)
     end
 end
 
@@ -153,7 +156,8 @@ function WUILSettingsCard_OnLoad(self)
 
     applyVisuals(self)
 
-    lib.EventBus:On("ThemeChanged", function() applyVisuals(self) end)
+    self._themeListener = function() applyVisuals(self) end
+    lib.EventBus:On("ThemeChanged", self._themeListener)
 end
 
 function WUILSettingsCard_OnEnter(self)

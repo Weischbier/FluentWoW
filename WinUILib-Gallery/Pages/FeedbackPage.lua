@@ -24,7 +24,7 @@ Gallery:RegisterPage("feedback", "Feedback", function(parent)
 
     local pb = lib:CreateProgressBar(stack)
     pb:SetHeader("Determinate")
-    pb:SetValue(0.65)
+    pb:SetValue(65)
     stack:AddChild(pb)
 
     local pbI = lib:CreateProgressBar(stack)
@@ -82,13 +82,16 @@ Gallery:RegisterPage("feedback", "Feedback", function(parent)
 
     local dlgBtn = lib:CreateButton(stack, nil, "Accent")
     dlgBtn:SetText("Show Dialog")
+    local demoDlg
     dlgBtn:SetOnClick(function()
-        local dlg = lib:CreateContentDialog(nil, "WUILGalleryDemoDialog")
-        dlg:SetTitle("Sample Dialog")
-        dlg:SetBody("This is a ContentDialog with primary and secondary actions.")
-        dlg:SetPrimaryButton("OK", function() dlg:Close() end)
-        dlg:SetSecondaryButton("Cancel", function() dlg:Close() end)
-        dlg:Open()
+        if not demoDlg then
+            demoDlg = lib:CreateContentDialog(nil, "WUILGalleryDemoDialog")
+            demoDlg:SetTitle("Sample Dialog")
+            demoDlg:SetBody("This is a ContentDialog with primary and secondary actions.")
+            demoDlg:SetPrimaryButton("OK", function() demoDlg:Close() end)
+            demoDlg:SetSecondaryButton("Cancel", function() demoDlg:Close() end)
+        end
+        demoDlg:Open()
     end)
     stack:AddChild(dlgBtn)
 end)

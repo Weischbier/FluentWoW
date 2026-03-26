@@ -53,7 +53,11 @@ end
 function CheckBoxMixin:SetChecked(checked)
     self._checked = checked
     self._indeterminate = false
-    self:OnStateChanged(self._vsm:GetState())
+    if checked then
+        self._vsm:SetState("Checked")
+    else
+        self._vsm:SetState("Normal")
+    end
 end
 
 ---@return boolean

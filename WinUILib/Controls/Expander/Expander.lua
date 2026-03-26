@@ -8,6 +8,9 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+-- Header height derived from tokens: XXXL(32) + MD(8) = 40
+local HEADER_H = T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -62,15 +65,15 @@ function ExpanderMixin:SetExpanded(expanded, instant)
         local targetH = self._contentHeight or 100
         if instant or Mot.reducedMotion then
             self.Content:SetHeight(targetH)
-            self:SetHeight(40 + targetH)
+            self:SetHeight(HEADER_H + targetH)
         else
             Mot:HeightTo(self.Content, 1, targetH,
                 lib.Tokens:GetNumber("Motion.Duration.Normal"),
                 function()
-                    self:SetHeight(40 + targetH)
+                    self:SetHeight(HEADER_H + targetH)
                 end)
             -- animate container height in parallel
-            Mot:HeightTo(self, 40, 40 + targetH)
+            Mot:HeightTo(self, HEADER_H, HEADER_H + targetH)
         end
         self._vsm:SetState("Expanded")
     else
@@ -78,14 +81,14 @@ function ExpanderMixin:SetExpanded(expanded, instant)
         if instant or Mot.reducedMotion then
             self.Content:Hide()
             self.Content:SetHeight(1)
-            self:SetHeight(40)
+            self:SetHeight(HEADER_H)
         else
             Mot:HeightTo(self.Content, fromH, 1,
                 lib.Tokens:GetNumber("Motion.Duration.Normal"),
                 function()
                     self.Content:Hide()
                 end)
-            Mot:HeightTo(self, self:GetHeight(), 40)
+            Mot:HeightTo(self, self:GetHeight(), HEADER_H)
         end
         self._vsm:SetState("Normal")
     end
@@ -101,7 +104,7 @@ function ExpanderMixin:SetContentHeight(height)
     self._contentHeight = height
     if self._expanded then
         self.Content:SetHeight(height)
-        self:SetHeight(40 + height)
+        self:SetHeight(HEADER_H + height)
     end
 end
 

@@ -42,24 +42,25 @@ function TabViewMixin:_RefreshTabs()
         btn:SetParent(self.TabStrip)
         btn:ClearAllPoints()
         btn:SetPoint("LEFT", self.TabStrip, "LEFT", xOff, 0)
-        btn:SetHeight(32)
+        btn:SetHeight(T:GetNumber("Spacing.XXXL"))  -- 32
         btn.Label:SetText(tab.text or "")
         btn._tabIndex = i
         btn._tabView = self
         btn.Hover:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
 
         -- auto-width based on text
-        local textWidth = btn.Label:GetStringWidth() + 24
-        btn:SetWidth(math.max(80, textWidth))
+        local textWidth = btn.Label:GetStringWidth() + T:GetNumber("Spacing.XXL")  -- 24
+        btn:SetWidth(math.max(T:GetNumber("Spacing.XXXL") * 2 + T:GetNumber("Spacing.XL"), textWidth))  -- ~80
         xOff = xOff + btn:GetWidth()
 
         if i == self._selectedIndex then
             btn.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
             btn.Indicator:SetColorTexture(T:GetColor("Color.Accent.Primary"))
+            btn.Indicator:Show()
             btn.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
         else
             btn.BG:SetColorTexture(T:GetColor("Color.Surface.Base"))
-            btn.Indicator:SetColorTexture(0, 0, 0, 0)
+            btn.Indicator:Hide()
             btn.Label:SetTextColor(T:GetColor("Color.Text.Secondary"))
         end
     end

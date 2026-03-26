@@ -29,7 +29,7 @@ Gallery:RegisterPage("input", "Input Controls", function(parent)
 
     local cb2 = lib:CreateCheckBox(stack)
     cb2:SetText("Three-state")
-    cb2:SetChecked("indeterminate")
+    cb2:SetIndeterminate(true)
     stack:AddChild(cb2)
 
     -- RadioButton

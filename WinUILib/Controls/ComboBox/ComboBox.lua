@@ -9,17 +9,10 @@ local T   = lib.Tokens
 local Mot = lib.Motion
 
 -------------------------------------------------------------------------------
--- Item pool
+-- Active ComboBox tracking (cross-close)
 -------------------------------------------------------------------------------
 
-local _itemPool
-
-local function getItemPool(parent)
-    if not _itemPool then
-        _itemPool = lib.FramePool:New("Button", parent, "WUILComboBoxItemTemplate")
-    end
-    return _itemPool
-end
+local _activeCombo
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -104,6 +97,11 @@ function ComboMixin:_Open()
         lib:Debug("ComboBox: blocked in combat")
         return
     end
+    -- Cross-close: close any other open ComboBox
+    if _activeCombo and _activeCombo ~= self then
+        _activeCombo:_Close()
+    end
+    _activeCombo = self
     self:_BuildDropdown()
     self.Dropdown.DropBG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
     Mot:FadeIn(self.Dropdown)
@@ -111,20 +109,23 @@ function ComboMixin:_Open()
 end
 
 function ComboMixin:_Close()
+    if _activeCombo == self then _activeCombo = nil end
     Mot:FadeOut(self.Dropdown)
     self._vsm:SetState("Normal")
 end
 
 function ComboMixin:_BuildDropdown()
-    local pool = getItemPool(self.Dropdown.Scroll.Child)
-    pool:ReleaseAll()
+    if not self._itemPool then
+        self._itemPool = lib.FramePool:New("Button", self.Dropdown.Scroll.Child, "WUILComboBoxItemTemplate")
+    end
+    self._itemPool:ReleaseAll()
 
     local items = self._items or {}
-    local itemHeight = 28
+    local itemHeight = T:GetNumber("Spacing.XXL") + T:GetNumber("Spacing.SM")  -- 24+4 = 28
     local yOff = 0
 
     for i, item in ipairs(items) do
-        local btn = pool:Acquire()
+        local btn = self._itemPool:Acquire()
         btn:SetParent(self.Dropdown.Scroll.Child)
         btn:ClearAllPoints()
         btn:SetPoint("TOPLEFT", 0, -yOff)
@@ -139,7 +140,7 @@ function ComboMixin:_BuildDropdown()
 
     self.Dropdown.Scroll.Child:SetHeight(math.max(1, yOff))
     local maxVisible = math.min(#items, 8)
-    self.Dropdown:SetHeight(maxVisible * itemHeight + 8)
+    self.Dropdown:SetHeight(maxVisible * itemHeight + T:GetNumber("Spacing.MD"))
 end
 
 -------------------------------------------------------------------------------

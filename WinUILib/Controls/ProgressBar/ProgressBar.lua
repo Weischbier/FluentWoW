@@ -134,10 +134,7 @@ end
 function WUILProgressRing_OnUpdate(self, elapsed)
     if not self._active then return end
     self._angle = (self._angle + elapsed * 360) % 360
-    local ag = self.Ring:GetParent()
-    if ag and ag.SetRotation then
-        ag:SetRotation(math.rad(self._angle))
-    end
+    self.Ring:SetRotation(math.rad(self._angle))
 end
 
 -------------------------------------------------------------------------------

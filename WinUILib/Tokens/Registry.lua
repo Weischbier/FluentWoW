@@ -81,6 +81,7 @@ function Registry:GetColor(key)
                c[3] or c.b or 0,
                c[4] or c.a or 1
     end
+    lib:Debug("GetColor: missing token '" .. tostring(key) .. "'")
     return 0, 0, 0, 1
 end
 

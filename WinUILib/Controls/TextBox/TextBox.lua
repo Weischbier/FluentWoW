@@ -106,7 +106,7 @@ end
 
 ---@param isPassword boolean
 function TextBoxMixin:SetPassword(isPassword)
-    self.EditBox:SetSecurityFlag(isPassword and 1 or 0)
+    self.EditBox:SetPassword(isPassword)
 end
 
 -------------------------------------------------------------------------------

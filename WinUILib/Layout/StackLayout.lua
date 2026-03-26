@@ -19,6 +19,9 @@ function StackMixin:OnStateChanged(newState, prevState)
 end
 
 function StackMixin:_Layout()
+    if self._laying_out then return end
+    self._laying_out = true
+
     local children = self._children
     if not children or #children == 0 then
         if self._orientation == "VERTICAL" then
@@ -26,6 +29,7 @@ function StackMixin:_Layout()
         else
             self:SetWidth(1)
         end
+        self._laying_out = false
         return
     end
 
@@ -47,6 +51,7 @@ function StackMixin:_Layout()
             end
         end
         self:SetHeight(math.abs(yOff) + padB)
+        self._laying_out = false
     else
         local xOff = padL
         for i, child in ipairs(children) do
@@ -59,6 +64,7 @@ function StackMixin:_Layout()
             end
         end
         self:SetWidth(xOff + padR)
+        self._laying_out = false
     end
 end
 

@@ -65,6 +65,7 @@ Gallery:RegisterPage("buttons", "Buttons", function(parent)
     stack:AddChild(iconHeader)
 
     local iconBtn = lib:CreateIconButton(stack)
+    iconBtn:SetIcon("Interface\\Buttons\\UI-GroupLoot-Coin-Up")
     stack:AddChild(iconBtn)
 
     -- Toggle button

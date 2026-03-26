@@ -76,7 +76,7 @@ local function EnsureFrame()
         -- Deselect previous
         if selectedKey and navButtons[selectedKey] then
             local prev = navButtons[selectedKey]
-            prev.BG:SetColorTexture(0, 0, 0, 0)
+            prev.BG:Hide()
             prev.Label:SetTextColor(T:GetColor("Color.Text.Secondary"))
         end
 
@@ -91,6 +91,7 @@ local function EnsureFrame()
         if navButtons[key] then
             local cur = navButtons[key]
             cur.BG:SetColorTexture(T:GetColor("Color.Surface.Elevated"))
+            cur.BG:Show()
             cur.Label:SetTextColor(T:GetColor("Color.Accent.Primary"))
         end
 
@@ -117,7 +118,7 @@ local function EnsureFrame()
 
         local bg = btn:CreateTexture(nil, "BACKGROUND")
         bg:SetAllPoints()
-        bg:SetColorTexture(0, 0, 0, 0)
+        bg:Hide()
         btn.BG = bg
 
         local label = btn:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -132,11 +133,12 @@ local function EnsureFrame()
         btn:SetScript("OnEnter", function(self)
             if key ~= selectedKey then
                 bg:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+                bg:Show()
             end
         end)
         btn:SetScript("OnLeave", function(self)
             if key ~= selectedKey then
-                bg:SetColorTexture(0, 0, 0, 0)
+                bg:Hide()
             end
         end)
 

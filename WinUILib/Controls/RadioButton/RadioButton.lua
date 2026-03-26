@@ -23,6 +23,16 @@ local function deselectGroup(group, except)
     end
 end
 
+local function unregisterFromGroup(self, group)
+    if not _groups[group] then return end
+    for i, rb in ipairs(_groups[group]) do
+        if rb == self then
+            table.remove(_groups[group], i)
+            return
+        end
+    end
+end
+
 local function registerInGroup(self, group)
     if not _groups[group] then _groups[group] = {} end
     table.insert(_groups[group], self)
@@ -76,6 +86,9 @@ end
 
 ---@param group string
 function RadioMixin:SetGroup(group)
+    if self._group then
+        unregisterFromGroup(self, self._group)
+    end
     self._group = group
     registerInGroup(self, group)
 end

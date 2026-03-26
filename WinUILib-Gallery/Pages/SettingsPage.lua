@@ -61,7 +61,12 @@ Gallery:RegisterPage("settings", "Settings", function(parent)
         c:SetTitle(label)
         c:SetWidth(400)
         local cb = lib:CreateComboBox(c)
-        cb:SetItems({"5 minutes", "10 minutes", "30 minutes", "Never"})
+        cb:SetItems({
+            { text = "5 minutes", value = 5 },
+            { text = "10 minutes", value = 10 },
+            { text = "30 minutes", value = 30 },
+            { text = "Never", value = 0 },
+        })
         cb:SetSelectedIndex(2)
         cb:SetWidth(140)
         c:SetActionControl(cb)

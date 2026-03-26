@@ -92,10 +92,10 @@ function MainFrameMixin:SetIcon(path)
     if path then
         self.TitleBar.Icon:SetTexture(path)
         self.TitleBar.Icon:Show()
-        self.TitleBar.Title:SetPoint("LEFT", self.TitleBar.Icon, "RIGHT", 8, 0)
+        self.TitleBar.Title:SetPoint("LEFT", self.TitleBar.Icon, "RIGHT", T:GetNumber("Spacing.MD"), 0)
     else
         self.TitleBar.Icon:Hide()
-        self.TitleBar.Title:SetPoint("LEFT", self.TitleBar, "LEFT", 16, 0)
+        self.TitleBar.Title:SetPoint("LEFT", self.TitleBar, "LEFT", T:GetNumber("Spacing.XL"), 0)
     end
 end
 
@@ -113,10 +113,11 @@ end
 ---@param insetT? number  top inset below title bar (default 40)
 ---@param insetB? number  bottom inset above status bar (default 28)
 function MainFrameMixin:SetContentInsets(insetL, insetR, insetT, insetB)
-    local l = insetL or 16
-    local r = insetR or 16
-    local t = insetT or 40
-    local b = insetB or 28
+    local sp = T
+    local l = insetL or sp:GetNumber("Spacing.XL")
+    local r = insetR or sp:GetNumber("Spacing.XL")
+    local t = insetT or sp:GetNumber("Spacing.XXXL") + sp:GetNumber("Spacing.MD")  -- 40
+    local b = insetB or sp:GetNumber("Spacing.XXL") + sp:GetNumber("Spacing.SM")   -- 28
     self.ContentArea:ClearAllPoints()
     self.ContentArea:SetPoint("TOPLEFT", l, -t)
     self.ContentArea:SetPoint("BOTTOMRIGHT", -r, b)
@@ -220,10 +221,9 @@ function WUILMainFrame_OnLoad(self)
 
     applyVisuals(self)
 
-    -- Theme change listener
-    lib.EventBus:On("ThemeChanged", function()
-        applyVisuals(self)
-    end)
+    -- Theme change listener (stored for cleanup)
+    self._themeListener = function() applyVisuals(self) end
+    lib.EventBus:On("ThemeChanged", self._themeListener)
 end
 
 function WUILMainFrame_OnShow(self)

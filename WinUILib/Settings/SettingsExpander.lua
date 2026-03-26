@@ -74,7 +74,7 @@ end
 -- Card management
 -------------------------------------------------------------------------------
 
-local CARD_GAP = 1  -- 1px divider between cards
+local CARD_GAP = 1  -- 1px divider between cards (no equivalent token; semantic separator)
 
 function ExpanderMixin:_LayoutCards()
     local yOff = 0
@@ -183,11 +183,15 @@ function ExpanderMixin:SetDescription(text)
     if text and text ~= "" then
         self.Header.DescLabel:SetText(text)
         self.Header.DescLabel:Show()
-        local h = 12 + self.Header.TitleLabel:GetStringHeight() + 2 + self.Header.DescLabel:GetStringHeight() + 12
-        self.Header:SetHeight(math.max(48, h))
+        local padT  = T:GetNumber("Spacing.LG")   -- 12
+        local gap   = T:GetNumber("Spacing.XS")    -- 2
+        local padB  = T:GetNumber("Spacing.LG")    -- 12
+        local minH  = T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.XL")  -- 48
+        local h = padT + self.Header.TitleLabel:GetStringHeight() + gap + self.Header.DescLabel:GetStringHeight() + padB
+        self.Header:SetHeight(math.max(minH, h))
     else
         self.Header.DescLabel:Hide()
-        self.Header:SetHeight(48)
+        self.Header:SetHeight(T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.XL"))  -- 48
     end
 end
 
@@ -199,8 +203,8 @@ function ExpanderMixin:SetIconTexture(path)
     else
         self.Header.Icon:Hide()
         self.Header.TitleLabel:ClearAllPoints()
-        self.Header.TitleLabel:SetPoint("TOPLEFT", self.Header, "TOPLEFT", 16, -12)
-        self.Header.TitleLabel:SetPoint("RIGHT", self.Header.Chevron, "LEFT", -8, 0)
+        self.Header.TitleLabel:SetPoint("TOPLEFT", self.Header, "TOPLEFT", T:GetNumber("Spacing.XL"), -T:GetNumber("Spacing.LG"))
+        self.Header.TitleLabel:SetPoint("RIGHT", self.Header.Chevron, "LEFT", -T:GetNumber("Spacing.MD"), 0)
     end
 end
 
@@ -237,7 +241,8 @@ function WUILSettingsExpander_OnLoad(self)
     self.Header.Chevron:SetText("\226\150\184")  -- ▸
 
     applyVisuals(self)
-    lib.EventBus:On("ThemeChanged", function() applyVisuals(self) end)
+    self._themeListener = function() applyVisuals(self) end
+    lib.EventBus:On("ThemeChanged", self._themeListener)
 end
 
 function WUILSettingsExpander_Header_OnClick(self)
@@ -254,6 +259,7 @@ end
 
 function WUILSettingsExpander_Header_OnLeave(self)
     local expander = self:GetParent()
+    if not expander._enabled then return end
     if expander._expanded then
         expander._vsm:SetState("Expanded")
     else

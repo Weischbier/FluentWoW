@@ -58,7 +58,13 @@ function StateMachine:SetFlag(flag, value)
     if self._flags[flag] == value then return end
     self._flags[flag] = value
     if flag == "Disabled" then
-        self:SetState(value and "Disabled" or "Normal")
+        if value then
+            self._preDisableState = self._state
+            self:SetState("Disabled")
+        else
+            self:SetState(self._preDisableState or "Normal")
+            self._preDisableState = nil
+        end
     end
     if self._control and self._control.OnFlagChanged then
         lib.Utils.SafeCall(self._control.OnFlagChanged, self._control, flag, value)
