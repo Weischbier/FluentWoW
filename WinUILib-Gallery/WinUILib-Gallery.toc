@@ -1,0 +1,14 @@
+## Interface: 110002
+## Title: WinUILib Gallery
+## Notes: Interactive showcase of all WinUILib controls.
+## Version: 1.0.0
+## Author: Weischbier
+## Dependencies: WinUILib
+## DefaultState: enabled
+
+Gallery.lua
+Pages/ButtonPage.lua
+Pages/InputPage.lua
+Pages/FeedbackPage.lua
+Pages/LayoutPage.lua
+Pages/SettingsPage.lua
