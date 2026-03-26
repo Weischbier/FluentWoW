@@ -89,8 +89,9 @@ function DialogMixin:Open()
         return
     end
     self:_ApplyTokens()
-    Mot:FadeIn(self, nil, nil)
-    Mot:SlideIn(self.Card, "UP", 16)
+    self.Overlay:SetAlpha(0)
+    Mot:FadeIn(self.Overlay)
+    Mot:SlideIn(self.Card, "UP", T:GetNumber("Spacing.XL"))
 end
 
 ---@param result? string
