@@ -7,7 +7,9 @@
 local lib = WinUILib
 local T   = lib.Tokens
 
-local SCROLL_STEP = T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")  -- 40
+local function SCROLL_STEP()
+    return T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")  -- 40
+end
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -103,7 +105,7 @@ function WUILScrollFrame_OnMouseWheel(self, delta)
     local parent = self:GetParent()
     local current = self:GetVerticalScroll()
     local maxScroll = self:GetVerticalScrollRange()
-    local newScroll = current - (delta * SCROLL_STEP)
+    local newScroll = current - (delta * SCROLL_STEP())
     newScroll = math.max(0, math.min(newScroll, maxScroll))
     self:SetVerticalScroll(newScroll)
     parent:_UpdateThumb()
@@ -115,7 +117,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILScrollFrame
 function lib:CreateScrollFrame(parent, name)
     return CreateFrame("Frame", name, parent, "WUILScrollFrameTemplate")
 end
