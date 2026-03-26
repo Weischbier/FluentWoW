@@ -15,7 +15,7 @@ Core/EventBus.lua
 Core/StateMachine.lua
 Core/FramePool.lua
 
-# ── Token / theme system ─────────────────────────────────────
+# ── Token / theme system ──────────────────────────────────────
 Tokens/Registry.lua
 Tokens/DefaultTheme.lua
 
@@ -25,7 +25,7 @@ Controls/Base/ControlBase.lua
 # ── Motion engine (flux-derived tweening) ─────────────────────
 Motion/Motion.lua
 
-# ── Controls (XML template before Lua behaviour) ─────────────
+# ── Controls (XML template before Lua behaviour) ──────────────
 Controls/MainFrame/MainFrame.xml
 Controls/MainFrame/MainFrame.lua
 Controls/Button/Button.xml
@@ -57,11 +57,11 @@ Controls/TabView/TabView.lua
 Controls/ScrollFrame/ScrollFrame.xml
 Controls/ScrollFrame/ScrollFrame.lua
 
-# ── Layout primitives ────────────────────────────────────────
+# ── Layout primitives ─────────────────────────────────────────
 Layout/StackLayout.xml
 Layout/StackLayout.lua
 
-# ── Settings controls ────────────────────────────────────────
+# ── Settings controls ─────────────────────────────────────────
 Settings/SettingsCard.xml
 Settings/SettingsCard.lua
 Settings/SettingsExpander.xml
