@@ -233,7 +233,7 @@ Controls are styled through a **three-layer system**:
 
 ```lua
 -- Custom variant: override accent colour on a single button
-local btn = WinUILib:CreateButton(parent, "Accent", "Custom")
+local btn = WinUILib:CreateButton(parent, nil, "Accent")
 btn:SetAccentColor(0.80, 0.20, 0.80)
 ```
 
@@ -255,13 +255,16 @@ All controls use `SetPoint` relative anchors, and layout containers
 (`StackLayout`) manage child anchors programmatically.
 
 ```lua
-local stack = WinUILib:CreateVStack(parent, 8)  -- 8px gap
+local stack = WinUILib:CreateStackLayout(parent, nil, "VERTICAL")
 stack:SetPoint("TOPLEFT", parent, "TOPLEFT", 16, -16)
 stack:SetWidth(400)
+stack:SetGap(8)
 stack:SetPadding(16, 16, 16, 16)  -- top, right, bottom, left
 
-local btn1 = WinUILib:CreateButton(stack, "Accent", "Action 1")
-local btn2 = WinUILib:CreateButton(stack, "Subtle", "Action 2")
+local btn1 = WinUILib:CreateButton(stack, nil, "Accent")
+btn1:SetText("Action 1")
+local btn2 = WinUILib:CreateButton(stack, nil, "Subtle")
+btn2:SetText("Action 2")
 stack:AddChild(btn1)
 stack:AddChild(btn2)
 -- Stack auto-sizes height to fit children.
@@ -288,15 +291,16 @@ All animations respect `WinUILib.Motion.reducedMotion = true` (skip motion).
 
 ```lua
 -- Build a settings page using SettingsCard + SettingsExpander
-local ts = WinUILib:CreateToggleSwitch(parent, "On", "Off")
-ts:SetOn(MyAddon_DB.enabled)
-ts.OnToggled = function(self, isOn)
+local ts = WinUILib:CreateToggleSwitch(parent)
+ts:SetIsOn(MyAddon_DB.enabled)
+ts:SetOnToggled(function(self, isOn)
     MyAddon_DB.enabled = isOn
-end
+end)
 
-local card = WinUILib:CreateSettingsCard(parent,
-    "Enable MyAddon",
-    "Turn the addon on or off without disabling it.", ts)
+local card = WinUILib:CreateSettingsCard(parent)
+card:SetTitle("Enable MyAddon")
+card:SetDescription("Turn the addon on or off without disabling it.")
+card:SetActionControl(ts)
 card:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, -8)
 card:SetWidth(500)
 ```
