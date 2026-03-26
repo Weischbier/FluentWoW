@@ -1,0 +1,151 @@
+<!-- WinUILib – Controls/Button/Button.xml
+     XML templates for Button, IconButton, and ToggleButton.
+     Behaviour is in Button.lua.
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         WUILButtonTemplate  –  standard filled accent button
+         Equivalent to WinUI Button (Accent variant).
+    ════════════════════════════════════════════════════════════════════ -->
+    <Button name="WUILButtonTemplate" virtual="true"
+            enableMouse="true" frameStrata="MEDIUM">
+
+        <!-- Background texture -->
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <!-- Top highlight line (WinUI top-edge accent for depth) -->
+                <Texture name="$parent_TopEdge">
+                    <Size x="1" y="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="TOPRIGHT"/>
+                    </Anchors>
+                    <Color r="0.40" g="0.78" b="1.00" a="0.40"/>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <!-- Hover / press overlay tint -->
+                <Texture name="$parent_Overlay" setAllPoints="true">
+                    <Color r="1" g="1" b="1" a="0"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <!-- Label -->
+        <FontString name="$parent_Label" inherits="GameFontNormal"
+                    justifyH="CENTER" justifyV="MIDDLE">
+            <Anchors>
+                <Anchor point="LEFT"  x="12" y="0"/>
+                <Anchor point="RIGHT" x="-12" y="0"/>
+            </Anchors>
+            <Color r="1" g="1" b="1"/>
+        </FontString>
+
+        <Size x="120" y="32"/>
+
+        <Scripts>
+            <OnLoad function="WUILButton_OnLoad"/>
+            <OnEnter function="WUILButton_OnEnter"/>
+            <OnLeave function="WUILButton_OnLeave"/>
+            <OnMouseDown function="WUILButton_OnMouseDown"/>
+            <OnMouseUp function="WUILButton_OnMouseUp"/>
+            <OnClick function="WUILButton_OnClick"/>
+        </Scripts>
+    </Button>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         WUILButtonSubtleTemplate  –  secondary / subtle (no fill)
+         Equivalent to WinUI Button (Standard variant).
+    ════════════════════════════════════════════════════════════════════ -->
+    <Button name="WUILButtonSubtleTemplate" virtual="true"
+            inherits="WUILButtonTemplate">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.13" g="0.13" b="0.14" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         WUILButtonDestructiveTemplate  –  destructive/error action
+         Equivalent to WinUI Button used for delete/dangerous actions.
+    ════════════════════════════════════════════════════════════════════ -->
+    <Button name="WUILButtonDestructiveTemplate" virtual="true"
+            inherits="WUILButtonTemplate">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.90" g="0.20" b="0.20" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         WUILIconButtonTemplate  –  icon-only square button
+         Equivalent to WinUI AppBarButton / small icon action button.
+    ════════════════════════════════════════════════════════════════════ -->
+    <Button name="WUILIconButtonTemplate" virtual="true"
+            inherits="WUILButtonTemplate">
+        <Size x="32" y="32"/>
+        <!-- Icon texture – callers set via SetIcon(atlas, size) -->
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_Icon" hidden="true">
+                    <Size x="16" y="16"/>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         WUILToggleButtonTemplate  –  two-state pressed/unpressed button
+         Equivalent to WinUI ToggleButton.
+    ════════════════════════════════════════════════════════════════════ -->
+    <CheckButton name="WUILToggleButtonTemplate" virtual="true"
+                 enableMouse="true" frameStrata="MEDIUM">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.13" g="0.13" b="0.14" a="1"/>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture name="$parent_Overlay" setAllPoints="true">
+                    <Color r="1" g="1" b="1" a="0"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <FontString name="$parent_Label" inherits="GameFontNormal"
+                    justifyH="CENTER" justifyV="MIDDLE">
+            <Anchors>
+                <Anchor point="LEFT"  x="12" y="0"/>
+                <Anchor point="RIGHT" x="-12" y="0"/>
+            </Anchors>
+            <Color r="0.85" g="0.85" b="0.88"/>
+        </FontString>
+
+        <Size x="120" y="32"/>
+
+        <Scripts>
+            <OnLoad function="WUILToggleButton_OnLoad"/>
+            <OnEnter function="WUILButton_OnEnter"/>
+            <OnLeave function="WUILButton_OnLeave"/>
+            <OnClick function="WUILToggleButton_OnClick"/>
+        </Scripts>
+    </CheckButton>
+
+</Ui>

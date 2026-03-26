@@ -1,0 +1,92 @@
+<!-- WinUILib – Controls/TextBox/TextBox.xml
+     Design reference: WinUI TextBox, SearchBox, NumberBox
+     https://learn.microsoft.com/windows/apps/design/controls/text-box
+     Wraps WoW's EditBox with a styled border + placeholder support.
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <Frame name="WUILTextBoxTemplate" virtual="true">
+        <Layers>
+            <!-- Container background -->
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.10" g="0.10" b="0.11" a="1"/>
+                </Texture>
+            </Layer>
+            <!-- Border (1 px) -->
+            <Layer level="BORDER">
+                <Texture name="$parent_Border" setAllPoints="true">
+                    <Color r="0.50" g="0.50" b="0.55" a="1"/>
+                    <!-- Actual border drawn as 1-pixel overlay; inner clipped by BG -->
+                </Texture>
+            </Layer>
+            <!-- Bottom focus line (WinUI underline accent on focus) -->
+            <Layer level="OVERLAY">
+                <Texture name="$parent_FocusLine">
+                    <Size x="1" y="2"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT"  x="1" y="0"/>
+                        <Anchor point="BOTTOMRIGHT" x="-1" y="0"/>
+                    </Anchors>
+                    <Color r="0.05" g="0.55" b="0.88" a="0"/>
+                </Texture>
+            </Layer>
+            <!-- Placeholder text -->
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Placeholder" inherits="GameFontNormal"
+                            justifyH="LEFT" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="LEFT"  x="8" y="0"/>
+                        <Anchor point="RIGHT" x="-8" y="0"/>
+                    </Anchors>
+                    <Color r="0.50" g="0.50" b="0.55" a="1"/>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <!-- The actual WoW EditBox -->
+        <EditBox name="$parent_Input" autoFocus="false"
+                 multiLine="false" numeric="false"
+                 letters="256">
+            <Anchors>
+                <Anchor point="LEFT"  x="8"  y="0"/>
+                <Anchor point="RIGHT" x="-8" y="0"/>
+            </Anchors>
+            <FontString inherits="GameFontNormal"/>
+            <Scripts>
+                <OnEnterPressed function="WUILTextBox_OnEnterPressed"/>
+                <OnEscapePressed function="WUILTextBox_OnEscapePressed"/>
+                <OnTextChanged function="WUILTextBox_OnTextChanged"/>
+                <OnEditFocusGained function="WUILTextBox_OnFocusGained"/>
+                <OnEditFocusLost function="WUILTextBox_OnFocusLost"/>
+            </Scripts>
+        </EditBox>
+
+        <Size x="200" y="32"/>
+
+        <Scripts>
+            <OnLoad   function="WUILTextBox_OnLoad"/>
+            <OnEnter  function="WUILTextBox_OnEnter"/>
+            <OnLeave  function="WUILTextBox_OnLeave"/>
+        </Scripts>
+    </Frame>
+
+    <!-- SearchBox variant – prepends a search icon and clear button -->
+    <Frame name="WUILSearchBoxTemplate" virtual="true"
+           inherits="WUILTextBoxTemplate">
+        <Layers>
+            <Layer level="ARTWORK">
+                <!-- Search icon (magnifier) -->
+                <Texture name="$parent_SearchIcon">
+                    <Size x="14" y="14"/>
+                    <Anchors><Anchor point="LEFT" x="8" y="0"/></Anchors>
+                    <Color r="0.50" g="0.50" b="0.55" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="WUILSearchBox_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

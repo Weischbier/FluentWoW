@@ -1,0 +1,79 @@
+<!-- WinUILib – Controls/InfoBar/InfoBar.xml
+     Design reference: WinUI InfoBar
+     https://learn.microsoft.com/windows/apps/design/controls/infobar
+     Non-blocking inline status message with severity levels.
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <Frame name="WUILInfoBarTemplate" virtual="true">
+        <Layers>
+            <!-- Coloured left accent strip (severity indicator) -->
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.13" g="0.13" b="0.14" a="1"/>
+                </Texture>
+                <Texture name="$parent_Accent">
+                    <Size x="4" y="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="BOTTOMLEFT"/>
+                    </Anchors>
+                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <!-- Severity icon slot -->
+                <Texture name="$parent_Icon">
+                    <Size x="16" y="16"/>
+                    <Anchors><Anchor point="LEFT" x="12" y="0"/></Anchors>
+                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <!-- Title -->
+        <FontString name="$parent_Title" inherits="GameFontNormal"
+                    justifyH="LEFT" justifyV="MIDDLE">
+            <Anchors>
+                <Anchor point="TOPLEFT"  x="36" y="-8"/>
+                <Anchor point="RIGHT"    x="-32" y="0"/>
+            </Anchors>
+            <Color r="0.95" g="0.95" b="0.97"/>
+        </FontString>
+
+        <!-- Message body -->
+        <FontString name="$parent_Message" inherits="GameFontNormalSmall"
+                    justifyH="LEFT" justifyV="TOP" nonspacewrap="true">
+            <Anchors>
+                <Anchor point="TOPLEFT"     x="36" y="-28"/>
+                <Anchor point="BOTTOMRIGHT" x="-32" y="8"/>
+            </Anchors>
+            <Color r="0.68" g="0.68" b="0.72"/>
+        </FontString>
+
+        <!-- Close button -->
+        <Button name="$parent_CloseBtn" enableMouse="true">
+            <Size x="20" y="20"/>
+            <Anchors><Anchor point="TOPRIGHT" x="-6" y="-6"/></Anchors>
+            <Layers>
+                <Layer level="OVERLAY">
+                    <FontString name="$parent_X" inherits="GameFontNormalSmall"
+                                justifyH="CENTER" justifyV="MIDDLE" setAllPoints="true">
+                        <Color r="0.68" g="0.68" b="0.72"/>
+                    </FontString>
+                </Layer>
+            </Layers>
+            <Scripts>
+                <OnLoad  function="WUILInfoBar_CloseBtn_OnLoad"/>
+                <OnClick function="WUILInfoBar_CloseBtn_OnClick"/>
+            </Scripts>
+        </Button>
+
+        <Size x="360" y="64"/>
+
+        <Scripts>
+            <OnLoad function="WUILInfoBar_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

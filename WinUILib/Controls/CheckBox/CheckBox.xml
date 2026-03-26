@@ -1,0 +1,55 @@
+<!-- WinUILib – Controls/CheckBox/CheckBox.xml
+     Three-state capable check box: Unchecked | Checked | Indeterminate
+     Design reference: WinUI CheckBox
+     https://learn.microsoft.com/windows/apps/design/controls/checkbox
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <CheckButton name="WUILCheckBoxTemplate" virtual="true"
+                 enableMouse="true">
+
+        <Layers>
+            <!-- Box border -->
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_Border" setAllPoints="false">
+                    <Size x="18" y="18"/>
+                    <Anchors><Anchor point="LEFT" x="0" y="0"/></Anchors>
+                    <Color r="0.50" g="0.50" b="0.55" a="1"/>
+                </Texture>
+                <!-- Box fill (inner) -->
+                <Texture name="$parent_Fill">
+                    <Size x="14" y="14"/>
+                    <Anchors><Anchor point="LEFT" x="2" y="0"/></Anchors>
+                    <Color r="0.10" g="0.10" b="0.11" a="1"/>
+                </Texture>
+            </Layer>
+            <!-- Check mark / dash (shown when checked / indeterminate) -->
+            <Layer level="OVERLAY">
+                <Texture name="$parent_Check" hidden="true">
+                    <Size x="10" y="10"/>
+                    <Anchors><Anchor point="LEFT" x="4" y="0"/></Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <!-- Label to the right of the box -->
+        <FontString name="$parent_Label" inherits="GameFontNormal"
+                    justifyH="LEFT" justifyV="MIDDLE">
+            <Anchors>
+                <Anchor point="LEFT"  x="26" y="0"/>
+                <Anchor point="RIGHT" x="0"  y="0"/>
+            </Anchors>
+            <Color r="0.85" g="0.85" b="0.88"/>
+        </FontString>
+
+        <Size x="200" y="20"/>
+
+        <Scripts>
+            <OnLoad   function="WUILCheckBox_OnLoad"/>
+            <OnEnter  function="WUILCheckBox_OnEnter"/>
+            <OnLeave  function="WUILCheckBox_OnLeave"/>
+            <OnClick  function="WUILCheckBox_OnClick"/>
+        </Scripts>
+    </CheckButton>
+
+</Ui>

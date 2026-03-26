@@ -1,0 +1,92 @@
+<!-- WinUILib – Controls/ComboBox/ComboBox.xml
+     Design reference: WinUI ComboBox
+     https://learn.microsoft.com/windows/apps/design/controls/combo-box
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- Dropdown item row (used inside the dropdown list) -->
+    <Button name="WUILComboBoxItemTemplate" virtual="true"
+            enableMouse="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.13" g="0.13" b="0.14" a="0"/>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Text" inherits="GameFontNormal"
+                            justifyH="LEFT" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="LEFT"  x="8"  y="0"/>
+                        <Anchor point="RIGHT" x="-8" y="0"/>
+                    </Anchors>
+                    <Color r="0.85" g="0.85" b="0.88"/>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Size x="180" y="28"/>
+        <Scripts>
+            <OnLoad  function="WUILComboBoxItem_OnLoad"/>
+            <OnEnter function="WUILComboBoxItem_OnEnter"/>
+            <OnLeave function="WUILComboBoxItem_OnLeave"/>
+            <OnClick function="WUILComboBoxItem_OnClick"/>
+        </Scripts>
+    </Button>
+
+    <!-- Dropdown list container -->
+    <Frame name="WUILComboBoxDropdownTemplate" virtual="true"
+           frameStrata="TOOLTIP" enableMouse="true" toplevel="true" hidden="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.10" g="0.10" b="0.11" a="0.97"/>
+                </Texture>
+                <Texture name="$parent_Border" setAllPoints="true">
+                    <Color r="0.28" g="0.28" b="0.32" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Size x="180" y="4"/>
+    </Frame>
+
+    <!-- ComboBox header button -->
+    <Button name="WUILComboBoxTemplate" virtual="true" enableMouse="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" setAllPoints="true">
+                    <Color r="0.10" g="0.10" b="0.11" a="1"/>
+                </Texture>
+                <Texture name="$parent_Border" setAllPoints="true">
+                    <Color r="0.50" g="0.50" b="0.55" a="1"/>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <!-- Chevron down arrow (placeholder square – use atlas in prod) -->
+                <Texture name="$parent_Chevron">
+                    <Size x="10" y="10"/>
+                    <Anchors><Anchor point="RIGHT" x="-8" y="0"/></Anchors>
+                    <Color r="0.68" g="0.68" b="0.72" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <FontString name="$parent_SelectedText" inherits="GameFontNormal"
+                    justifyH="LEFT" justifyV="MIDDLE">
+            <Anchors>
+                <Anchor point="LEFT"  x="8"  y="0"/>
+                <Anchor point="RIGHT" x="-24" y="0"/>
+            </Anchors>
+            <Color r="0.85" g="0.85" b="0.88"/>
+        </FontString>
+
+        <Size x="180" y="32"/>
+
+        <Scripts>
+            <OnLoad  function="WUILComboBox_OnLoad"/>
+            <OnEnter function="WUILComboBox_OnEnter"/>
+            <OnLeave function="WUILComboBox_OnLeave"/>
+            <OnClick function="WUILComboBox_OnClick"/>
+        </Scripts>
+    </Button>
+
+</Ui>

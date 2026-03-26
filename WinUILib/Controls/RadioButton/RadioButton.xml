@@ -1,0 +1,53 @@
+<!-- WinUILib – Controls/RadioButton/RadioButton.xml
+     Design reference: WinUI RadioButton
+     https://learn.microsoft.com/windows/apps/design/controls/radio-button
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <CheckButton name="WUILRadioButtonTemplate" virtual="true"
+                 enableMouse="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <!-- Outer ring -->
+                <Texture name="$parent_Ring">
+                    <Size x="18" y="18"/>
+                    <Anchors><Anchor point="LEFT" x="0" y="0"/></Anchors>
+                    <Color r="0.50" g="0.50" b="0.55" a="1"/>
+                </Texture>
+                <!-- Inner background -->
+                <Texture name="$parent_Fill">
+                    <Size x="12" y="12"/>
+                    <Anchors><Anchor point="LEFT" x="3" y="0"/></Anchors>
+                    <Color r="0.10" g="0.10" b="0.11" a="1"/>
+                </Texture>
+            </Layer>
+            <!-- Selected dot -->
+            <Layer level="OVERLAY">
+                <Texture name="$parent_Dot" hidden="true">
+                    <Size x="8" y="8"/>
+                    <Anchors><Anchor point="LEFT" x="5" y="0"/></Anchors>
+                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <FontString name="$parent_Label" inherits="GameFontNormal"
+                    justifyH="LEFT" justifyV="MIDDLE">
+            <Anchors>
+                <Anchor point="LEFT"  x="26" y="0"/>
+                <Anchor point="RIGHT" x="0"  y="0"/>
+            </Anchors>
+            <Color r="0.85" g="0.85" b="0.88"/>
+        </FontString>
+
+        <Size x="200" y="20"/>
+
+        <Scripts>
+            <OnLoad  function="WUILRadioButton_OnLoad"/>
+            <OnEnter function="WUILRadioButton_OnEnter"/>
+            <OnLeave function="WUILRadioButton_OnLeave"/>
+            <OnClick function="WUILRadioButton_OnClick"/>
+        </Scripts>
+    </CheckButton>
+
+</Ui>

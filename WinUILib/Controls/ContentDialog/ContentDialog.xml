@@ -1,0 +1,79 @@
+<!-- WinUILib – Controls/ContentDialog/ContentDialog.xml
+     Design reference: WinUI ContentDialog
+     https://learn.microsoft.com/windows/apps/design/controls/dialogs-and-flyouts/dialogs
+     Modal overlay dialog with primary + secondary actions.
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <Frame name="WUILContentDialogTemplate" virtual="true"
+           frameStrata="DIALOG" enableMouse="true" movable="false"
+           toplevel="true" hidden="true">
+
+        <!-- Scrim overlay (covers entire screen) -->
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_Scrim">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"     relativeTo="UIParent"/>
+                        <Anchor point="BOTTOMRIGHT" relativeTo="UIParent"/>
+                    </Anchors>
+                    <Color r="0" g="0" b="0" a="0.60"/>
+                </Texture>
+                <!-- Dialog card -->
+                <Texture name="$parent_BG">
+                    <Size x="440" y="240"/>
+                    <Anchors><Anchor point="CENTER" relativeTo="UIParent"/></Anchors>
+                    <Color r="0.13" g="0.13" b="0.14" a="0.98"/>
+                </Texture>
+                <!-- Dialog border -->
+                <Texture name="$parent_Border">
+                    <Size x="440" y="240"/>
+                    <Anchors><Anchor point="CENTER" relativeTo="UIParent"/></Anchors>
+                    <Color r="0.28" g="0.28" b="0.32" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <!-- Title bar -->
+        <FontString name="$parent_Title" inherits="GameFontNormal"
+                    justifyH="LEFT" justifyV="TOP">
+            <Anchors>
+                <Anchor point="TOPLEFT"  relativeTo="$parent_BG" relativePoint="TOPLEFT"  x="24" y="-20"/>
+                <Anchor point="TOPRIGHT" relativeTo="$parent_BG" relativePoint="TOPRIGHT" x="-24" y="-20"/>
+            </Anchors>
+            <Color r="0.95" g="0.95" b="0.97"/>
+        </FontString>
+
+        <!-- Content area -->
+        <FontString name="$parent_Content" inherits="GameFontNormalSmall"
+                    justifyH="LEFT" justifyV="TOP" nonspacewrap="true">
+            <Anchors>
+                <Anchor point="TOPLEFT"  relativeTo="$parent_BG" relativePoint="TOPLEFT"  x="24" y="-52"/>
+                <Anchor point="TOPRIGHT" relativeTo="$parent_BG" relativePoint="TOPRIGHT" x="-24" y="-52"/>
+            </Anchors>
+            <Color r="0.68" g="0.68" b="0.72"/>
+        </FontString>
+
+        <!-- Primary action button -->
+        <Button name="$parent_PrimaryBtn" inherits="WUILButtonTemplate">
+            <Anchors>
+                <Anchor point="BOTTOMRIGHT" relativeTo="$parent_BG" relativePoint="BOTTOMRIGHT"
+                        x="-16" y="16"/>
+            </Anchors>
+        </Button>
+
+        <!-- Secondary action button -->
+        <Button name="$parent_SecondaryBtn" inherits="WUILButtonSubtleTemplate">
+            <Anchors>
+                <Anchor point="RIGHT" relativeTo="$parent_PrimaryBtn" relativePoint="LEFT"
+                        x="-8" y="0"/>
+            </Anchors>
+        </Button>
+
+        <Scripts>
+            <OnLoad function="WUILContentDialog_OnLoad"/>
+            <OnKeyDown function="WUILContentDialog_OnKeyDown"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

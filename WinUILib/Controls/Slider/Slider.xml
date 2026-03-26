@@ -1,0 +1,62 @@
+<!-- WinUILib – Controls/Slider/Slider.xml
+     Design reference: WinUI Slider
+     https://learn.microsoft.com/windows/apps/design/controls/slider
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <Frame name="WUILSliderTemplate" virtual="true">
+        <Layers>
+            <!-- Track background (inactive portion) -->
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_TrackBG">
+                    <Size x="1" y="4"/>
+                    <Anchors>
+                        <Anchor point="LEFT"  x="8"  y="0"/>
+                        <Anchor point="RIGHT" x="-8" y="0"/>
+                    </Anchors>
+                    <Color r="0.28" g="0.28" b="0.32" a="1"/>
+                </Texture>
+            </Layer>
+            <!-- Track fill (active/accent portion – sized by Lua) -->
+            <Layer level="ARTWORK">
+                <Texture name="$parent_TrackFill">
+                    <Size x="0" y="4"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="8" y="0"/>
+                    </Anchors>
+                    <Color r="0.05" g="0.55" b="0.88" a="1"/>
+                </Texture>
+            </Layer>
+            <!-- Thumb -->
+            <Layer level="OVERLAY">
+                <Texture name="$parent_Thumb">
+                    <Size x="16" y="16"/>
+                    <Anchors><Anchor point="LEFT" x="0" y="0"/></Anchors>
+                    <Color r="1.00" g="1.00" b="1.00" a="1"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <!-- Optional value label above thumb -->
+        <FontString name="$parent_ValueLabel" inherits="GameFontNormalSmall"
+                    justifyH="CENTER" hidden="true">
+            <Anchors>
+                <Anchor point="BOTTOM" relativeTo="$parent_Thumb" relativePoint="TOP"
+                        x="0" y="4"/>
+            </Anchors>
+            <Color r="0.85" g="0.85" b="0.88"/>
+        </FontString>
+
+        <Size x="200" y="20"/>
+
+        <Scripts>
+            <OnLoad        function="WUILSlider_OnLoad"/>
+            <OnEnter       function="WUILSlider_OnEnter"/>
+            <OnLeave       function="WUILSlider_OnLeave"/>
+            <OnMouseDown   function="WUILSlider_OnMouseDown"/>
+            <OnMouseUp     function="WUILSlider_OnMouseUp"/>
+            <OnSizeChanged function="WUILSlider_OnSizeChanged"/>
+        </Scripts>
+    </Frame>
+
+</Ui>
