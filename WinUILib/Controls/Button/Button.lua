@@ -44,24 +44,42 @@ local function applyVisuals(self)
     local style = self._style or STYLES.Accent
     local state = self._vsm:GetState()
 
-    local bgKey, labelKey
+    local bgKey, labelKey, bottomKey, overlayKey
     if state == "Disabled" then
         bgKey    = style.bg
         labelKey = "Color.Text.Disabled"
+        bottomKey = "Color.Border.Default"
     elseif state == "Pressed" then
         bgKey    = style.bgPress
         labelKey = style.label
+        bottomKey = style.bgPress
+        overlayKey = "Color.Overlay.Press"
     elseif state == "Hover" then
         bgKey    = style.bgHover
         labelKey = style.label
+        bottomKey = style.bg
+        overlayKey = "Color.Overlay.Hover"
     else
         bgKey    = style.bg
         labelKey = style.label
+        bottomKey = style.bgPress
     end
 
     self.BG:SetColorTexture(T:GetColor(bgKey))
     self.Label:SetTextColor(T:GetColor(labelKey))
     self.TopEdge:SetColorTexture(T:GetColor(style.topEdge))
+    self.BottomEdge:SetColorTexture(T:GetColor(bottomKey))
+
+    if self.Shadow then
+        local sr, sg, sb = T:GetColor("Color.Surface.Base")
+        self.Shadow:SetColorTexture(sr, sg, sb, 0.85)
+    end
+
+    if overlayKey then
+        self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+    else
+        self.Overlay:SetColorTexture(0, 0, 0, 0)
+    end
 
     if state == "Disabled" then
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -78,36 +96,55 @@ local function applyToggleVisuals(self)
     local state = self._vsm:GetState()
     local checked = self._checked
 
-    local bgKey, labelKey, topKey
+    local bgKey, labelKey, topKey, bottomKey, overlayKey
     if state == "Disabled" then
         bgKey    = "Color.Surface.Elevated"
         labelKey = "Color.Text.Disabled"
         topKey   = "Color.Border.Subtle"
+        bottomKey = "Color.Border.Default"
     elseif checked then
         if state == "Pressed" then
             bgKey = "Color.Accent.Pressed"
+            overlayKey = "Color.Overlay.Press"
         elseif state == "Hover" then
             bgKey = "Color.Accent.Hover"
+            overlayKey = "Color.Overlay.Hover"
         else
             bgKey = "Color.Accent.Primary"
         end
         labelKey = "Color.Text.OnAccent"
         topKey   = "Color.Accent.Light"
+        bottomKey = "Color.Accent.Pressed"
     else
         if state == "Pressed" then
             bgKey = "Color.Overlay.Press"
+            overlayKey = "Color.Overlay.Press"
         elseif state == "Hover" then
             bgKey = "Color.Overlay.Hover"
+            overlayKey = "Color.Overlay.Hover"
         else
             bgKey = "Color.Surface.Elevated"
         end
         labelKey = "Color.Text.Primary"
         topKey   = "Color.Border.Subtle"
+        bottomKey = "Color.Border.Default"
     end
 
     self.BG:SetColorTexture(T:GetColor(bgKey))
     self.Label:SetTextColor(T:GetColor(labelKey))
     self.TopEdge:SetColorTexture(T:GetColor(topKey))
+    self.BottomEdge:SetColorTexture(T:GetColor(bottomKey))
+
+    if self.Shadow then
+        local sr, sg, sb = T:GetColor("Color.Surface.Base")
+        self.Shadow:SetColorTexture(sr, sg, sb, 0.85)
+    end
+
+    if overlayKey then
+        self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+    else
+        self.Overlay:SetColorTexture(0, 0, 0, 0)
+    end
 
     if state == "Disabled" then
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -161,21 +198,39 @@ local IconMixin = {}
 
 function IconMixin:OnStateChanged(newState, prevState)
     local state = newState
-    local bgKey
+    local bgKey, borderKey, overlayKey
     if state == "Disabled" then
         bgKey = "Color.Surface.Elevated"
+        borderKey = "Color.Border.Subtle"
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
     elseif state == "Pressed" then
-        bgKey = "Color.Overlay.Press"
+        bgKey = "Color.Surface.Overlay"
+        borderKey = "Color.Accent.Primary"
+        overlayKey = "Color.Overlay.Press"
         self:SetAlpha(1)
     elseif state == "Hover" then
-        bgKey = "Color.Overlay.Hover"
+        bgKey = "Color.Surface.Overlay"
+        borderKey = "Color.Border.Focus"
+        overlayKey = "Color.Overlay.Hover"
         self:SetAlpha(1)
     else
         bgKey = "Color.Surface.Elevated"
+        borderKey = "Color.Border.Subtle"
         self:SetAlpha(1)
     end
     self.BG:SetColorTexture(T:GetColor(bgKey))
+    self.Border:SetColorTexture(T:GetColor(borderKey))
+
+    if self.Shadow then
+        local sr, sg, sb = T:GetColor("Color.Surface.Base")
+        self.Shadow:SetColorTexture(sr, sg, sb, 0.85)
+    end
+
+    if overlayKey then
+        self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+    else
+        self.Overlay:SetColorTexture(0, 0, 0, 0)
+    end
 
     local iconKey = (state == "Disabled") and "Color.Icon.Disabled" or "Color.Icon.Default"
     self.Icon:SetVertexColor(T:GetColor(iconKey))
@@ -243,6 +298,10 @@ function WUILButton_OnLoad(self)
     self:WUILInit()
     self._style = STYLES.Accent
     self._isToggle = false
+    local font = T:Get("Typography.BodyBold")
+    if font then
+        self.Label:SetFont(font.font, font.size, font.flags)
+    end
     applyVisuals(self)
 end
 
@@ -251,6 +310,10 @@ function WUILButtonSubtle_OnLoad(self)
     self:WUILInit()
     self._style = STYLES.Subtle
     self._isToggle = false
+    local font = T:Get("Typography.BodyBold")
+    if font then
+        self.Label:SetFont(font.font, font.size, font.flags)
+    end
     applyVisuals(self)
 end
 
@@ -259,6 +322,10 @@ function WUILButtonDestructive_OnLoad(self)
     self:WUILInit()
     self._style = STYLES.Destructive
     self._isToggle = false
+    local font = T:Get("Typography.BodyBold")
+    if font then
+        self.Label:SetFont(font.font, font.size, font.flags)
+    end
     applyVisuals(self)
 end
 
@@ -274,6 +341,10 @@ function WUILToggleButton_OnLoad(self)
     self:WUILInit()
     self._isToggle = true
     self._checked  = false
+    local font = T:Get("Typography.BodyBold")
+    if font then
+        self.Label:SetFont(font.font, font.size, font.flags)
+    end
     applyToggleVisuals(self)
 end
 
@@ -301,7 +372,7 @@ end
 
 function WUILButton_OnMouseUp(self)
     if not self._enabled then return end
-    if MouseIsOver(self) then
+    if self:IsMouseOver() then
         self._vsm:SetState("Hover")
     elseif self._isToggle and self._checked then
         self._vsm:SetState("Checked")

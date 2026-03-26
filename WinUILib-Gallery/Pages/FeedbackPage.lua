@@ -6,10 +6,7 @@ local lib = WinUILib
 local Gallery = lib._gallery
 
 Gallery:RegisterPage("feedback", "Feedback", function(parent)
-    local stack = lib:CreateStackLayout(parent, nil, "VERTICAL")
-    stack:SetAllPoints(parent)
-    stack:SetGap(16)
-    stack:SetPadding(16, 0, 16, 0)
+    local _, _, stack, refresh = Gallery:CreateDemoPage(parent)
 
     local header = lib:CreateTextBlock(stack)
     header:SetStyle("Header")
@@ -94,4 +91,6 @@ Gallery:RegisterPage("feedback", "Feedback", function(parent)
         demoDlg:Open()
     end)
     stack:AddChild(dlgBtn)
+
+    refresh()
 end)

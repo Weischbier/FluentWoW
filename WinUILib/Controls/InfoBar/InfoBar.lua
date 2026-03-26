@@ -40,7 +40,7 @@ function InfoBarMixin:_ApplySeverity()
     local sev = SEVERITY[self._severity] or SEVERITY.Info
     self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
     self.LeftEdge:SetColorTexture(T:GetColor(sev.edge))
-    self.Icon:SetColorTexture(1, 1, 1)
+    self.Icon:SetColorTexture(T:GetColor("Color.Base.White"))
     self.Icon:SetVertexColor(T:GetColor(sev.icon))
     self.Title:SetTextColor(T:GetColor("Color.Text.Primary"))
     self.Message:SetTextColor(T:GetColor("Color.Text.Secondary"))

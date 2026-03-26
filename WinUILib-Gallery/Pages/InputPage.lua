@@ -7,10 +7,7 @@ local lib = WinUILib
 local Gallery = lib._gallery
 
 Gallery:RegisterPage("input", "Input Controls", function(parent)
-    local stack = lib:CreateStackLayout(parent, nil, "VERTICAL")
-    stack:SetAllPoints(parent)
-    stack:SetGap(16)
-    stack:SetPadding(16, 0, 16, 0)
+    local _, _, stack, refresh = Gallery:CreateDemoPage(parent)
 
     local header = lib:CreateTextBlock(stack)
     header:SetStyle("Header")
@@ -107,4 +104,6 @@ Gallery:RegisterPage("input", "Input Controls", function(parent)
     })
     cx:SetSelectedIndex(1)
     stack:AddChild(cx)
+
+    refresh()
 end)

@@ -73,6 +73,18 @@ local function applyVisuals(self)
     tb.Icon:Hide()
 end
 
+local function registerThemeListener(self)
+    if self._themeListenerRegistered or not self._themeListener then return end
+    lib.EventBus:On("ThemeChanged", self._themeListener)
+    self._themeListenerRegistered = true
+end
+
+local function unregisterThemeListener(self)
+    if not self._themeListenerRegistered or not self._themeListener then return end
+    lib.EventBus:Off("ThemeChanged", self._themeListener)
+    self._themeListenerRegistered = false
+end
+
 -------------------------------------------------------------------------------
 -- Title / Status / Icon
 -------------------------------------------------------------------------------
@@ -213,6 +225,7 @@ function WUILMainFrame_OnLoad(self)
     self._localStatus = {}
     self._status      = nil
     self._resizable   = true
+    self._themeListenerRegistered = false
 
     -- Register for ESC-to-close
     if self:GetName() then
@@ -220,18 +233,18 @@ function WUILMainFrame_OnLoad(self)
     end
 
     applyVisuals(self)
-
-    -- Theme change listener (stored for cleanup)
     self._themeListener = function() applyVisuals(self) end
-    lib.EventBus:On("ThemeChanged", self._themeListener)
 end
 
 function WUILMainFrame_OnShow(self)
+    registerThemeListener(self)
+    applyVisuals(self)
     if Mot then Mot:FadeIn(self) end
     if self._onShow then lib.Utils.SafeCall(self._onShow, self) end
 end
 
 function WUILMainFrame_OnHide(self)
+    unregisterThemeListener(self)
     self:_SaveStatus()
     if self._onClose then lib.Utils.SafeCall(self._onClose, self) end
 end

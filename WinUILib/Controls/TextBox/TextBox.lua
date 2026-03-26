@@ -18,33 +18,44 @@ local TextBoxMixin = {}
 function TextBoxMixin:OnStateChanged(newState, prevState)
     local state = newState
 
+    local shadowR, shadowG, shadowB = T:GetColor("Color.Surface.Base")
+    self.Shadow:SetColorTexture(shadowR, shadowG, shadowB, 0.85)
+
     if state == "Disabled" then
         self.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
         self.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
         self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.EditBox:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self.ClearBtn.X:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
         self.EditBox:EnableMouse(false)
     elseif state == "Focused" then
         self:SetAlpha(1)
         self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.Border:SetColorTexture(T:GetColor("Color.Border.Focus"))
+        self.TopEdge:SetColorTexture(T:GetColor("Color.Accent.Light"))
         self.BottomEdge:SetColorTexture(T:GetColor("Color.Accent.Primary"))
         self.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.ClearBtn.X:SetTextColor(T:GetColor("Color.Accent.Primary"))
         self.EditBox:EnableMouse(true)
     elseif state == "Hover" then
         self:SetAlpha(1)
         self.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
-        self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Focus"))
         self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.ClearBtn.X:SetTextColor(T:GetColor("Color.Text.Primary"))
         self.EditBox:EnableMouse(true)
     else
         self:SetAlpha(1)
         self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
         self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.ClearBtn.X:SetTextColor(T:GetColor("Color.Text.Secondary"))
         self.EditBox:EnableMouse(true)
     end
 

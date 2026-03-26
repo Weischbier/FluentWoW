@@ -1,4 +1,4 @@
-## Interface: 120005
+## Interface: 120005, 120001
 ## Title: WinUILib
 ## Notes: WinUI-inspired, token-driven UI framework for World of Warcraft addon developers.
 ## Version: 1.0.0

@@ -1,4 +1,4 @@
-## Interface: 120005
+## Interface: 120005, 120001
 ## Title: WinUILib Gallery
 ## Notes: Interactive showcase of all WinUILib controls.
 ## Version: 1.0.0

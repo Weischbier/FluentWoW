@@ -100,7 +100,7 @@ function WUILCheckBox_OnLoad(self)
     self:WUILInit()
     self._checked = false
     self._indeterminate = false
-    self.Check:SetColorTexture(1, 1, 1)
+    self.Check:SetColorTexture(T:GetColor("Color.Base.White"))
     self:OnStateChanged("Normal")
 end
 

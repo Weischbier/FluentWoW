@@ -28,6 +28,9 @@ local function unregisterFromGroup(self, group)
     for i, rb in ipairs(_groups[group]) do
         if rb == self then
             table.remove(_groups[group], i)
+            if #_groups[group] == 0 then
+                _groups[group] = nil
+            end
             return
         end
     end
@@ -35,6 +38,9 @@ end
 
 local function registerInGroup(self, group)
     if not _groups[group] then _groups[group] = {} end
+    for _, rb in ipairs(_groups[group]) do
+        if rb == self then return end
+    end
     table.insert(_groups[group], self)
 end
 
@@ -122,6 +128,19 @@ function WUILRadioButton_OnLoad(self)
     self._selected = false
     self._group = "default"
     registerInGroup(self, "default")
+    self:HookScript("OnHide", function(frame)
+        if frame._group then
+            unregisterFromGroup(frame, frame._group)
+        end
+    end)
+    self:HookScript("OnShow", function(frame)
+        if frame._group then
+            registerInGroup(frame, frame._group)
+            if frame._selected then
+                deselectGroup(frame._group, frame)
+            end
+        end
+    end)
     self:OnStateChanged("Normal")
 end
 

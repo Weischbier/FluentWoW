@@ -8,10 +8,23 @@
         <Size x="200" y="32"/>
         <Layers>
             <Layer level="BACKGROUND">
+                <Texture name="$parent_Shadow" parentKey="Shadow">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="-1"/>
+                        <Anchor point="BOTTOMRIGHT" y="1"/>
+                    </Anchors>
+                </Texture>
                 <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
             </Layer>
             <Layer level="BORDER">
                 <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
+                <Texture name="$parent_TopEdge" parentKey="TopEdge">
+                    <Size x="0" y="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="TOPRIGHT"/>
+                    </Anchors>
+                </Texture>
             </Layer>
             <Layer level="BORDER" textureSubLevel="1">
                 <Texture name="$parent_BottomEdge" parentKey="BottomEdge">

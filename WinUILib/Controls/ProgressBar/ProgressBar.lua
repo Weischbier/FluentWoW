@@ -129,8 +129,9 @@ function WUILProgressRing_OnLoad(self)
     self:WUILInit()
     self._active = true
     self._angle = 0
-    self.Ring:SetColorTexture(1, 1, 1)
+    self.Ring:SetColorTexture(T:GetColor("Color.Base.White"))
     self:OnStateChanged("Normal")
+    self:SetScript("OnUpdate", WUILProgressRing_OnUpdate)
 end
 
 function WUILProgressRing_OnUpdate(self, elapsed)

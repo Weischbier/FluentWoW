@@ -16,6 +16,18 @@ local Mot = lib.Motion
 ---@class WUILSettingsExpander
 local ExpanderMixin = {}
 
+local function registerThemeListener(self)
+    if self._themeListenerRegistered or not self._themeListener then return end
+    lib.EventBus:On("ThemeChanged", self._themeListener)
+    self._themeListenerRegistered = true
+end
+
+local function unregisterThemeListener(self)
+    if not self._themeListenerRegistered or not self._themeListener then return end
+    lib.EventBus:Off("ThemeChanged", self._themeListener)
+    self._themeListenerRegistered = false
+end
+
 local function applyVisuals(self, state)
     state = state or self:GetState()
     local hdr = self.Header
@@ -225,6 +237,7 @@ function WUILSettingsExpander_OnLoad(self)
     self._expanded = false
     self._cards = {}
     self._contentHeight = 0
+    self._themeListenerRegistered = false
 
     -- Typography
     local titleFont = T:Get("Typography.Body")
@@ -244,7 +257,14 @@ function WUILSettingsExpander_OnLoad(self)
 
     applyVisuals(self)
     self._themeListener = function() applyVisuals(self) end
-    lib.EventBus:On("ThemeChanged", self._themeListener)
+    registerThemeListener(self)
+    self:HookScript("OnShow", function(frame)
+        registerThemeListener(frame)
+        applyVisuals(frame)
+    end)
+    self:HookScript("OnHide", function(frame)
+        unregisterThemeListener(frame)
+    end)
 end
 
 function WUILSettingsExpander_Header_OnClick(self)

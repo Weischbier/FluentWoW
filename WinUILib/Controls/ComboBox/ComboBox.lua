@@ -23,10 +23,16 @@ local ComboMixin = {}
 
 function ComboMixin:OnStateChanged(newState, prevState)
     local state = newState
+    local shadowR, shadowG, shadowB = T:GetColor("Color.Surface.Base")
+
+    self.Shadow:SetColorTexture(shadowR, shadowG, shadowB, 0.85)
+    self.Dropdown.DropBG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+    self.Dropdown.DropBorder:SetColorTexture(T:GetColor("Color.Border.Subtle"))
 
     if state == "Disabled" then
         self.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
         self.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
         self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self.Arrow:SetTextColor(T:GetColor("Color.Text.Disabled"))
@@ -34,14 +40,16 @@ function ComboMixin:OnStateChanged(newState, prevState)
     elseif state == "Expanded" then
         self:SetAlpha(1)
         self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.Border:SetColorTexture(T:GetColor("Color.Border.Focus"))
+        self.TopEdge:SetColorTexture(T:GetColor("Color.Accent.Light"))
         self.BottomEdge:SetColorTexture(T:GetColor("Color.Accent.Primary"))
         self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
         self.Arrow:SetTextColor(T:GetColor("Color.Accent.Primary"))
     elseif state == "Hover" then
         self:SetAlpha(1)
         self.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
-        self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Focus"))
         self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
         self.Arrow:SetTextColor(T:GetColor("Color.Text.Primary"))
@@ -49,6 +57,7 @@ function ComboMixin:OnStateChanged(newState, prevState)
         self:SetAlpha(1)
         self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
         self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
         self.Arrow:SetTextColor(T:GetColor("Color.Text.Secondary"))
@@ -116,7 +125,10 @@ end
 
 function ComboMixin:_BuildDropdown()
     if not self._itemPool then
-        self._itemPool = lib.FramePool:New("Button", self.Dropdown.Scroll.Child, "WUILComboBoxItemTemplate")
+        self._itemPool = lib.FramePool:New("Button", self.Dropdown.Scroll.Child, "WUILComboBoxItemTemplate", function(btn)
+            btn._comboParent = nil
+            btn._itemIndex = nil
+        end)
     end
     self._itemPool:ReleaseAll()
 
@@ -152,6 +164,10 @@ function WUILComboBox_OnLoad(self)
     self:WUILInit()
     self._items = {}
     self.Dropdown.Scroll:SetScrollChild(self.Dropdown.Scroll.Child)
+    local font = T:Get("Typography.BodyBold")
+    if font then
+        self.SelectedLabel:SetFont(font.font, font.size, font.flags)
+    end
     self:OnStateChanged("Normal")
 end
 

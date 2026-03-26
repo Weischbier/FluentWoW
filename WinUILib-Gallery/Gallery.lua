@@ -4,6 +4,7 @@
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
+local T = lib.Tokens
 
 -------------------------------------------------------------------------------
 -- Page registry
@@ -13,12 +14,47 @@ local Gallery = {}
 Gallery.pages = {}
 Gallery.pageOrder = {}
 
+local function refreshDemoPage(scroll, content, stack, parent)
+    stack:Refresh()
+    content:SetWidth(math.max(1, parent:GetWidth() - T:GetNumber("Spacing.XXL")))
+    content:SetHeight(math.max(parent:GetHeight(), stack:GetHeight() + T:GetNumber("Spacing.XXXL")))
+    scroll:SetContentHeight(content:GetHeight())
+end
+
 ---@param key string
 ---@param title string
 ---@param builder function(contentParent)  builds page content into the parent
 function Gallery:RegisterPage(key, title, builder)
     self.pages[key] = { title = title, builder = builder, frame = nil }
     table.insert(self.pageOrder, key)
+end
+
+---@param parent Frame
+---@return WUILScrollFrame, Frame, WUILStackLayout, function
+function Gallery:CreateDemoPage(parent)
+    local scroll = lib:CreateScrollFrame(parent)
+    scroll:SetAllPoints(parent)
+    scroll.ScrollFrame:EnableMouseWheel(true)
+
+    local content = scroll:GetScrollChild()
+    content:ClearAllPoints()
+    content:SetPoint("TOPLEFT", scroll.ScrollFrame, "TOPLEFT", 0, 0)
+    content:SetPoint("TOPRIGHT", scroll.ScrollFrame, "TOPRIGHT", 0, 0)
+
+    local stack = lib:CreateStackLayout(content, nil, "VERTICAL")
+    stack:SetPoint("TOPLEFT", content, "TOPLEFT", 0, 0)
+    stack:SetPoint("TOPRIGHT", content, "TOPRIGHT", 0, 0)
+    stack:SetGap(T:GetNumber("Spacing.XL"))
+    stack:SetPadding(T:GetNumber("Spacing.XL"), T:GetNumber("Spacing.XL"), T:GetNumber("Spacing.XXXL"), T:GetNumber("Spacing.XL"))
+
+    local function refresh()
+        refreshDemoPage(scroll, content, stack, parent)
+    end
+
+    scroll.RefreshLayout = refresh
+    parent:HookScript("OnShow", refresh)
+
+    return scroll, content, stack, refresh
 end
 
 -------------------------------------------------------------------------------
@@ -31,18 +67,16 @@ local function EnsureFrame()
     if mainFrame then return mainFrame end
 
     mainFrame = lib:CreateMainFrame("WUILGalleryFrame", "WinUILib Gallery")
-    mainFrame:SetSize(900, 600)
+    mainFrame:SetSize(1000, 700)
     mainFrame:SetStatusText("WinUILib v" .. tostring(lib.version))
     mainFrame:ClearAllPoints()
     mainFrame:SetPoint("CENTER")
-
-    local T = lib.Tokens
 
     ---------------------------------------------------------------------------
     -- Sidebar (navigation pane)
     ---------------------------------------------------------------------------
     local sidebar = CreateFrame("Frame", nil, mainFrame)
-    sidebar:SetWidth(200)
+    sidebar:SetWidth(220)
     sidebar:SetPoint("TOPLEFT", mainFrame, "TOPLEFT", 0, -40)
     sidebar:SetPoint("BOTTOMLEFT", mainFrame, "BOTTOMLEFT", 0, 24)
 
@@ -61,7 +95,7 @@ local function EnsureFrame()
     ---------------------------------------------------------------------------
     -- Content area (right of sidebar)
     ---------------------------------------------------------------------------
-    mainFrame:SetContentInsets(200, 16, 40, 28)
+    mainFrame:SetContentInsets(220, 24, 40, 32)
     local content = mainFrame:GetContentArea()
 
     ---------------------------------------------------------------------------
