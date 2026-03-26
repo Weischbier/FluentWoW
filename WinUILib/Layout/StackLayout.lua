@@ -152,7 +152,7 @@ end
 ---@param parent Frame
 ---@param name? string
 ---@param orientation? string  "VERTICAL"|"HORIZONTAL" (default VERTICAL)
----@return Frame
+---@return WUILStackLayout
 function lib:CreateStackLayout(parent, name, orientation)
     local f = CreateFrame("Frame", name, parent, "WUILStackLayoutTemplate")
     f._orientation = orientation or "VERTICAL"

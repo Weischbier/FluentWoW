@@ -187,7 +187,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILSettingsCard
 function lib:CreateSettingsCard(parent, name)
     return CreateFrame("Frame", name, parent, "WUILSettingsCardTemplate")
 end

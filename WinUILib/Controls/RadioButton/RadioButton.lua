@@ -154,7 +154,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Button
+---@return WUILRadioButton
 function lib:CreateRadioButton(parent, name)
     return CreateFrame("Button", name, parent, "WUILRadioButtonTemplate")
 end

@@ -162,7 +162,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILExpander
 function lib:CreateExpander(parent, name)
     return CreateFrame("Frame", name, parent, "WUILExpanderTemplate")
 end

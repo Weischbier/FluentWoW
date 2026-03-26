@@ -78,7 +78,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILTextBlock
 function lib:CreateTextBlock(parent, name)
     return CreateFrame("Frame", name, parent, "WUILTextBlockTemplate")
 end

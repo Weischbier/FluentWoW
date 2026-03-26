@@ -140,7 +140,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Button
+---@return WUILCheckBox
 function lib:CreateCheckBox(parent, name)
     return CreateFrame("Button", name, parent, "WUILCheckBoxTemplate")
 end

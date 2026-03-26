@@ -210,7 +210,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILComboBox
 function lib:CreateComboBox(parent, name)
     return CreateFrame("Frame", name, parent, "WUILComboBoxTemplate")
 end

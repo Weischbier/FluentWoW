@@ -350,7 +350,7 @@ end
 ---@param parent Frame
 ---@param name? string
 ---@param style? string  "Accent"|"Subtle"|"Destructive"
----@return Button
+---@return WUILButton
 function lib:CreateButton(parent, name, style)
     local template = "WUILButtonTemplate"
     if style == "Subtle" then
@@ -363,14 +363,14 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Button
+---@return WUILIconButton
 function lib:CreateIconButton(parent, name)
     return CreateFrame("Button", name, parent, "WUILIconButtonTemplate")
 end
 
 ---@param parent Frame
 ---@param name? string
----@return Button
+---@return WUILToggleButton
 function lib:CreateToggleButton(parent, name)
     return CreateFrame("Button", name, parent, "WUILToggleButtonTemplate")
 end

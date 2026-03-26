@@ -143,14 +143,14 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILProgressBar
 function lib:CreateProgressBar(parent, name)
     return CreateFrame("Frame", name, parent, "WUILProgressBarTemplate")
 end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILProgressRing
 function lib:CreateProgressRing(parent, name)
     return CreateFrame("Frame", name, parent, "WUILProgressRingTemplate")
 end

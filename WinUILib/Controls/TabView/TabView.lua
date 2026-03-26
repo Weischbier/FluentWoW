@@ -137,7 +137,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILTabView
 function lib:CreateTabView(parent, name)
     return CreateFrame("Frame", name, parent, "WUILTabViewTemplate")
 end

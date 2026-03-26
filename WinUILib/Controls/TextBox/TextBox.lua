@@ -191,14 +191,14 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILTextBox
 function lib:CreateTextBox(parent, name)
     return CreateFrame("Frame", name, parent, "WUILTextBoxTemplate")
 end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILTextBox
 function lib:CreateSearchBox(parent, name)
     return CreateFrame("Frame", name, parent, "WUILSearchBoxTemplate")
 end

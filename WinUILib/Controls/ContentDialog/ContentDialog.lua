@@ -134,7 +134,7 @@ end
 
 ---@param parent? Frame  defaults to UIParent
 ---@param name? string
----@return Frame
+---@return WUILContentDialog
 function lib:CreateContentDialog(parent, name)
     return CreateFrame("Frame", name, parent or UIParent, "WUILContentDialogTemplate")
 end

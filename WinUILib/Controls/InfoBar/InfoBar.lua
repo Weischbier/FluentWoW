@@ -124,7 +124,7 @@ end
 
 ---@param parent Frame
 ---@param name? string
----@return Frame
+---@return WUILInfoBar
 function lib:CreateInfoBar(parent, name)
     return CreateFrame("Frame", name, parent, "WUILInfoBarTemplate")
 end

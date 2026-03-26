@@ -294,7 +294,7 @@ local _frameCount = 0
 
 ---@param name? string     global name (needed for ESC-to-close)
 ---@param title? string    window title
----@return Frame
+---@return WUILMainFrame
 function lib:CreateMainFrame(name, title)
     if not name then
         _frameCount = _frameCount + 1
