@@ -50,7 +50,6 @@
         </Layers>
         <Scripts>
             <OnLoad function="WUILProgressRing_OnLoad"/>
-            <OnUpdate function="WUILProgressRing_OnUpdate"/>
         </Scripts>
     </Frame>
 

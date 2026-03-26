@@ -94,8 +94,10 @@ end
 function RingMixin:SetActive(active)
     self._active = active
     if active then
+        self:SetScript("OnUpdate", WUILProgressRing_OnUpdate)
         self:Show()
     else
+        self:SetScript("OnUpdate", nil)
         self:Hide()
     end
 end
