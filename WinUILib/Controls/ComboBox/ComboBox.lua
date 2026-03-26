@@ -184,6 +184,10 @@ function WUILComboBox_OnHide(self)
     if self.Dropdown:IsShown() then
         self.Dropdown:Hide()
     end
+    if _activeCombo == self then _activeCombo = nil end
+    if self._vsm:GetState() == "Expanded" then
+        self._vsm:SetState("Normal")
+    end
 end
 
 function WUILComboBoxItem_OnClick(self)
