@@ -142,5 +142,7 @@ end
 ---@param name? string
 ---@return WUILCheckBox
 function lib:CreateCheckBox(parent, name)
-    return CreateFrame("Button", name, parent, "WUILCheckBoxTemplate")
+    local f = CreateFrame("Button", name, parent, "WUILCheckBoxTemplate")
+    ---@cast f WUILCheckBox
+    return f
 end

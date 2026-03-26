@@ -80,5 +80,7 @@ end
 ---@param name? string
 ---@return WUILTextBlock
 function lib:CreateTextBlock(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILTextBlockTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILTextBlockTemplate")
+    ---@cast f WUILTextBlock
+    return f
 end

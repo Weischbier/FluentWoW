@@ -216,5 +216,7 @@ end
 ---@param name? string
 ---@return WUILComboBox
 function lib:CreateComboBox(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILComboBoxTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILComboBoxTemplate")
+    ---@cast f WUILComboBox
+    return f
 end

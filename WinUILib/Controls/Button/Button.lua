@@ -358,19 +358,25 @@ function lib:CreateButton(parent, name, style)
     elseif style == "Destructive" then
         template = "WUILButtonDestructiveTemplate"
     end
-    return CreateFrame("Button", name, parent, template)
+    local f = CreateFrame("Button", name, parent, template)
+    ---@cast f WUILButton
+    return f
 end
 
 ---@param parent Frame
 ---@param name? string
 ---@return WUILIconButton
 function lib:CreateIconButton(parent, name)
-    return CreateFrame("Button", name, parent, "WUILIconButtonTemplate")
+    local f = CreateFrame("Button", name, parent, "WUILIconButtonTemplate")
+    ---@cast f WUILIconButton
+    return f
 end
 
 ---@param parent Frame
 ---@param name? string
 ---@return WUILToggleButton
 function lib:CreateToggleButton(parent, name)
-    return CreateFrame("Button", name, parent, "WUILToggleButtonTemplate")
+    local f = CreateFrame("Button", name, parent, "WUILToggleButtonTemplate")
+    ---@cast f WUILToggleButton
+    return f
 end

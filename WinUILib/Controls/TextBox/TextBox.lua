@@ -195,12 +195,16 @@ end
 ---@param name? string
 ---@return WUILTextBox
 function lib:CreateTextBox(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILTextBoxTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILTextBoxTemplate")
+    ---@cast f WUILTextBox
+    return f
 end
 
 ---@param parent Frame
 ---@param name? string
 ---@return WUILTextBox
 function lib:CreateSearchBox(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILSearchBoxTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILSearchBoxTemplate")
+    ---@cast f WUILTextBox
+    return f
 end

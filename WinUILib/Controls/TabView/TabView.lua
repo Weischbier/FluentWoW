@@ -139,5 +139,7 @@ end
 ---@param name? string
 ---@return WUILTabView
 function lib:CreateTabView(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILTabViewTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILTabViewTemplate")
+    ---@cast f WUILTabView
+    return f
 end

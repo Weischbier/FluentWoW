@@ -301,6 +301,7 @@ function lib:CreateMainFrame(name, title)
         name = "WUILMainFrame" .. _frameCount
     end
     local f = CreateFrame("Frame", name, UIParent, "WUILMainFrameTemplate")
+    ---@cast f WUILMainFrame
     if title then f:SetTitle(title) end
     f:_ApplyStatus()
     return f

@@ -137,5 +137,7 @@ end
 ---@param name? string
 ---@return WUILContentDialog
 function lib:CreateContentDialog(parent, name)
-    return CreateFrame("Frame", name, parent or UIParent, "WUILContentDialogTemplate")
+    local f = CreateFrame("Frame", name, parent or UIParent, "WUILContentDialogTemplate")
+    ---@cast f WUILContentDialog
+    return f
 end

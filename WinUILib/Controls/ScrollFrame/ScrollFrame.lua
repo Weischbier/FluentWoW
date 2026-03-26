@@ -119,5 +119,7 @@ end
 ---@param name? string
 ---@return WUILScrollFrame
 function lib:CreateScrollFrame(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILScrollFrameTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILScrollFrameTemplate")
+    ---@cast f WUILScrollFrame
+    return f
 end

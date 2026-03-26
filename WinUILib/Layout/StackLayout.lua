@@ -155,6 +155,7 @@ end
 ---@return WUILStackLayout
 function lib:CreateStackLayout(parent, name, orientation)
     local f = CreateFrame("Frame", name, parent, "WUILStackLayoutTemplate")
+    ---@cast f WUILStackLayout
     f._orientation = orientation or "VERTICAL"
     return f
 end

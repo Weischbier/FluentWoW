@@ -192,5 +192,7 @@ end
 ---@param name? string
 ---@return WUILSettingsCard
 function lib:CreateSettingsCard(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILSettingsCardTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILSettingsCardTemplate")
+    ---@cast f WUILSettingsCard
+    return f
 end

@@ -112,5 +112,7 @@ end
 ---@param name? string
 ---@return WUILToggleSwitch
 function lib:CreateToggleSwitch(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILToggleSwitchTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILToggleSwitchTemplate")
+    ---@cast f WUILToggleSwitch
+    return f
 end

@@ -168,5 +168,7 @@ end
 ---@param name? string
 ---@return WUILExpander
 function lib:CreateExpander(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILExpanderTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILExpanderTemplate")
+    ---@cast f WUILExpander
+    return f
 end

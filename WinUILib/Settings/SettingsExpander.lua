@@ -277,5 +277,7 @@ end
 ---@param name? string
 ---@return WUILSettingsExpander
 function lib:CreateSettingsExpander(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILSettingsExpanderTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILSettingsExpanderTemplate")
+    ---@cast f WUILSettingsExpander
+    return f
 end

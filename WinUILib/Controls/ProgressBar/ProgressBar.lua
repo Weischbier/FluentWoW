@@ -147,12 +147,16 @@ end
 ---@param name? string
 ---@return WUILProgressBar
 function lib:CreateProgressBar(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILProgressBarTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILProgressBarTemplate")
+    ---@cast f WUILProgressBar
+    return f
 end
 
 ---@param parent Frame
 ---@param name? string
 ---@return WUILProgressRing
 function lib:CreateProgressRing(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILProgressRingTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILProgressRingTemplate")
+    ---@cast f WUILProgressRing
+    return f
 end

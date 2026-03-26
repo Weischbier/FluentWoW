@@ -126,5 +126,7 @@ end
 ---@param name? string
 ---@return WUILInfoBar
 function lib:CreateInfoBar(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILInfoBarTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILInfoBarTemplate")
+    ---@cast f WUILInfoBar
+    return f
 end

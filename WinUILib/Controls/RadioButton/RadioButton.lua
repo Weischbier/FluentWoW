@@ -160,5 +160,7 @@ end
 ---@param name? string
 ---@return WUILRadioButton
 function lib:CreateRadioButton(parent, name)
-    return CreateFrame("Button", name, parent, "WUILRadioButtonTemplate")
+    local f = CreateFrame("Button", name, parent, "WUILRadioButtonTemplate")
+    ---@cast f WUILRadioButton
+    return f
 end

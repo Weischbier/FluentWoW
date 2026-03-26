@@ -157,5 +157,7 @@ end
 ---@param name? string
 ---@return WUILSlider
 function lib:CreateSlider(parent, name)
-    return CreateFrame("Frame", name, parent, "WUILSliderTemplate")
+    local f = CreateFrame("Frame", name, parent, "WUILSliderTemplate")
+    ---@cast f WUILSlider
+    return f
 end
