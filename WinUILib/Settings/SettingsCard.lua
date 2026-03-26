@@ -82,10 +82,13 @@ function CardMixin:SetDescription(text)
         local gap   = T:GetNumber("Spacing.XS")    -- 2
         local padB  = T:GetNumber("Spacing.XL")    -- 16
         local h = padT + self.TitleLabel:GetStringHeight() + gap + self.DescLabel:GetStringHeight() + padB
-        self:SetHeight(math.max(52, h))
+        local minH = padT + self.TitleLabel:GetStringHeight() + padB
+        self:SetHeight(math.max(minH, h))
     else
         self.DescLabel:Hide()
-        self:SetHeight(52)
+        local padT = T:GetNumber("Spacing.LG")
+        local padB = T:GetNumber("Spacing.XL")
+        self:SetHeight(padT + self.TitleLabel:GetStringHeight() + padB)
     end
 end
 
