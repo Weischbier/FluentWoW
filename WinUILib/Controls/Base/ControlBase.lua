@@ -68,7 +68,8 @@ function ControlBase:ShowTooltip()
     local r, g, b = lib.Tokens:GetColor("Color.Text.Primary")
     GameTooltip:SetText(self._tooltipTitle, r, g, b, true)
     if self._tooltipText then
-        GameTooltip:AddLine(self._tooltipText, nil, nil, nil, true)
+        local tr, tg, tb = lib.Tokens:GetColor("Color.Text.Secondary")
+        GameTooltip:AddLine(self._tooltipText, tr, tg, tb, true)
     end
     GameTooltip:Show()
 end
