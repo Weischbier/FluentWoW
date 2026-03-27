@@ -116,6 +116,7 @@ end)
 ### Tab Items
 
 Each tab item uses `WUILTabItemTemplate` and supports:
+
 - `text` — tab label (required)
 - `content` — pre-built content frame (optional; otherwise create on tab change)
 - `icon` — Fluent icon glyph string or texture path

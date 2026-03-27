@@ -424,9 +424,11 @@ FluentWoW is designed for incremental adoption:
 4. **Full framework** — build entire addon UIs with layout + controls + motion
 
 ### Embedding (standalone distribution)
+
 Addons can list `FluentWoW` as a `Dependencies:` entry in their TOC.
 
 ### Library load-order negotiation
+
 `Bootstrap.lua` guards on version: if FluentWoW is already loaded with a higher
 version, the embed exits cleanly.  The richest feature set present in the
 session is always used.

@@ -25,7 +25,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 
 ### 1. Declare dependency in your TOC
 
-```
+```text
 Dependencies: FluentWoW
 ```
 
@@ -68,7 +68,7 @@ FluentWoW.Tokens:Override({
 
 ## Structure
 
-```
+```text
 FluentWoW/              Main library (add as dependency)
   Libs/                Vendored LibStub + flux motion engine
   Core/                Bootstrap, Utils, EventBus, StateMachine, FramePool
