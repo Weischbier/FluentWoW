@@ -81,7 +81,7 @@ FluentWoW/
 │   ├── FluentIcons.lua          Segoe Fluent Icons glyph map
 │   └── Fonts/                   Bundled font files
 ├── Controls/
-│   ├── Base/ControlBase.lua     Shared mixin: VSM, tooltip, enable/disable
+│   ├── Base/ControlBase.lua     Shared mixin: VSM, tooltip, enable/disable, theme-change listener
 │   ├── MainFrame/               Application window shell (title bar, resize, drag)
 │   ├── Button/                  Button, IconButton, ToggleButton
 │   ├── CheckBox/
@@ -285,7 +285,7 @@ FluentWoW.Tokens:RegisterTheme("Christmas", {
     Color = { Accent = { Primary = { 1, 0.1, 0.1, 1 } } }
 })
 FluentWoW.Tokens:SetTheme("Christmas")
--- All controls automatically use the new accent colour on next state update.
+-- All controls automatically re-apply OnStateChanged via ControlBase ThemeChanged listener.
 ```
 
 ---

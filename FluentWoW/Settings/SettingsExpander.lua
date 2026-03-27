@@ -172,9 +172,7 @@ function ExpanderMixin:SetExpanded(expanded, instant)
         else
             self.Content:SetHeight(1)
             self:SetHeight(headerH + 1)
-            Mot:HeightTo(self.Content, 1, contentH, nil, function()
-                self:SetHeight(headerH + contentH)
-            end)
+            Mot:HeightTo(self.Content, 1, contentH)
             Mot:HeightTo(self, headerH, headerH + contentH)
         end
     else
@@ -185,7 +183,6 @@ function ExpanderMixin:SetExpanded(expanded, instant)
         else
             Mot:HeightTo(self.Content, contentH, 1, nil, function()
                 self.Content:Hide()
-                self:SetHeight(headerH)
             end)
             Mot:HeightTo(self, headerH + contentH, headerH)
         end

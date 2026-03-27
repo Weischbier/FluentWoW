@@ -29,10 +29,14 @@ function BarMixin:OnStateChanged(newState, prevState)
         self.Bar.Track:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
         self.Bar.Fill:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+        self:_StopIndeterminate()
     else
         self:SetAlpha(1)
         self.Bar.Track:SetColorTexture(T:GetColor("Color.Border.Subtle"))
         self.Bar.Fill:SetColorTexture(T:GetColor(currentBarColorKey(self)))
+        if self._indeterminate then
+            self:_StartIndeterminate()
+        end
     end
 end
 
@@ -118,9 +122,13 @@ function RingMixin:OnStateChanged(newState, prevState)
     if newState == "Disabled" then
         self.Ring:SetVertexColor(T:GetColor("Color.Icon.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
+        self:SetScript("OnUpdate", nil)
     else
         self:SetAlpha(1)
         self.Ring:SetVertexColor(T:GetColor("Color.Accent.Primary"))
+        if self._active then
+            self:SetScript("OnUpdate", FWoWProgressRing_OnUpdate)
+        end
     end
 end
 

@@ -59,6 +59,7 @@ end
 
 function SkeletonMixin:_StartShimmer()
     if self._shimmerRunning then return end
+    if Mot.reducedMotion then return end
     self._shimmerRunning = true
     self._shimmerPhase = 0
 

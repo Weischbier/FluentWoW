@@ -91,6 +91,7 @@ function DialogMixin:Open()
         lib:Debug("ContentDialog: blocked in combat")
         return
     end
+    self:Show()
     self:_ApplyTokens()
     self.Overlay:SetAlpha(0)
     Mot:FadeIn(self.Overlay)

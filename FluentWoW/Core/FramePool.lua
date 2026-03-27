@@ -14,13 +14,14 @@ lib:RegisterModule("FramePool", FramePool)
 ---@return table
 function FramePool:New(frameType, parent, template, resetFn)
     local pool = {
-        _frameType = frameType,
-        _parent    = parent,
-        _template  = template,
-        _resetFn   = resetFn,
-        _free      = {},
-        _active    = {},
-        _counter   = 0,
+        _frameType    = frameType,
+        _parent       = parent,
+        _template     = template,
+        _resetFn      = resetFn,
+        _free         = {},
+        _active       = {},
+        _activeCount  = 0,
+        _counter      = 0,
     }
     setmetatable(pool, { __index = FramePool })
     return pool
@@ -34,6 +35,7 @@ function FramePool:Acquire()
         frame = CreateFrame(self._frameType, nil, self._parent, self._template)
     end
     self._active[frame] = true
+    self._activeCount = (self._activeCount or 0) + 1
     frame:Show()
     return frame
 end
@@ -42,6 +44,7 @@ end
 function FramePool:Release(frame)
     if not self._active[frame] then return end
     self._active[frame] = nil
+    self._activeCount = (self._activeCount or 1) - 1
     frame:Hide()
     frame:ClearAllPoints()
     if self._resetFn then
@@ -51,14 +54,14 @@ function FramePool:Release(frame)
 end
 
 function FramePool:ReleaseAll()
-    for frame in pairs(self._active) do
+    local frames = {}
+    for frame in pairs(self._active) do frames[#frames + 1] = frame end
+    for _, frame in ipairs(frames) do
         self:Release(frame)
     end
 end
 
 ---@return integer
 function FramePool:ActiveCount()
-    local n = 0
-    for _ in pairs(self._active) do n = n + 1 end
-    return n
+    return self._activeCount or 0
 end

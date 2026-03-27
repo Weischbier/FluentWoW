@@ -43,6 +43,10 @@ end
 
 ---@param newState string
 function StateMachine:SetState(newState)
+    if not StateMachine.States[newState] then
+        lib:Debug("StateMachine: invalid state '" .. tostring(newState) .. "'")
+        return
+    end
     if self._state == newState then return end
     local prev = self._state
     self._state = newState

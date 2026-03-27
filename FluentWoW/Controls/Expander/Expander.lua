@@ -74,12 +74,10 @@ function ExpanderMixin:SetExpanded(expanded, instant)
             self:SetHeight(hdrH + targetH)
         else
             Mot:HeightTo(self.Content, 1, targetH,
-                lib.Tokens:GetNumber("Motion.Duration.Normal"),
-                function()
-                    self:SetHeight(hdrH + targetH)
-                end)
+                lib.Tokens:GetNumber("Motion.Duration.Normal"))
             -- animate container height in parallel
-            Mot:HeightTo(self, hdrH, hdrH + targetH)
+            Mot:HeightTo(self, hdrH, hdrH + targetH,
+                lib.Tokens:GetNumber("Motion.Duration.Normal"))
         end
         self._vsm:SetState("Expanded")
     else
@@ -95,7 +93,8 @@ function ExpanderMixin:SetExpanded(expanded, instant)
                 function()
                     self.Content:Hide()
                 end)
-            Mot:HeightTo(self, self:GetHeight(), hdrH)
+            Mot:HeightTo(self, self:GetHeight(), hdrH,
+                lib.Tokens:GetNumber("Motion.Duration.Normal"))
         end
         self._vsm:SetState("Normal")
     end

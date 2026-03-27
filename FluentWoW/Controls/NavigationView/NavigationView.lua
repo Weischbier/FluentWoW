@@ -84,8 +84,7 @@ function NavViewMixin:SetPaneExpanded(expanded, instant)
     end
 
     if self.Pane.ToggleBtn then
-        local icon = expanded and Icons.GlobalNavButton or Icons.GlobalNavButton
-        self.Pane.ToggleBtn.Icon:SetText(icon)
+        self.Pane.ToggleBtn.Icon:SetText(Icons.GlobalNavButton)
     end
 end
 

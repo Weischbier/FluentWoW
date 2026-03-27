@@ -17,6 +17,13 @@ function ControlBase:FWoWInit(opts)
     self._vsm         = lib.StateMachine:New(self)
     self._tooltipText = nil
     self._tooltipTitle = nil
+
+    self._themeListener = function()
+        if self.OnStateChanged then
+            lib.Utils.SafeCall(self.OnStateChanged, self, self._vsm:GetState(), self._vsm:GetState())
+        end
+    end
+    lib.EventBus:On("ThemeChanged", self._themeListener)
 end
 
 ---@param enabled boolean

@@ -155,6 +155,10 @@ function InfoBarMixin:SetOnClosed(fn)
 end
 
 function InfoBarMixin:Open()
+    if InCombatLockdown() then
+        lib:Debug("InfoBar: blocked in combat")
+        return
+    end
     Mot:FadeIn(self)
 end
 

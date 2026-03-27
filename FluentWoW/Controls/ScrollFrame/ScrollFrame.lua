@@ -103,6 +103,13 @@ function FWoWScrollFrame_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, ScrollMixin)
     self:FWoWInit()
     self:_ApplyTokens()
+
+    self:SetScript("OnHide", function()
+        if self._draggingThumb then
+            self._draggingThumb = false
+            self:SetScript("OnUpdate", nil)
+        end
+    end)
 end
 
 function FWoWScrollFrame_OnScrollLoad(self)
