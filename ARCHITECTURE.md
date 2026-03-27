@@ -211,6 +211,7 @@ FluentWoW-Gallery/
 | Skeleton | `FWoWSkeletonTemplate` | ✅ Phase 2 |
 
 ### Planned (Phase 3+)
+
 - Virtualized list (true row recycling)
 - Grid layout container
 - Responsive width classes
@@ -241,6 +242,7 @@ FluentWoW.Tokens:SetTheme("MyTheme")
 ```
 
 ### Token categories
+
 - `Color.Surface.*` — background layers
 - `Color.Border.*` — control borders, focus rings
 - `Color.Text.*` — text roles
@@ -277,6 +279,7 @@ btn:SetAccentColor(0.80, 0.20, 0.80)
 ```
 
 To create a full custom theme:
+
 ```lua
 FluentWoW.Tokens:RegisterTheme("Christmas", {
     Color = { Accent = { Primary = { 1, 0.1, 0.1, 1 } } }
@@ -368,6 +371,7 @@ assert(FluentWoW and FluentWoW.version >= 10000,
 Open with: `/fwow`
 
 Pages:
+
 - **Buttons** — Button variants, ToggleButton, state demo
 - **Input Controls** — CheckBox, RadioButton, ToggleSwitch, TextBox, Slider, ComboBox
 - **Feedback & Dialogs** — ProgressBar, ProgressRing, InfoBar, ContentDialog, Expander
@@ -381,6 +385,7 @@ Pages:
 ## 12. Testing Strategy
 
 ### Unit tests (Lua-side, no WoW API required)
+
 - Token resolution order (override → theme → default) for Color tokens
 - Design constants immutability (spacing, typography, radii, motion, opacity cannot be overridden)
 - StateMachine transitions (all valid state paths)
@@ -389,6 +394,7 @@ Pages:
 - EventBus subscribe/emit/unsubscribe/once
 
 ### Integration / behaviour tests (in-game)
+
 - All controls display correctly at UIParent:GetScale() = 0.64, 1.0, 1.5
 - ToggleSwitch thumb animates between positions
 - ComboBox dropdown appears below (flips up when near screen bottom)
@@ -441,6 +447,7 @@ session is always used.
 | API churn | Semantic versioning; deprecated APIs kept for 2 minor versions |
 
 ### Non-Goals
+
 - Direct XAML port (WoW has no layout engine)
 - Replacing Ace3 configuration DB (`AceDB` should still be used for saved vars)
 - Providing a "look like Blizzard UI" theme (FluentWoW has its own design language)
@@ -453,11 +460,13 @@ session is always used.
 ## 15. Phased Roadmap
 
 ### Phase 0 – Research & feasibility ✅
+
 - Established WoW addon constraints
 - Mapped WinUI concepts to WoW primitives
 - Defined token system and naming conventions
 
 ### Phase 1 – Core runtime + tokens + MVP controls ✅
+
 - Vendored libraries: LibStub, flux motion engine
 - Bootstrap, Utils, EventBus, StateMachine, FramePool
 - Token registry + Dark theme + Light theme
@@ -471,6 +480,7 @@ session is always used.
 - Gallery: 5-page showcase addon (`/fwow`)
 
 ### Phase 2 – Navigation + advanced controls ✅
+
 - `NavigationView` sidebar control
 - `BreadcrumbBar`
 - `NumberBox` (validated numeric input)
@@ -483,12 +493,14 @@ session is always used.
 - Gallery: Navigation page + Advanced Controls page
 
 ### Phase 3 – Layout + motion polish
+
 - `Grid` layout container
 - Responsive width classes
 - Virtualized list rows (true FramePool recycling)
 - Connected animation helpers
 
 ### Phase 4 – Gallery + docs expansion
+
 - Source snippet viewer in Gallery
 - Anti-pattern examples page
 - Token browser page
@@ -496,6 +508,7 @@ session is always used.
 - Performance notes page
 
 ### Phase 5 – Hardening + adoption prep
+
 - CurseForge / Wago packaging
 - Semantic versioning automation
 - Lua lint CI (luacheck)
@@ -507,6 +520,7 @@ session is always used.
 ## 16. MVP Recommendation
 
 **Top 10 first controls to build (already implemented)**:
+
 1. Button (Accent / Subtle / Destructive) + ToggleButton
 2. ToggleSwitch
 3. CheckBox + RadioButton
@@ -519,6 +533,7 @@ session is always used.
 10. SettingsCard + SettingsExpander
 
 **Top 10 design rules that must never be violated**:
+
 1. Never hardcode colour values — always use `Tokens:GetColor()` (spacing, font sizes, radii, motion, and opacity ARE intentionally hardcoded design constants and must not be moved to themes)
 2. Never call `Show()` on a protected frame in combat
 3. Never use absolute pixel positions — anchor relative to parent
