@@ -111,7 +111,8 @@ function NavViewMixin:_BuildItems()
         btn:ClearAllPoints()
         btn:SetPoint("TOPLEFT", container, "TOPLEFT", 4, -yOff)
         btn:SetPoint("RIGHT", container, "RIGHT", -4, 0)
-        btn:SetHeight(36)
+        local navItemH = T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")  -- 32+8 = 40
+        btn:SetHeight(navItemH)
         btn._navView = self
         btn._itemKey = item.key
 
@@ -132,7 +133,7 @@ function NavViewMixin:_BuildItems()
 
         btn:Show()
         self._navButtons[i] = btn
-        yOff = yOff + 36 + T:GetNumber("Spacing.XS")
+        yOff = yOff + navItemH + T:GetNumber("Spacing.XS")
     end
 
     self:_RefreshItems()

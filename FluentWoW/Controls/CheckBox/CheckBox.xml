@@ -9,7 +9,7 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture name="$parent_Box" parentKey="Box">
-                    <Size x="18" y="18"/>
+                    <Size x="20" y="20"/>
                     <Anchors>
                         <Anchor point="LEFT" x="0" y="0"/>
                     </Anchors>

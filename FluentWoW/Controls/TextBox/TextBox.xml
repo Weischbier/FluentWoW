@@ -56,7 +56,7 @@
                         <FontString name="$parent_Placeholder" parentKey="Placeholder"
                             inherits="GameFontDisable" justifyH="LEFT">
                             <Anchors>
-                                <Anchor point="TOPLEFT" x="12" y="-8"/>
+                                <Anchor point="TOPLEFT" x="16" y="-8"/>
                                 <Anchor point="BOTTOMRIGHT" x="-32" y="8"/>
                             </Anchors>
                         </FontString>
@@ -65,7 +65,7 @@
                 <Frames>
                     <EditBox name="$parent_EditBox" parentKey="EditBox" autoFocus="false">
                         <Anchors>
-                            <Anchor point="TOPLEFT" x="12" y="-8"/>
+                            <Anchor point="TOPLEFT" x="16" y="-8"/>
                             <Anchor point="BOTTOMRIGHT" x="-32" y="8"/>
                         </Anchors>
                         <FontString inherits="GameFontHighlight"/>

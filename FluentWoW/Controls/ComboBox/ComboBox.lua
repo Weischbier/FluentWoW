@@ -183,7 +183,7 @@ function ComboMixin:_BuildDropdown()
     self._itemPool:ReleaseAll()
 
     local items = self._items or {}
-    local itemHeight = T:GetNumber("Spacing.XXL") + T:GetNumber("Spacing.SM")  -- 24+4 = 28
+    local itemHeight = T:GetNumber("Spacing.XXXL")  -- 32
     local dropdownWidth = math.max(self:GetWidth(), T:GetNumber("Spacing.XXXL") * 6 + T:GetNumber("Spacing.XL"))
     local contentWidth = math.max(1, dropdownWidth - T:GetNumber("Spacing.MD") * 2)
     local yOff = 0

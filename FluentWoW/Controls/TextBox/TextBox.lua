@@ -14,7 +14,7 @@ local ICON_FONT = lib.FLUENT_ICON_FONT
 local function applyLayout(self)
     local headerHeight = self._headerText ~= nil and self._headerText ~= "" and (T:GetNumber("Spacing.XL") + T:GetNumber("Spacing.SM")) or 0
     local fieldHeight = self._multiline and (self._multilineHeight or 96) or 32
-    local leftInset = self.SearchIcon and 30 or 12
+    local leftInset = self.SearchIcon and 34 or T:GetNumber("Spacing.XL")  -- 16
     local rightInset = (self._multiline or self._readOnly) and 12 or 32
 
     self:SetHeight(fieldHeight + headerHeight)

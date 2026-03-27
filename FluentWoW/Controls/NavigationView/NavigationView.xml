@@ -20,7 +20,7 @@
                 </Layers>
                 <Frames>
                     <Button name="$parent_ToggleBtn" parentKey="ToggleBtn">
-                        <Size x="40" y="36"/>
+                        <Size x="40" y="40"/>
                         <Anchors>
                             <Anchor point="TOPLEFT" x="4" y="-4"/>
                         </Anchors>
@@ -82,7 +82,7 @@
 
     <!-- Nav item template (used by FramePool) -->
     <Button name="FWoWNavItemTemplate" virtual="true">
-        <Size x="200" y="36"/>
+        <Size x="200" y="40"/>
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture name="$parent_BG" parentKey="BG" setAllPoints="true" hidden="true"/>

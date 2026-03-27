@@ -12,7 +12,7 @@
             </Layer>
             <Layer level="BORDER">
                 <Texture name="$parent_LeftEdge" parentKey="LeftEdge">
-                    <Size x="3" y="0"/>
+                    <Size x="4" y="0"/>
                     <Anchors>
                         <Anchor point="TOPLEFT"/>
                         <Anchor point="BOTTOMLEFT"/>

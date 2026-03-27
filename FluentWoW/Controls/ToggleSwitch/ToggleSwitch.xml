@@ -27,7 +27,7 @@
         </Layers>
         <Frames>
             <Frame name="$parent_Track" parentKey="Track">
-                <Size x="40" y="20"/>
+                <Size x="44" y="20"/>
                 <Anchors>
                     <Anchor point="RIGHT" x="0" y="0"/>
                 </Anchors>

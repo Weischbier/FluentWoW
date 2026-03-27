@@ -11,9 +11,9 @@ local Mot = lib.Motion
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
 
--- Header height derived from tokens: XXXL(32) + MD(8) = 40
+-- Header height derived from tokens: XXXL(32) + XL(16) = 48
 local function HEADER_H()
-    return T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")
+    return T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.XL")
 end
 
 -------------------------------------------------------------------------------

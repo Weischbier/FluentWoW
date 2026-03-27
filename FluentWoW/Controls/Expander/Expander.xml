@@ -5,10 +5,10 @@
          Size: 400×auto  |  Parts: Header (BG, Label, Chevron), Content
          ================================================================ -->
     <Frame name="FWoWExpanderTemplate" virtual="true" enableMouse="true">
-        <Size x="400" y="40"/>
+        <Size x="400" y="48"/>
         <Frames>
             <Button name="$parent_Header" parentKey="Header">
-                <Size x="0" y="40"/>
+                <Size x="0" y="48"/>
                 <Anchors>
                     <Anchor point="TOPLEFT"/>
                     <Anchor point="TOPRIGHT"/>

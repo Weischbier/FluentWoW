@@ -40,7 +40,7 @@ local function updateSliderLayout(self)
         slider.Track:SetPoint("BOTTOM", slider, "BOTTOM", 0, trackInset())
         self.TickContainer:SetPoint("TOPLEFT", slider.Track, "TOPRIGHT", T:GetNumber("Spacing.MD"), 0)
         self.TickContainer:SetPoint("BOTTOMLEFT", slider.Track, "BOTTOMRIGHT", T:GetNumber("Spacing.MD"), 0)
-        self.TickContainer:SetWidth(T:GetNumber("Spacing.LG"))
+        self.TickContainer:SetWidth(T:GetNumber("Spacing.SM") + T:GetNumber("Spacing.XS"))  -- 4+2 = 6: WinUI tick height
     else
         slider:SetOrientation("HORIZONTAL")
         slider:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 0, 0)
@@ -51,7 +51,7 @@ local function updateSliderLayout(self)
         slider.Track:SetPoint("RIGHT", slider, "RIGHT", 0, 0)
         self.TickContainer:SetPoint("TOPLEFT", slider.Track, "BOTTOMLEFT", 0, -T:GetNumber("Spacing.XS"))
         self.TickContainer:SetPoint("TOPRIGHT", slider.Track, "BOTTOMRIGHT", 0, -T:GetNumber("Spacing.XS"))
-        self.TickContainer:SetHeight(T:GetNumber("Spacing.LG"))
+        self.TickContainer:SetHeight(T:GetNumber("Spacing.SM") + T:GetNumber("Spacing.XS"))  -- 4+2 = 6: WinUI tick height
     end
 end
 

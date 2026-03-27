@@ -112,7 +112,7 @@
 
     <!-- Item template (used by FramePool) -->
     <Button name="FWoWComboBoxItemTemplate" virtual="true">
-        <Size x="192" y="28"/>
+        <Size x="192" y="32"/>
         <Layers>
             <Layer level="HIGHLIGHT">
                 <Texture name="$parent_Highlight" parentKey="Highlight" setAllPoints="true" alphaMode="ADD"/>

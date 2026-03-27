@@ -5,6 +5,23 @@ All notable changes to FluentWoW will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-03-27
+
+### Changed
+
+- **CheckBox**: Box size 18×18 → 20×20 to match WinUI spec
+- **ToggleSwitch**: Track width 40 → 44px to match WinUI Fluent Design (44×20 pill)
+- **TextBox**: Horizontal padding 12 → 16px (`Spacing.XL`); SearchBox left inset 30 → 34px
+- **Slider**: Tick container height/width 12px → 6px (SM+XS) to match WinUI tick mark size
+- **ComboBox**: Dropdown item height 28 → 32px (`Spacing.XXXL`) to match WinUI standard item height
+- **InfoBar**: Left accent edge width 3 → 4px to match WinUI severity stripe
+- **NavigationView**: Item height 36 → 40px (XXXL+MD); hamburger button 36 → 40px
+- **Expander**: Header height 40 → 48px (XXXL+XL) to match WinUI ExpanderHeaderMinHeight
+
+### Added
+
+- **Texture Asset Specifications** (`.docs/TextureAssets.md`): 25 TGA texture descriptions with AI-generation prompts for rounded corners, pill shapes, circles, shadows, focus rings, and indicators — enabling full Fluent Design visual fidelity
+
 ## [1.2.0] - 2026-03-27
 
 ### Added
