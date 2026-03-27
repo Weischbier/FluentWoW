@@ -5,6 +5,13 @@ All notable changes to FluentWoW will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-03-27
+
+### Added
+
+- **Texture Assets**: Generated all 25 TGA texture files in `FluentWoW/Assets/Textures/` per the `.docs/TextureAssets.md` spec — rounded rectangle fills/borders/shadows (4px & 8px radius), pill shapes (toggle track, slider/progress), circle shapes (slider/toggle thumbs, radio button ring/dot), checkbox rounded squares, focus rings, badge pill, nav/tab indicators, progress ring spinner, callout arrow, and scrollbar thumb
+- **Texture Generator**: `tools/generate_textures.py` — Python/Pillow script that procedurally generates all 25 assets with 4× supersampled anti-aliasing, correct dimensions, pure white on transparent background (32-bit RGBA TGA)
+
 ## [1.3.0] - 2026-03-27
 
 ### Changed
@@ -21,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Texture Asset Specifications** (`.docs/TextureAssets.md`): 25 TGA texture descriptions with AI-generation prompts for rounded corners, pill shapes, circles, shadows, focus rings, and indicators — enabling full Fluent Design visual fidelity
+- **Copilot review texture pack**: Added `tools/generate_texture_pack.py` plus an isolated 25-file TGA output set under `FluentWoW/Assets/Textures_Copilot/` for side-by-side comparison with other generated variants
 
 ## [1.2.0] - 2026-03-27
 
