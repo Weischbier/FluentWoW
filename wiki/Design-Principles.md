@@ -18,7 +18,7 @@ FluentWoW is **not** a XAML clone. It extracts the **transferable design princip
 ## Principle Translation Matrix
 
 | WinUI / Fluent Concept | Portability | WoW Strategy | Caveats |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Design tokens** | ✅ Direct | Lua token registry (`FluentWoW.Tokens`) | Runtime-switched; no CSS variables |
 | **Spacing scale** | ✅ Direct | `Tokens.Spacing.*` (XS=2 … XXXL=32) | Integer pixels; WoW rounds sub-pixel |
 | **Type ramp** | ✅ Adapted | `Tokens.Typography.*` → `SetFont()` | Limited to bundled WoW fonts |

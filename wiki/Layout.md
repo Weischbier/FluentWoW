@@ -49,7 +49,7 @@ hstack:AddChild(save)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `AddChild(child)` | `Frame` | — | Add a child frame and re-layout |
 | `RemoveChild(child)` | `Frame` | — | Remove a child frame and re-layout |
 | `GetChildren()` | — | `table` | Get the ordered children array |

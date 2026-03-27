@@ -7,7 +7,7 @@ The Button control family implements WinUI's [Button](https://learn.microsoft.co
 ## Variants
 
 | Variant | Factory | Template | Use Case |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Accent** (default) | `CreateButton(parent, name)` | `WUILButtonTemplate` | Primary / call-to-action |
 | **Subtle** | `CreateButton(parent, name, "Subtle")` | `WUILButtonSubtleTemplate` | Secondary / low-emphasis |
 | **Destructive** | `CreateButton(parent, name, "Destructive")` | `WUILButtonDestructiveTemplate` | Dangerous / irreversible actions |
@@ -21,7 +21,7 @@ The Button control family implements WinUI's [Button](https://learn.microsoft.co
 All buttons cycle through these states automatically:
 
 | State | Trigger |
-|---|---|
+| --- | --- |
 | `Normal` | Default resting state |
 | `Hover` | Mouse enters button area |
 | `Pressed` | Mouse button held down |
@@ -59,7 +59,7 @@ delete:SetText("Delete All")
 ### API
 
 | Method | Parameters | Description |
-|---|---|---|
+| --- | --- | --- |
 | `SetText(text)` | `text: string` | Set button label |
 | `GetText()` | — | Returns current label text |
 | `SetStyle(style)` | `style: "Accent"\|"Subtle"\|"Destructive"` | Change style at runtime |
@@ -70,7 +70,7 @@ delete:SetText("Delete All")
 ### Style Token Mapping
 
 | | Background | Background (Hover) | Background (Press) | Label | Top Edge |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | **Accent** | `Color.Accent.Primary` | `Color.Accent.Hover` | `Color.Accent.Pressed` | `Color.Text.OnAccent` | `Color.Accent.Light` |
 | **Subtle** | `Color.Surface.Elevated` | `Color.Overlay.Hover` | `Color.Overlay.Press` | `Color.Text.Primary` | `Color.Border.Subtle` |
 | **Destructive** | `Color.Feedback.Error` | `Color.Feedback.ErrorHover` | `Color.Feedback.Error` | `Color.Text.OnAccent` | `Color.Feedback.Error` |
@@ -100,7 +100,7 @@ btn:SetIcon("common-icon-redx", true)
 ### API
 
 | Method | Parameters | Description |
-|---|---|---|
+| --- | --- | --- |
 | `SetIcon(path, isAtlas?)` | `path: string`, `isAtlas: boolean` | Set icon texture or atlas |
 | `SetOnClick(fn)` | `fn: function(self, mouseButton)` | Set click callback |
 
@@ -126,7 +126,7 @@ toggle:SetChecked(true)
 ### API
 
 | Method | Parameters | Description |
-|---|---|---|
+| --- | --- | --- |
 | `SetText(text)` | `text: string` | Set button label |
 | `GetText()` | — | Returns current label text |
 | `SetChecked(checked)` | `checked: boolean` | Set toggle state |

@@ -11,7 +11,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 ## Features
 
 | Category | Controls |
-|---|---|
+| --- | --- |
 | **Buttons** | Button (Accent / Subtle / Destructive), IconButton, ToggleButton |
 | **Input** | CheckBox, RadioButton, ToggleSwitch, TextBox, SearchBox, Slider, ComboBox |
 | **Feedback** | ProgressBar, ProgressRing, InfoBar (4 severities), ContentDialog |

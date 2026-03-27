@@ -7,7 +7,7 @@ applyTo: "FluentWoW/Motion/**"
 ## Presets
 
 | Preset | Duration Token | Use |
-|---|---|---|
+| --- | --- | --- |
 | `FadeIn` | `Motion.Duration.Entrance` | Panel/dialog appear |
 | `FadeOut` | `Motion.Duration.Exit` | Dismiss/hide |
 | `SlideIn` | `Motion.Duration.Entrance` | Flyout entrance |

@@ -34,7 +34,7 @@ cb:SetIndeterminate(true)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetChecked(checked)` | `boolean` | — | Set checked state |
 | `IsChecked()` | — | `boolean` | Check if checked |
 | `SetIndeterminate(ind)` | `boolean` | — | Set indeterminate (clears checked) |
@@ -83,7 +83,7 @@ r3:SetGroup("size")
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetSelected(selected)` | `boolean` | — | Select/deselect (deselects others in group) |
 | `IsSelected()` | — | `boolean` | Check if selected |
 | `SetGroup(group)` | `string` | — | Set mutual-exclusion group name |
@@ -119,7 +119,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetIsOn(isOn)` | `boolean` | — | Set toggle state |
 | `IsOn()` | — | `boolean` | Check if on |
 | `SetHeader(text)` | `string` | — | Set header label text |
@@ -174,7 +174,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetText(text)` | `string` | — | Set input text |
 | `GetText()` | — | `string` | Get current text |
 | `SetPlaceholder(text)` | `string` | — | Set placeholder text |
@@ -218,7 +218,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetValue(value)` | `number` | — | Set slider value |
 | `GetValue()` | — | `number` | Get current value |
 | `SetRange(min, max)` | `number, number` | — | Set min/max range |
@@ -266,7 +266,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetItems(items)` | `{text, value}[]` | — | Set all dropdown items |
 | `GetItems()` | — | `table` | Get items array |
 | `SetSelectedIndex(index)` | `integer` | — | Select by index |

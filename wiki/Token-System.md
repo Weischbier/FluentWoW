@@ -25,7 +25,7 @@ The token registry is accessible as `FluentWoW.Tokens` (an instance of `Tokens/R
 ### Retrieval
 
 | Method | Signature | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `Get(key)` | `(key: string)` | `any` | Raw token lookup with full resolution chain |
 | `GetColor(key)` | `(key: string)` | `r, g, b, a` | Colour as four numbers (0–1) |
 | `GetSpacing(key)` | `(key: string)` | `number` | Spacing value (auto-prefixes `"Spacing."`) |
@@ -35,7 +35,7 @@ The token registry is accessible as `FluentWoW.Tokens` (an instance of `Tokens/R
 ### Theme Management
 
 | Method | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `RegisterTheme(name, tokens)` | `(string, table)` | Register a new theme |
 | `SetTheme(name)` | `(string)` | Switch to a registered theme |
 | `GetThemeName()` | — | Returns the active theme name |
@@ -47,7 +47,7 @@ The token registry is accessible as `FluentWoW.Tokens` (an instance of `Tokens/R
 Theme operations emit events via the [EventBus](Core-Modules#eventbus):
 
 | Event | Payload | Trigger |
-|---|---|---|
+| --- | --- | --- |
 | `"ThemeRegistered"` | `themeName` | `RegisterTheme()` |
 | `"ThemeChanged"` | `themeName` | `SetTheme()` |
 | `"TokensOverridden"` | `overridesTable` | `Override()` |
@@ -78,13 +78,13 @@ FluentWoW.Tokens:GetColor("Color.Accent.Primary")  -- returns r, g, b, a
 #### Color.Base
 
 | Token | Default (Dark) | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Color.Base.White` | `1.00, 1.00, 1.00, 1` | Pure white |
 
 #### Color.Surface
 
 | Token | Default (Dark) | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Color.Surface.Base` | `0.12, 0.12, 0.12, 1` | App background |
 | `Color.Surface.Raised` | `0.16, 0.16, 0.16, 1` | Card / panel background |
 | `Color.Surface.Overlay` | `0.20, 0.20, 0.20, 1` | Flyout / dropdown bg |
@@ -94,7 +94,7 @@ FluentWoW.Tokens:GetColor("Color.Accent.Primary")  -- returns r, g, b, a
 #### Color.Border
 
 | Token | Default (Dark) | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Color.Border.Default` | `0.33, 0.33, 0.33, 1` | Control border |
 | `Color.Border.Subtle` | `0.25, 0.25, 0.25, 1` | Low-contrast border |
 | `Color.Border.Focus` | `0.60, 0.60, 0.60, 1` | Focus ring / hover border |
@@ -103,7 +103,7 @@ FluentWoW.Tokens:GetColor("Color.Accent.Primary")  -- returns r, g, b, a
 #### Color.Text
 
 | Token | Default (Dark) | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Color.Text.Primary` | `1.00, 1.00, 1.00, 1` | Primary text |
 | `Color.Text.Secondary` | `0.70, 0.70, 0.70, 1` | Subtitle / hint |
 | `Color.Text.Disabled` | `0.40, 0.40, 0.40, 1` | Disabled text |
@@ -115,7 +115,7 @@ FluentWoW.Tokens:GetColor("Color.Accent.Primary")  -- returns r, g, b, a
 #### Color.Icon
 
 | Token | Default (Dark) | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Color.Icon.Default` | `1.00, 1.00, 1.00, 1` | Default icon |
 | `Color.Icon.Subtle` | `0.70, 0.70, 0.70, 1` | Muted icon |
 | `Color.Icon.Disabled` | `0.40, 0.40, 0.40, 1` | Disabled icon |
@@ -124,7 +124,7 @@ FluentWoW.Tokens:GetColor("Color.Accent.Primary")  -- returns r, g, b, a
 #### Color.Accent
 
 | Token | Default (Dark) | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Color.Accent.Primary` | `0.38, 0.57, 0.93, 1` | Primary accent (blue) |
 | `Color.Accent.Hover` | `0.48, 0.65, 0.96, 1` | Accent hover |
 | `Color.Accent.Pressed` | `0.28, 0.47, 0.83, 1` | Accent pressed |
@@ -133,7 +133,7 @@ FluentWoW.Tokens:GetColor("Color.Accent.Primary")  -- returns r, g, b, a
 #### Color.Feedback
 
 | Token | Default (Dark) | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Color.Feedback.Success` | `0.30, 0.80, 0.40, 1` | Success green |
 | `Color.Feedback.Warning` | `0.95, 0.75, 0.20, 1` | Warning amber |
 | `Color.Feedback.Error` | `0.90, 0.25, 0.25, 1` | Error red |
@@ -143,7 +143,7 @@ FluentWoW.Tokens:GetColor("Color.Accent.Primary")  -- returns r, g, b, a
 #### Color.Overlay
 
 | Token | Default (Dark) | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Color.Overlay.Dialog` | `0.00, 0.00, 0.00, 0.72` | Modal backdrop scrim |
 | `Color.Overlay.Hover` | `1.00, 1.00, 1.00, 0.08` | Hover state overlay |
 | `Color.Overlay.Press` | `1.00, 1.00, 1.00, 0.16` | Press state overlay |
@@ -153,7 +153,7 @@ FluentWoW.Tokens:GetColor("Color.Accent.Primary")  -- returns r, g, b, a
 ### Spacing
 
 | Token | Value | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Spacing.XS` | 2 | Tight insets |
 | `Spacing.SM` | 4 | Small gaps |
 | `Spacing.MD` | 8 | Standard gap |
@@ -171,7 +171,7 @@ local gap = FluentWoW.Tokens:GetSpacing("MD")  -- 8
 ### Typography
 
 | Token | Font | Size | Flags | Use |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | `Typography.Display` | MORPHEUS.ttf | 28 | — | Hero headings |
 | `Typography.Header` | FRIZQT__.TTF | 20 | — | Section headers |
 | `Typography.Title` | FRIZQT__.TTF | 16 | — | Card titles |
@@ -190,7 +190,7 @@ myFontString:SetFont(font, size, flags)
 ### Corner Radii
 
 | Token | Value | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Radii.None` | 0 | No rounding |
 | `Radii.SM` | 2 | Subtle rounding |
 | `Radii.MD` | 4 | Default rounding |
@@ -204,7 +204,7 @@ myFontString:SetFont(font, size, flags)
 ### Motion Duration
 
 | Token | Value (s) | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Motion.Duration.Instant` | 0 | No animation |
 | `Motion.Duration.Fast` | 0.10 | Micro-interactions (press, toggle) |
 | `Motion.Duration.Normal` | 0.20 | Standard transitions |
@@ -215,7 +215,7 @@ myFontString:SetFont(font, size, flags)
 ### Motion Easing
 
 | Token | Value | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Motion.Easing.Standard` | `"Smooth"` | Default for most transitions |
 | `Motion.Easing.Decelerate` | `"Smooth"` | Entrance animations |
 | `Motion.Easing.Accelerate` | `"Linear"` | Exit animations |
@@ -226,7 +226,7 @@ myFontString:SetFont(font, size, flags)
 ### Opacity
 
 | Token | Value | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Opacity.Disabled` | 0.40 | Disabled controls |
 | `Opacity.Overlay` | 0.60 | Semi-transparent overlays |
 | `Opacity.Ghost` | 0.70 | De-emphasized elements |
@@ -236,7 +236,7 @@ myFontString:SetFont(font, size, flags)
 ### Layer
 
 | Token | Value | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Layer.Base` | 1 | Background frames |
 | `Layer.Raised` | 2 | Cards / panels |
 | `Layer.Overlay` | 3 | Flyouts / dropdowns |
@@ -248,7 +248,7 @@ myFontString:SetFont(font, size, flags)
 ### Density
 
 | Token | Value | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Density.Compact` | 0.75 | Dense / condensed layouts |
 | `Density.Normal` | 1.00 | Standard spacing |
 | `Density.Comfortable` | 1.30 | Roomy / touch-friendly |
@@ -258,7 +258,7 @@ myFontString:SetFont(font, size, flags)
 ### Icon Sizes
 
 | Token | Value | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Icon.SM` | 12 | Small inline icons |
 | `Icon.MD` | 16 | Standard icons |
 | `Icon.LG` | 20 | Large / header icons |

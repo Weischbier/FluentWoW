@@ -29,7 +29,7 @@ loading:SetIndeterminate(true)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetValue(value)` | `number` | — | Set progress 0–100 (switches to determinate) |
 | `GetValue()` | — | `number` | Get current progress value |
 | `SetIndeterminate(isInd)` | `boolean` | — | Toggle indeterminate animation |
@@ -41,7 +41,7 @@ loading:SetIndeterminate(true)
 ### Visual States
 
 | State | Behaviour |
-|---|---|
+| --- | --- |
 | `Running` | Normal accent-coloured fill |
 | `Paused` | Yellow/warning fill colour |
 | `Error` | Red/error fill colour |
@@ -67,7 +67,7 @@ ring:SetActive(false)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetActive(active)` | `boolean` | — | Start/stop spinning |
 | `IsActive()` | — | `boolean` | Check if spinning |
 
@@ -101,7 +101,7 @@ info:SetActionControl(actionBtn)
 ### Severities
 
 | Severity | Icon | Background Colour Token |
-|---|---|---|
+| --- | --- | --- |
 | `"Info"` | Information circle | `Color.Feedback.Info` |
 | `"Success"` | Checkmark circle | `Color.Feedback.Success` |
 | `"Warning"` | Warning triangle | `Color.Feedback.Warning` |
@@ -110,7 +110,7 @@ info:SetActionControl(actionBtn)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetSeverity(severity)` | `string` | — | `"Info"` / `"Success"` / `"Warning"` / `"Error"` |
 | `GetSeverity()` | — | `string` | Current severity |
 | `SetTitle(text)` | `string` | — | Bold title text |
@@ -151,7 +151,7 @@ dialog:Open()
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetTitle(title)` | `string` | — | Dialog title text |
 | `SetBody(body)` | `string` | — | Body text (word-wrapped) |
 | `SetPrimaryButton(text, cb?)` | `string, function?` | — | Primary button text + optional callback |
@@ -165,7 +165,7 @@ dialog:Open()
 ### Close Results
 
 | Result | Trigger |
-|---|---|
+| --- | --- |
 | `"Primary"` | Primary button clicked |
 | `"Secondary"` | Secondary button clicked |
 | `"Close"` | × button or ESC key |

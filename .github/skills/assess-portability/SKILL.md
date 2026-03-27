@@ -21,7 +21,7 @@ description: >
 ## Inputs
 
 | Input | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `controlName` | Yes | WinUI control name, e.g., `TreeView` |
 
 ## Steps
@@ -58,7 +58,7 @@ Use MCP tools:
 ### 4. Rate Portability
 
 | Rating | Meaning | Action |
-|---|---|---|
+| --- | --- | --- |
 | ✅ Direct | All features map cleanly | Port as-is |
 | ⚠️ Adapted | Core features portable, some adapted/dropped | Port with documented compromises |
 | ❌ Not viable | Core functionality impossible in WoW | Skip; document why |
@@ -73,7 +73,7 @@ Update `.docs/PortabilityMatrix.md`:
 ## Outputs
 
 | Output | Description |
-|---|---|
+| --- | --- |
 | Rating | ✅, ⚠️, or ❌ |
 | Strategy | How to implement in WoW (widget type, compromises) |
 | Matrix update | `.docs/PortabilityMatrix.md` row updated |
@@ -81,6 +81,6 @@ Update `.docs/PortabilityMatrix.md`:
 ## Failure Modes
 
 | Failure | Recovery |
-|---|---|
+| --- | --- |
 | XAML file not found in `.help/.sources/` | Search for alternate naming; control may be in a subfolder or named differently |
 | MCP server unavailable | Fall back to `.help/.helper/AddOns/Blizzard_*` and ketho.wow-api annotations |

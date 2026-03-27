@@ -19,7 +19,7 @@ The entry point for the entire framework. Handles:
 ### Key Properties
 
 | Property | Type | Description |
-|---|---|---|
+| --- | --- | --- |
 | `FluentWoW.version` | `number` | Encoded version (e.g. 10000 = 1.00.00) |
 | `FluentWoW.name` | `string` | Library name (`"FluentWoW-1.0"`) |
 | `FluentWoW.debug` | `boolean?` | Set to `true` to enable debug messages |
@@ -27,7 +27,7 @@ The entry point for the entire framework. Handles:
 ### Methods
 
 | Method | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Error(msg, level?)` | Raises a formatted error | `[FluentWoW] msg` |
 | `Assert(cond, msg)` | Returns false + prints warning if cond is falsy | Non-throwing assertion |
 | `Debug(msg)` | Prints to chat if `lib.debug == true` | Debug logging |
@@ -59,7 +59,7 @@ A lightweight publish/subscribe system for decoupling framework internals. Used 
 ### API
 
 | Method | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `On(event, fn)` | Subscribe to an event | Persistent listener |
 | `Off(event, fn)` | Unsubscribe a specific function | Must pass the exact function reference |
 | `Once(event, fn)` | Subscribe for a single firing | Auto-removes after first call |
@@ -69,7 +69,7 @@ A lightweight publish/subscribe system for decoupling framework internals. Used 
 ### Built-in Events
 
 | Event | Payload | Source |
-|---|---|---|
+| --- | --- | --- |
 | `"ThemeChanged"` | `themeName` | `Tokens:SetTheme()` |
 | `"ThemeRegistered"` | `themeName` | `Tokens:RegisterTheme()` |
 | `"TokensOverridden"` | `overridesTable` | `Tokens:Override()` |
@@ -125,7 +125,7 @@ A Visual State Machine (VSM) that tracks the current interaction state of each c
 ### States
 
 | State | Meaning |
-|---|---|
+| --- | --- |
 | `Normal` | Default resting state |
 | `Hover` | Mouse is over the control |
 | `Pressed` | Mouse button is held down |
@@ -140,7 +140,7 @@ A Visual State Machine (VSM) that tracks the current interaction state of each c
 ### API
 
 | Method | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `New(control, initial?)` | Creates a new VSM instance | Returns a machine object |
 | `GetState()` | — | Current state name |
 | `SetState(newState)` | Transition to new state | Fires handlers + `control.OnStateChanged` |
@@ -190,7 +190,7 @@ A frame recycling pool to avoid repeated `CreateFrame` allocations. Used interna
 ### API
 
 | Method | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `New(frameType, parent, template?, resetFn?)` | Create a new pool | Returns pool instance |
 | `Acquire()` | — | Get a frame (creates if pool is empty) |
 | `Release(frame)` | Return a frame to the pool | Hides, clears points, calls resetFn |
@@ -243,7 +243,7 @@ A collection of stateless utility functions used throughout the framework.
 ### Table Helpers
 
 | Function | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Merge(dst, src)` | Returns `dst` | Copies `src` keys into `dst` (non-overwriting) |
 | `DeepCopy(orig)` | Returns new table | Deep-clones a table |
 | `Contains(tbl, value)` | Returns `boolean` | Checks if array contains value |
@@ -251,14 +251,14 @@ A collection of stateless utility functions used throughout the framework.
 ### String Helpers
 
 | Function | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `ColorText(text, r, g, b)` | Returns `string` | Wraps text in WoW colour codes |
 | `Truncate(text, maxLen)` | Returns `string` | Truncates with ellipsis (`…`) |
 
 ### Frame Helpers
 
 | Function | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `SetPoint(frame, point, relativeTo, relativePoint, x?, y?)` | — | `ClearAllPoints()` then `SetPoint()` in one call |
 | `SnapToPixel(v)` | Returns `number` | Rounds to nearest integer (pixel-snap) |
 | `UIScale()` | Returns `number` | `UIParent:GetScale()` |
@@ -266,14 +266,14 @@ A collection of stateless utility functions used throughout the framework.
 ### Colour Helpers
 
 | Function | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `HexToRGB(hex)` | Returns `r, g, b` | Converts `"#FF8800"` or `"FF8800"` to 0–1 floats |
 | `LerpColor(r1,g1,b1, r2,g2,b2, t)` | Returns `r, g, b` | Linear interpolation between two colours |
 
 ### Safety
 
 | Function | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `SafeCall(fn, ...)` | Returns `ok, result` | `pcall` wrapper with debug logging on failure |
 | `InCombat()` | Returns `boolean` | Alias for `InCombatLockdown()` |
 

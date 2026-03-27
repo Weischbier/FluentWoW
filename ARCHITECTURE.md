@@ -24,6 +24,7 @@ maps them onto WoW-native frame constraints.
 **FluentWoW** — production-grade, library-namespaced, WoW-ecosystem friendly.
 
 Other candidates considered:
+
 - **FluentWoW** — evokes Fluent Design System directly
 - **ArcaneUI** — WoW-thematic alternative
 - **WoWFluent** — descriptive but slightly redundant
@@ -34,7 +35,7 @@ Other candidates considered:
 ## 3. Principle Translation Matrix
 
 | WinUI / Fluent Concept | Portability | WoW Strategy | Caveats |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Design tokens** | ✅ Direct | Lua token registry (`FluentWoW.Tokens`) | Runtime-switched; no CSS variables |
 | **Spacing scale** | ✅ Direct | `Tokens.Spacing.*` (XS=2…XXXL=32) | Integer pixels; WoW rounds sub-pixel |
 | **Type ramp** | ✅ Adapted | `Tokens.Typography.*` → `SetFont()` | Limited to bundled WoW fonts |
@@ -57,7 +58,7 @@ Other candidates considered:
 
 ## 4. Architecture Blueprint
 
-```
+```text
 FluentWoW/
 ├── FluentWoW.toc                 TOC load-order manifest
 ├── Libs/
@@ -127,7 +128,7 @@ FluentWoW-Gallery/
 ### Module responsibilities
 
 | Module | Purpose | Combat-safe? | Optional? |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `Core/Bootstrap` | Global namespace, version guard, lifecycle | ✅ | No |
 | `Core/Utils` | General helpers | ✅ | No |
 | `Core/EventBus` | Decoupled pub/sub | ✅ | No |
@@ -150,16 +151,18 @@ FluentWoW-Gallery/
 ## 5. Control Catalog
 
 ### Foundational
+
 | Control | Template | Status |
-|---|---|---|
+| --- | --- | --- |
 | Button (Accent / Subtle / Destructive) | `FWoWButtonTemplate` | ✅ MVP |
 | IconButton | `FWoWIconButtonTemplate` | ✅ MVP |
 | ToggleButton | `FWoWToggleButtonTemplate` | ✅ MVP |
 | TextBlock (Display/Title/Body/Caption) | `FWoWTextBlockTemplate` | ✅ MVP |
 
 ### Data Entry
+
 | Control | Template | Status |
-|---|---|---|
+| --- | --- | --- |
 | CheckBox | `FWoWCheckBoxTemplate` | ✅ MVP |
 | RadioButton | `FWoWRadioButtonTemplate` | ✅ MVP |
 | ToggleSwitch | `FWoWToggleSwitchTemplate` | ✅ MVP |
@@ -168,16 +171,18 @@ FluentWoW-Gallery/
 | ComboBox | `FWoWComboBoxTemplate` | ✅ MVP |
 
 ### Feedback / Status
+
 | Control | Template | Status |
-|---|---|---|
+| --- | --- | --- |
 | ProgressBar (det. + indet.) | `FWoWProgressBarTemplate` | ✅ MVP |
 | ProgressRing | `FWoWProgressRingTemplate` | ✅ MVP |
 | InfoBar (4 severities) | `FWoWInfoBarTemplate` | ✅ MVP |
 | ContentDialog | `FWoWContentDialogTemplate` | ✅ MVP |
 
 ### Navigation / Layout
+
 | Control | Template | Status |
-|---|---|---|
+| --- | --- | --- |
 | MainFrame | `FWoWMainFrameTemplate` | ✅ MVP |
 | TabView | `FWoWTabViewTemplate` | ✅ MVP |
 | Expander | `FWoWExpanderTemplate` | ✅ MVP |
@@ -185,14 +190,16 @@ FluentWoW-Gallery/
 | VStack / HStack | `FWoWStackLayoutTemplate` | ✅ MVP |
 
 ### Settings
+
 | Control | Template | Status |
-|---|---|---|
+| --- | --- | --- |
 | SettingsCard | `FWoWSettingsCardTemplate` | ✅ MVP |
 | SettingsExpander | `FWoWSettingsExpanderTemplate` | ✅ MVP |
 
 ### Navigation / Advanced
+
 | Control | Template | Status |
-|---|---|---|
+| --- | --- | --- |
 | NavigationView | `FWoWNavigationViewTemplate` | ✅ Phase 2 |
 | BreadcrumbBar | `FWoWBreadcrumbBarTemplate` | ✅ Phase 2 |
 | NumberBox | `FWoWNumberBoxTemplate` | ✅ Phase 2 |
@@ -309,7 +316,7 @@ stack:AddChild(btn2)
 All animations respect `FluentWoW.Motion.reducedMotion = true` (skip motion).
 
 | Preset | Duration token | Use case |
-|---|---|---|
+| --- | --- | --- |
 | `FadeIn` | `Motion.Duration.Entrance` (0.25s) | Dialog / panel appear |
 | `FadeOut` | `Motion.Duration.Exit` (0.15s) | Dismiss / hide |
 | `SlideIn` | `Motion.Duration.Entrance` | Flyout entrance |
@@ -390,8 +397,9 @@ Pages:
 - SettingsExpander height animates correctly with 1/2/3 nested cards
 
 ### Taint / combat-safety matrix
+
 | Scenario | Expected |
-|---|---|
+| --- | --- |
 | Open ComboBox during combat | Blocked with debug log; no error |
 | Open ContentDialog during combat | Deferred; opens on PLAYER_REGEN_ENABLED |
 | ToggleSwitch click during combat | Allowed (non-secure frame) |
@@ -422,8 +430,9 @@ session is always used.
 ## 14. Risks & Non-Goals
 
 ### Risks
+
 | Risk | Mitigation |
-|---|---|
+| --- | --- |
 | Combat lockdown taint | All dialogs/dropdowns guard `InCombatLockdown()` |
 | Overengineering | MVP-first roadmap; experimental controls are gated |
 | Visual inconsistency with Blizzard | Token system allows Blizzard-aligned theme |

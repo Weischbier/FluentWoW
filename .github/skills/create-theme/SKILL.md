@@ -22,7 +22,7 @@ description: >
 ## Inputs
 
 | Input | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `themeName` | Yes | e.g., `"Light"`, `"HighContrast"`, `"MyAddonTheme"` |
 | `colorPalette` | Yes | Key color values (accent, surface, text, border) |
 
@@ -80,7 +80,7 @@ Add the theme to `.docs/TokenReference.md` §Theme Notes.
 ## Outputs
 
 | Output | Path |
-|---|---|
+| --- | --- |
 | Theme file | `FluentWoW/Tokens/{ThemeName}Theme.lua` |
 | TOC | Modified (if shipped theme) |
 | Docs | `.docs/TokenReference.md` updated |

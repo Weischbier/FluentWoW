@@ -66,7 +66,7 @@ Always follow the `scaffold-control` skill (`.github/skills/scaffold-control/SKI
 ## Reference Files
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | `.docs/ControlPortingGuide.md` | 8-step porting workflow |
 | `.docs/DesignRules.md` | 10 non-negotiable rules |
 | `.docs/DesignSpecs.md` | Pixel measurements from WinUI design images |

@@ -21,7 +21,7 @@ description: >
 ## Inputs
 
 | Input | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `pageName` | Yes | e.g., `NavigationViewPage` |
 | `controlNames` | Yes | Controls to demo, e.g., `NavigationView, BreadcrumbBar` |
 | `isNewPage` | Yes | `true` for new page, `false` for adding to existing |
@@ -65,7 +65,7 @@ Pages/{pageName}.lua
 ## Outputs
 
 | Output | Path |
-|---|---|
+| --- | --- |
 | Page file | `FluentWoW-Gallery/Pages/{pageName}.lua` |
 | Gallery.lua | Modified — sidebar entry added |
 | TOC | Modified — page listed |
@@ -73,6 +73,6 @@ Pages/{pageName}.lua
 ## Failure Modes
 
 | Failure | Recovery |
-|---|---|
+| --- | --- |
 | Control factory method missing | Run `scaffold-control` first |
 | Gallery.lua pattern unclear | Read `Gallery.lua` fully; look for page registration pattern |

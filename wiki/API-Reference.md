@@ -9,7 +9,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ### Buttons
 
 | Method | Signature | Returns |
-|---|---|---|
+| --- | --- | --- |
 | `CreateButton` | `(parent, name?, style?)` | `WUILButton` |
 | `CreateIconButton` | `(parent, name?)` | `WUILIconButton` |
 | `CreateToggleButton` | `(parent, name?)` | `WUILToggleButton` |
@@ -19,7 +19,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ### Input
 
 | Method | Signature | Returns |
-|---|---|---|
+| --- | --- | --- |
 | `CreateCheckBox` | `(parent, name?)` | `WUILCheckBox` |
 | `CreateRadioButton` | `(parent, name?)` | `WUILRadioButton` |
 | `CreateToggleSwitch` | `(parent, name?)` | `WUILToggleSwitch` |
@@ -31,13 +31,13 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ### Text
 
 | Method | Signature | Returns |
-|---|---|---|
+| --- | --- | --- |
 | `CreateTextBlock` | `(parent, name?)` | `WUILTextBlock` |
 
 ### Feedback
 
 | Method | Signature | Returns |
-|---|---|---|
+| --- | --- | --- |
 | `CreateProgressBar` | `(parent, name?)` | `WUILProgressBar` |
 | `CreateProgressRing` | `(parent, name?)` | `WUILProgressRing` |
 | `CreateInfoBar` | `(parent, name?)` | `WUILInfoBar` |
@@ -48,7 +48,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ### Navigation
 
 | Method | Signature | Returns |
-|---|---|---|
+| --- | --- | --- |
 | `CreateTabView` | `(parent, name?)` | `WUILTabView` |
 | `CreateExpander` | `(parent, name?)` | `WUILExpander` |
 | `CreateScrollFrame` | `(parent, name?)` | `WUILScrollFrame` |
@@ -59,7 +59,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ### Layout
 
 | Method | Signature | Returns |
-|---|---|---|
+| --- | --- | --- |
 | `CreateStackLayout` | `(parent, name?, orientation?)` | `WUILStackLayout` |
 
 `orientation`: `"VERTICAL"` (default) or `"HORIZONTAL"`
@@ -67,7 +67,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ### Settings
 
 | Method | Signature | Returns |
-|---|---|---|
+| --- | --- | --- |
 | `CreateSettingsCard` | `(parent, name?)` | `WUILSettingsCard` |
 | `CreateSettingsExpander` | `(parent, name?)` | `WUILSettingsExpander` |
 
@@ -76,7 +76,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ## Parameters Glossary
 
 | Parameter | Type | Description |
-|---|---|---|
+| --- | --- | --- |
 | `parent` | `Frame` | WoW frame to parent the new control to |
 | `name` | `string?` | Optional global name for the frame |
 | `style` | `string?` | Button style variant |
@@ -88,7 +88,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ## Module Access
 
 | Module | Access | Description |
-|---|---|---|
+| --- | --- | --- |
 | Tokens | `FluentWoW.Tokens` | [Token registry](Token-System) |
 | Motion | `FluentWoW.Motion` | [Animation engine](Motion-and-Animation) |
 | EventBus | `FluentWoW.EventBus` | [Pub/sub events](Core-Modules#eventbus) |
@@ -102,7 +102,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ## Token Retrieval
 
 | Method | Signature | Returns |
-|---|---|---|
+| --- | --- | --- |
 | `Tokens:Get(key)` | `(string)` | `any` |
 | `Tokens:GetColor(key)` | `(string)` | `r, g, b, a` |
 | `Tokens:GetSpacing(key)` | `(string)` | `number` |
@@ -114,7 +114,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 ## Theme Management
 
 | Method | Signature | Description |
-|---|---|---|
+| --- | --- | --- |
 | `Tokens:RegisterTheme(name, tokens)` | `(string, table)` | Register a theme |
 | `Tokens:SetTheme(name)` | `(string)` | Activate a theme |
 | `Tokens:GetThemeName()` | — | Current theme name |

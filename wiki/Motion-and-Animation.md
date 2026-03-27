@@ -34,7 +34,7 @@ local handle = Mot:Tween(proxy, 0.3, { x = 100, alpha = 1 })
 **Returns** a chainable tween handle with:
 
 | Chain Method | Description |
-|---|---|
+| --- | --- |
 | `:ease(name)` | Set easing function (see [Easing Functions](#easing-functions)) |
 | `:delay(seconds)` | Delay before start |
 | `:onstart(fn)` | Callback when tween begins |
@@ -105,7 +105,7 @@ end)
 ## Control Methods
 
 | Method | Description |
-|---|---|
+| --- | --- |
 | `Motion:Cancel(handle)` | Cancel a specific tween or timer handle |
 | `Motion:Stop(frame)` | Stop all tweens owned by `frame` |
 | `Motion:StopAll()` | Stop all tweens and timers, park the driver frame |
@@ -190,7 +190,7 @@ end)
 The motion engine provides 27 easing functions plus `linear`:
 
 | Family | In | Out | InOut |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **quad** | `quadin` | `quadout` | `quadinout` |
 | **cubic** | `cubicin` | `cubicout` | `cubicinout` |
 | **quart** | `quartin` | `quartout` | `quartinout` |
@@ -211,7 +211,7 @@ The default easing is `quadout` for most FluentWoW controls.
 ### Easing Descriptions
 
 | Type | Feel |
-|---|---|
+| --- | --- |
 | `linear` | Constant speed |
 | `*in` | Starts slow, accelerates |
 | `*out` | Starts fast, decelerates (most natural for UI) |

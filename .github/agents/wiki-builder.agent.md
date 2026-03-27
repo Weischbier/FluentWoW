@@ -19,14 +19,14 @@ All files live in `wiki/` at the repository root.
 ### Navigation
 
 | Page | Purpose |
-|---|---|
+| --- | --- |
 | `Home.md` | Landing page, feature summary, quick-nav table |
 | `_Sidebar.md` | GitHub Wiki sidebar navigation structure |
 
 ### Getting Started & Reference
 
 | Page | Purpose | Update Triggers |
-|---|---|---|
+| --- | --- | --- |
 | `Getting-Started.md` | Installation, TOC dependency, first-control tutorial | New factory methods, API changes |
 | `API-Reference.md` | Quick-ref table of all factory methods + modules | Any factory added/removed/renamed |
 | `Controls-Overview.md` | Catalog of all controls with templates + status | Control added/removed, status change |
@@ -34,7 +34,7 @@ All files live in `wiki/` at the repository root.
 ### Control Pages
 
 | Page | Controls Covered | Update Triggers |
-|---|---|---|
+| --- | --- | --- |
 | `Button.md` | Button (Accent/Subtle/Destructive), IconButton, ToggleButton | Button API changes, new variants |
 | `Input-Controls.md` | CheckBox, RadioButton, ToggleSwitch, TextBox, SearchBox, Slider, ComboBox | Input control API changes |
 | `Feedback-Controls.md` | ProgressBar, ProgressRing, InfoBar, ContentDialog | Feedback control API changes |
@@ -45,7 +45,7 @@ All files live in `wiki/` at the repository root.
 ### Framework Pages
 
 | Page | Purpose | Update Triggers |
-|---|---|---|
+| --- | --- | --- |
 | `Token-System.md` | Token architecture, resolution, complete reference | Token added/removed/renamed, value changes |
 | `Theming.md` | Dark/Light themes, custom themes, overrides, persistence | New themes, API changes |
 | `Motion-and-Animation.md` | Tween API, presets, easing functions | New presets, API changes |
@@ -55,7 +55,7 @@ All files live in `wiki/` at the repository root.
 ### Supplementary Pages
 
 | Page | Purpose | Update Triggers |
-|---|---|---|
+| --- | --- | --- |
 | `Gallery.md` | Gallery addon usage, page registration | New gallery pages |
 | `Design-Principles.md` | WinUI→WoW translation matrix, design rules | Rule changes (rare) |
 | `FAQ.md` | Common issues, combat lockdown, debugging | New known issues, pattern changes |

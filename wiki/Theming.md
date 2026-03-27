@@ -7,7 +7,7 @@ FluentWoW ships with two built-in themes (**Dark** and **Light**) and provides a
 ## Built-in Themes
 
 | Theme | Registered Name | Description |
-|---|---|---|
+| --- | --- | --- |
 | Dark (default) | `"Dark"` | Dark surfaces, light text, blue accent |
 | Light | `"Light"` | Light surfaces, dark text, deeper blue accent |
 
@@ -142,7 +142,7 @@ refreshMyUI()
 ### Event Reference
 
 | Event | Payload | When |
-|---|---|---|
+| --- | --- | --- |
 | `"ThemeChanged"` | `themeName: string` | `SetTheme()` called |
 | `"ThemeRegistered"` | `themeName: string` | `RegisterTheme()` called |
 | `"TokensOverridden"` | `overrides: table` | `Override()` called |

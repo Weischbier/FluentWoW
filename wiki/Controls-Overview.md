@@ -9,7 +9,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 ### Foundational
 
 | Control | Template | Factory | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Button (Accent) | `WUILButtonTemplate` | `CreateButton(parent, name, "Accent")` | Primary action button |
 | Button (Subtle) | `WUILButtonSubtleTemplate` | `CreateButton(parent, name, "Subtle")` | Secondary / low-emphasis button |
 | Button (Destructive) | `WUILButtonDestructiveTemplate` | `CreateButton(parent, name, "Destructive")` | Dangerous / irreversible action |
@@ -22,7 +22,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 ### Data Entry
 
 | Control | Template | Factory | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | CheckBox | `WUILCheckBoxTemplate` | `CreateCheckBox(parent, name)` | Two-state or three-state checkbox |
 | RadioButton | `WUILRadioButtonTemplate` | `CreateRadioButton(parent, name)` | Mutual-exclusion radio within groups |
 | ToggleSwitch | `WUILToggleSwitchTemplate` | `CreateToggleSwitch(parent, name)` | On/off toggle with sliding thumb |
@@ -36,7 +36,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 ### Feedback & Status
 
 | Control | Template | Factory | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | ProgressBar | `WUILProgressBarTemplate` | `CreateProgressBar(parent, name)` | Determinate + indeterminate progress |
 | ProgressRing | `WUILProgressRingTemplate` | `CreateProgressRing(parent, name)` | Spinning activity indicator |
 | InfoBar | `WUILInfoBarTemplate` | `CreateInfoBar(parent, name)` | Severity-coloured notification bar |
@@ -47,7 +47,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 ### Navigation & Chrome
 
 | Control | Template | Factory | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | TabView | `WUILTabViewTemplate` | `CreateTabView(parent, name)` | Tabbed content container |
 | Expander | `WUILExpanderTemplate` | `CreateExpander(parent, name)` | Collapsible section with animation |
 | ScrollFrame | `WUILScrollFrameTemplate` | `CreateScrollFrame(parent, name)` | Scrollable content area with thumb |
@@ -58,7 +58,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 ### Advanced (Phase 2)
 
 | Control | Template | Factory | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | NavigationView | `FWoWNavigationViewTemplate` | `CreateNavigationView(parent, name)` | Sidebar navigation with collapsible pane |
 | BreadcrumbBar | `FWoWBreadcrumbBarTemplate` | `CreateBreadcrumbBar(parent, name)` | Horizontal breadcrumb path trail |
 | NumberBox | `FWoWNumberBoxTemplate` | `CreateNumberBox(parent, name)` | Validated numeric input with spin buttons |
@@ -74,7 +74,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 ### Layout
 
 | Control | Template | Factory | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | StackLayout | `WUILStackLayoutTemplate` | `CreateStackLayout(parent, name, orient)` | VStack / HStack auto-layout |
 
 → **[Layout page](Layout)**
@@ -82,7 +82,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 ### Settings (Community Toolkit)
 
 | Control | Template | Factory | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | SettingsCard | `WUILSettingsCardTemplate` | `CreateSettingsCard(parent, name)` | Settings row with title + action |
 | SettingsExpander | `WUILSettingsExpanderTemplate` | `CreateSettingsExpander(parent, name)` | Expandable settings group |
 
@@ -95,7 +95,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 Every FluentWoW control inherits from `ControlBase`, which provides:
 
 | Method | Description |
-|---|---|
+| --- | --- |
 | `SetEnabled(enabled)` | Enable or disable the control (greys out, blocks interaction) |
 | `IsEnabled()` | Returns `true` if the control is enabled |
 | `SetTooltip(title, text?)` | Set tooltip title and optional body text |

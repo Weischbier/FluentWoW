@@ -43,7 +43,7 @@ applyTo: "**/*.xml"
 ## Widget Type Selection
 
 | Use Case | WoW Widget | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Clickable control | `Button` | Has native OnClick |
 | Text input | `EditBox` | WoW's only text input |
 | Range input | `Slider` | Native slider widget |

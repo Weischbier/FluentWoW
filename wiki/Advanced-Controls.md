@@ -31,7 +31,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetValue(v)` | `number` | — | Set current value (clamped to min/max) |
 | `GetValue()` | — | `number` | Get current value |
 | `SetMinimum(v)` | `number` | — | Set minimum bound |
@@ -69,7 +69,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetItems(items)` | `string[]` | — | Set segment labels |
 | `SetSelectedIndex(i)` | `integer` | — | Select segment |
 | `GetSelectedItem()` | — | `string?` | Get selected label |
@@ -100,7 +100,7 @@ badge:SetIcon(FluentWoW.Icons.Checkmark)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetText(text)` | `string` | — | Badge label |
 | `SetIcon(glyph)` | `string?` | — | Optional icon glyph |
 | `SetAppearance(name)` | `"Accent"\|"Success"\|"Warning"\|"Error"\|"Subtle"` | — | Colour scheme |
@@ -108,7 +108,7 @@ badge:SetIcon(FluentWoW.Icons.Checkmark)
 ### Appearances
 
 | Name | Background Token | Text Token |
-|---|---|---|
+| --- | --- | --- |
 | `Accent` | `AccentDefault` | `TextOnAccentPrimary` |
 | `Success` | `StatusSuccessBackground` | `StatusSuccessText` |
 | `Warning` | `StatusWarningBackground` | `StatusWarningText` |
@@ -144,7 +144,7 @@ bar:SetOverflowEnabled(true)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetCommands(cmds)` | `{key, icon?, label?, tooltip?, onClick}[]` | — | Set command list |
 | `SetOverflowEnabled(e)` | `boolean` | — | Show "⋯" overflow button |
 | `SetOnOverflow(fn)` | `function(self)` | — | Overflow button callback |
@@ -178,7 +178,7 @@ tip:Open()  -- blocked during InCombatLockdown()
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetTitle(text)` | `string` | — | Callout title |
 | `SetBody(text)` | `string` | — | Body / description text |
 | `SetTarget(frame, placement)` | `Frame, "TOP"\|"BOTTOM"\|"LEFT"\|"RIGHT"` | — | Anchor to a target frame |
@@ -219,7 +219,7 @@ empty:SetActionControl(btn)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetIcon(glyph)` | `string` | — | Large icon glyph |
 | `SetTitle(text)` | `string` | — | Title text |
 | `SetDescription(text)` | `string` | — | Description text |
@@ -246,7 +246,7 @@ skel:SetActive(false)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetActive(active)` | `boolean` | — | Start/stop shimmer animation |
 | `IsActive()` | — | `boolean` | Whether shimmer is running |
 | `SetShape(shape)` | `"rect"\|"circle"\|"line"` | — | Visual shape variant |

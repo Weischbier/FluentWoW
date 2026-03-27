@@ -34,7 +34,7 @@ frame:Open()
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetTitle(title)` | `string` | — | Window title text |
 | `SetStatusText(text)` | `string` | — | Status bar text (bottom) |
 | `SetIcon(path)` | `string` | — | Title bar icon texture path |
@@ -99,7 +99,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetTabs(tabs)` | `{text, content?, icon?, closable?}[]` | — | Set all tabs; selects first |
 | `AddTab(tab)` | `table` | — | Append a tab and select it |
 | `RemoveTab(index)` | `integer` | — | Remove tab by index |
@@ -156,7 +156,7 @@ exp:SetExpanded(true, true)  -- instant, no animation
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetTitle(text)` | `string` | — | Header text |
 | `GetTitle()` | — | `string` | Get header text |
 | `SetExpanded(exp, instant?)` | `boolean, boolean?` | — | Expand/collapse (with animation unless instant) |
@@ -201,7 +201,7 @@ scroll:SetContentHeight(50 * 20)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `GetScrollChild()` | — | `Frame` | Scroll child for embedding content |
 | `SetContentHeight(h)` | `number` | — | Set total content height |
 | `SetScrollOffset(offset)` | `number` | — | Set vertical scroll position |
@@ -246,7 +246,7 @@ local contentArea = nav:GetContentArea()
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetItems(items)` | `{key, icon?, text}[]` | — | Set navigation items |
 | `SelectItem(key)` | `string` | — | Select item by key |
 | `SetPaneExpanded(exp)` | `boolean` | — | Expand/collapse sidebar pane |
@@ -286,7 +286,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetItems(items)` | `string[]` | — | Set breadcrumb path levels |
 | `SetOnItemClicked(fn)` | `function(self, index, text)` | — | Crumb click callback |
 

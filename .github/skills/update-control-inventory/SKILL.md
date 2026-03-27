@@ -21,7 +21,7 @@ description: >
 ## Inputs
 
 | Input | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `controlName` | Yes | e.g., `NavigationView` |
 | `action` | Yes | `added`, `updated`, `deprecated`, `removed` |
 | `version` | No | Version in which the action occurs |
@@ -67,7 +67,7 @@ Report any discrepancies.
 ## Outputs
 
 | Output | Description |
-|---|---|
+| --- | --- |
 | MasterPlan.md | Updated §4 |
 | PortabilityMatrix.md | Updated status |
 | ARCHITECTURE.md | Updated §5 |

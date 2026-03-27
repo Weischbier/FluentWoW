@@ -9,7 +9,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 ## Quick Navigation
 
 | Section | Description |
-|---|---|
+| --- | --- |
 | **[Getting Started](Getting-Started)** | Installation, dependencies, your first control |
 | **[Controls Overview](Controls-Overview)** | Summary of all 22+ controls with status |
 | **[API Reference](API-Reference)** | Quick-reference table of every factory method |
@@ -17,7 +17,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 ### Control Documentation
 
 | Page | Controls |
-|---|---|
+| --- | --- |
 | **[Button](Button)** | Button (Accent / Subtle / Destructive), IconButton, ToggleButton |
 | **[Input Controls](Input-Controls)** | CheckBox, RadioButton, ToggleSwitch, TextBox, SearchBox, Slider, ComboBox |
 | **[Feedback Controls](Feedback-Controls)** | ProgressBar, ProgressRing, InfoBar, ContentDialog |
@@ -28,7 +28,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 ### Framework Internals
 
 | Page | Description |
-|---|---|
+| --- | --- |
 | **[Token System](Token-System)** | Design tokens, resolution order, complete token reference |
 | **[Theming](Theming)** | Creating custom themes, light/dark mode, runtime overrides |
 | **[Motion & Animation](Motion-and-Animation)** | Tweening engine, presets, easing functions |
@@ -38,7 +38,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 ### Extras
 
 | Page | Description |
-|---|---|
+| --- | --- |
 | **[Gallery](Gallery)** | Interactive showcase addon (`/wuil`) |
 | **[FAQ & Troubleshooting](FAQ)** | Common issues, combat lockdown, debugging |
 | **[Design Principles](Design-Principles)** | WinUI → WoW translation matrix |

@@ -33,7 +33,7 @@ Both must be in your AddOns folder. The Gallery's TOC declares `Dependencies: Fl
 The gallery organises controls into five themed pages:
 
 | Page | File | Controls Demonstrated |
-|---|---|---|
+| --- | --- | --- |
 | **Button** | `Pages/ButtonPage.lua` | Button (Accent, Subtle, Destructive), IconButton, ToggleButton |
 | **Input** | `Pages/InputPage.lua` | CheckBox, RadioButton, ToggleSwitch, TextBox, SearchBox, Slider, ComboBox |
 | **Feedback** | `Pages/FeedbackPage.lua` | ProgressBar, ProgressRing, InfoBar, ContentDialog |
@@ -74,7 +74,7 @@ MainFrame (1000×700)
 Gallery pages use shared helper methods for consistent layout:
 
 | Method | Description |
-|---|---|
+| --- | --- |
 | `Gallery:CreateDemoPage(parent)` | Returns `scroll, content, stack, refresh` — a standard scrollable page layout |
 | `Gallery:CreateSurface(parent, colorKey)` | Creates a coloured background surface frame |
 | `Gallery:CreateExampleBlock(parent, header, height)` | Creates a titled section block |

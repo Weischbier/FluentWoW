@@ -24,7 +24,7 @@ description: >
 ## Inputs
 
 | Input | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `controlName` | Yes | PascalCase name, e.g., `NavigationView` |
 | `baseWidget` | Yes | WoW widget type: `Frame`, `Button`, `Slider`, `EditBox`, `ScrollFrame`, `StatusBar` |
 | `states` | Yes | Comma-separated states, e.g., `Normal, Hover, Pressed, Disabled` |
@@ -136,7 +136,7 @@ Available in `FluentWoW/Libs/` (loaded before Core, do NOT modify):
 ## Outputs
 
 | Output | Path |
-|---|---|
+| --- | --- |
 | XML template | `FluentWoW/Controls/{controlName}/{controlName}.xml` |
 | Lua behavior | `FluentWoW/Controls/{controlName}/{controlName}.lua` |
 | TOC entry | `FluentWoW/FluentWoW.toc` (modified) |
@@ -147,7 +147,7 @@ Available in `FluentWoW/Libs/` (loaded before Core, do NOT modify):
 ## Failure Modes
 
 | Failure | Recovery |
-|---|---|
+| --- | --- |
 | Base widget type doesn't support needed behavior | Check `mcp_wow-api_get_widget_methods` and consider a different base or manual implementation |
 | Control requires secure frames | Add combat lockdown guard; mark in Combat Safety Matrix |
 | No equivalent WoW feature | Document in PortabilityMatrix as ❌ and skip, or design an adapted alternative |

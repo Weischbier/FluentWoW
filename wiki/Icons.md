@@ -68,7 +68,7 @@ The glyph map covers hundreds of icons from the [Microsoft Segoe Fluent Icons](h
 ### Common Icons
 
 | Name | Codepoint | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Icons.Settings` | U+E713 | Settings gear |
 | `Icons.Search` | U+E721 | Search magnifier |
 | `Icons.ChevronDown` | U+E70D | Dropdown arrow |
@@ -97,7 +97,7 @@ The glyph map covers hundreds of icons from the [Microsoft Segoe Fluent Icons](h
 ## Sizing Guidelines
 
 | Token | Size | Use |
-|---|---|---|
+| --- | --- | --- |
 | `Icon.SM` | 12px | Inline icons in body text |
 | `Icon.MD` | 16px | Standard control icons |
 | `Icon.LG` | 20px | Header / title icons |

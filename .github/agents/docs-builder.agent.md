@@ -14,7 +14,7 @@ You are the Docs Builder — responsible for keeping all FluentWoW documentation
 ## Managed Documents
 
 | Document | Purpose | Update Triggers |
-|---|---|---|
+| --- | --- | --- |
 | `ARCHITECTURE.md` | Full architecture reference | Any structural change, new control, new module |
 | `README.md` | Consumer quick start | New features, API changes |
 | `CHANGELOG.md` | Version history | Every release, significant changes |

@@ -65,7 +65,7 @@ end)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetTitle(text)` | `string` | — | Card title text |
 | `SetDescription(text)` | `string` | — | Subtitle / description (auto-resizes height) |
 | `SetIconTexture(path)` | `string\|number` | — | Icon texture path or fileID |
@@ -128,7 +128,7 @@ expander:SetExpanded(true)
 ### API
 
 | Method | Parameters | Returns | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SetTitle(text)` | `string` | — | Header title text |
 | `SetDescription(text)` | `string` | — | Header subtitle (auto-resizes) |
 | `SetIconTexture(path)` | `string\|number` | — | Header icon texture or fileID |

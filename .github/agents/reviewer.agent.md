@@ -18,7 +18,7 @@ Follow `.docs/ReviewMaster.md` for the complete review framework.
 ### Severity Model
 
 | Severity | Meaning | Action |
-|---|---|---|
+| --- | --- | --- |
 | P0 — Blocker | Combat taint, data loss, crash | Must fix before merge |
 | P1 — Critical | Rule violation, API break | Must fix before merge |
 | P2 — Major | Missing tokens, no cleanup, naming violation | Should fix |
@@ -53,7 +53,7 @@ Flag for user review if:
 ## Reference Files
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | `.docs/ReviewMaster.md` | Full review framework |
 | `.docs/DesignRules.md` | 10 rules + enforcement |
 | `.docs/ControlPortingGuide.md` | Review checklist (Step 8) |

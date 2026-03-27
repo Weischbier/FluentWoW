@@ -20,7 +20,7 @@ description: >
 ## Inputs
 
 | Input | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `newMinor` | Yes | New MINOR number (e.g., `10100` for v1.1.0) |
 | `releaseNotes` | Yes | Summary of what changed in this release |
 
@@ -60,7 +60,7 @@ Check `.pkgmeta` excludes are correct — `.help/`, `.docs/`, `.github/` should 
 ## Outputs
 
 | Output | Path |
-|---|---|
+| --- | --- |
 | Bootstrap.lua | Modified — MINOR bumped |
 | FluentWoW.toc | Modified — Version bumped |
 | FluentWoW-Gallery.toc | Modified — Version bumped |
@@ -70,6 +70,6 @@ Check `.pkgmeta` excludes are correct — `.help/`, `.docs/`, `.github/` should 
 ## Failure Modes
 
 | Failure | Recovery |
-|---|---|
+| --- | --- |
 | Luacheck errors | Fix lint errors before proceeding |
 | Version mismatch | Manually reconcile all 4 locations |
