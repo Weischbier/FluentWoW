@@ -6,9 +6,10 @@ applyTo: "FluentWoW/Tokens/**"
 
 ## Architecture
 
-- `Registry.lua` implements the token resolution engine
-- `DefaultTheme.lua` provides the default dark theme token values
-- Resolution order: addon override → active theme → default theme
+- `Registry.lua` implements the token resolution engine + hardcoded design constants
+- `DarkTheme.lua` provides the dark theme color values
+- `LightTheme.lua` provides the light theme color values
+- Resolution order for colors: addon override → active theme → Dark (fallback)
 
 ## Invariants
 
@@ -43,7 +44,7 @@ See `.docs/TokenReference.md` for the complete catalog.
 ## Adding New Tokens
 
 ### Color tokens (themeable)
-1. Add the default value to `DefaultTheme.lua` under the `Color` category
+1. Add the dark-mode value to `DarkTheme.lua` under the `Color` category
 2. Add the light-mode variant to `LightTheme.lua`
 3. Document the token in `.docs/TokenReference.md`
 4. Use the token in the control via `T:GetColor()` or `T:Get("Color.*")`

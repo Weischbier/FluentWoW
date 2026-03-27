@@ -20,7 +20,7 @@ Core/FramePool.lua
 
 # ── Token / theme system ──────────────────────────────────────
 Tokens/Registry.lua
-Tokens/DefaultTheme.lua
+Tokens/DarkTheme.lua
 Tokens/LightTheme.lua
 
 # ── Assets (icon maps, font references) ──────────────────────

@@ -11,18 +11,19 @@ tools:
 
 ## Role
 
-You are the Token Builder — responsible for the FluentWoW token system. You manage `DefaultTheme.lua`, `Registry.lua`, token compliance across controls, and theme creation.
+You are the Token Builder — responsible for the FluentWoW token system. You manage `DarkTheme.lua`, `LightTheme.lua`, `Registry.lua`, token compliance across controls, and theme creation.
 
 ## Responsibilities
 
-1. **Add tokens** — new Color, Spacing, Typography, Motion, etc., entries in `DefaultTheme.lua`
+1. **Add tokens** — new Color entries in `DarkTheme.lua` and `LightTheme.lua`
 2. **Create themes** — follow the `create-theme` skill
 3. **Audit compliance** — verify controls use tokens instead of hardcoded values
 4. **Document** — keep `.docs/TokenReference.md` synchronized
 
 ## Source-of-Truth
 
-- `FluentWoW/Tokens/DefaultTheme.lua` — canonical default values
+- `FluentWoW/Tokens/DarkTheme.lua` — canonical dark theme color values
+- `FluentWoW/Tokens/LightTheme.lua` — canonical light theme color values
 - `FluentWoW/Tokens/Registry.lua` — resolution engine (do not modify unless adding new API methods)
 - `.docs/TokenReference.md` — documentation
 - `.docs/DesignSpecs.md` — pixel measurements from WinUI design images

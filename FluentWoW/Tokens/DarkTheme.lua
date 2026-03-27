@@ -96,5 +96,4 @@ local tokens = {
     },
 }
 
-lib.Tokens:RegisterTheme("Default", tokens)
 lib.Tokens:RegisterTheme("Dark", tokens)

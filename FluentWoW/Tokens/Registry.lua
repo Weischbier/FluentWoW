@@ -12,7 +12,7 @@ lib:RegisterModule("Tokens", Registry)
 
 local _themes    = {}
 local _overrides = {}
-local _active    = "Default"
+local _active    = "Dark"
 
 -------------------------------------------------------------------------------
 -- Hardcoded design constants — NOT overridable by themes or overrides.
@@ -155,10 +155,10 @@ function Registry:Get(key)
     -- Design constants are checked first and are immutable
     local design = resolve(_DESIGN, key)
     if design ~= nil then return design end
-    -- Color tokens resolve through: override > active theme > default theme
+    -- Color tokens resolve through: override > active theme > Dark fallback
     return _overrides[key]
         or resolve(_themes[_active] or {}, key)
-        or resolve(_themes["Default"] or {}, key)
+        or resolve(_themes["Dark"] or {}, key)
 end
 
 ---@param key string

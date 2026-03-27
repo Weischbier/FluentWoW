@@ -14,7 +14,7 @@ description: >
 ## Prerequisites
 
 1. Read `.docs/TokenReference.md` for the complete token catalog
-2. Read `FluentWoW/Tokens/DefaultTheme.lua` for the canonical structure
+2. Read `FluentWoW/Tokens/DarkTheme.lua` for the canonical structure
 3. Read `FluentWoW/Tokens/Registry.lua` for the registration API
 4. View design images in `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/` for dark/light theme color references
 5. Read `.docs/DesignSpecs.md` for extracted design measurements and color notes
@@ -68,7 +68,7 @@ T:RegisterTheme("{themeName}", {
 
 ### 2. Register in TOC (if shipped)
 
-Add to `FluentWoW/FluentWoW.toc` after `DefaultTheme.lua`:
+Add to `FluentWoW/FluentWoW.toc` after `DarkTheme.lua`:
 ```
 Tokens/{ThemeName}Theme.lua
 ```

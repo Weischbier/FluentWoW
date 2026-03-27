@@ -7,12 +7,14 @@ FluentWoW uses a **design-token system** to centralise all visual constants — 
 ## Architecture
 
 ```
-Resolution order:   Runtime Override  →  Active Theme  →  Default Theme
+Resolution order:   Runtime Override  →  Active Theme  →  Dark Theme (fallback)
 ```
 
-1. **Runtime overrides** (`Tokens:Override({...})`) — highest priority, applied by the consumer addon
+1. **Runtime overrides** (`Tokens:Override({...})`) — highest priority, applied by the consumer addon (Color tokens only)
 2. **Active theme** — the currently selected theme (e.g. `"Light"`)
-3. **Default theme** — the built-in dark theme, always present as fallback
+3. **Dark theme** — the built-in dark theme, always present as color fallback
+
+Note: Spacing, typography, radii, motion, opacity, and icon sizes are hardcoded design constants in `Registry.lua` and are not part of the theme chain.
 
 The token registry is accessible as `FluentWoW.Tokens` (an instance of `Tokens/Registry.lua`).
 

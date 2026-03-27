@@ -68,7 +68,8 @@ FluentWoW/
 │   └── FramePool.lua            Frame recycling for lists / dropdowns
 ├── Tokens/
 │   ├── Registry.lua             Token resolution + hardcoded design constants
-│   └── DefaultTheme.lua         Dark-theme color table (colors only)
+│   ├── DarkTheme.lua            Dark-theme color table (colors only)
+│   └── LightTheme.lua           Light-theme color table (colors only)
 ├── Controls/
 │   ├── Base/ControlBase.lua     Shared mixin: VSM, tooltip, enable/disable
 │   ├── Button/                  Button, IconButton, ToggleButton
@@ -394,7 +395,7 @@ session is always used.
 | Overengineering | MVP-first roadmap; experimental controls are gated |
 | Visual inconsistency with Blizzard | Token system allows Blizzard-aligned theme |
 | Performance | `FramePool` recycles frames; `OnUpdate` is stopped when idle |
-| Theme fragmentation | One official Default theme; community themes are addons |
+| Theme fragmentation | Two official themes (Dark + Light); community themes are addons |
 | API churn | Semantic versioning; deprecated APIs kept for 2 minor versions |
 
 ### Non-Goals

@@ -34,7 +34,7 @@ You are the Docs Builder — responsible for keeping all FluentWoW documentation
 1. **ARCHITECTURE.md §5 Control Catalog** must list every control in `FluentWoW/Controls/`
 2. **MasterPlan §4** control inventory must match ARCHITECTURE.md
 3. **PortabilityMatrix** must have an entry for every control in WinUI Gallery
-4. **TokenReference** must document every token in `DefaultTheme.lua`
+4. **TokenReference** must document every token in `DarkTheme.lua` and `LightTheme.lua`
 5. **DesignSpecs** must have pixel measurements for every implemented control family
 6. **CHANGELOG** must document every user-visible change
 

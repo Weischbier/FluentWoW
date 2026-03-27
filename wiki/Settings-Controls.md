@@ -194,7 +194,7 @@ stack:AddChild(appearanceExp)
 
 local themeDD = lib:CreateComboBox(appearanceExp)
 themeDD:SetItems({
-    { text = "Dark",  value = "Default" },
+    { text = "Dark",  value = "Dark" },
     { text = "Light", value = "Light" },
 })
 themeDD:SetSelectedIndex(1)

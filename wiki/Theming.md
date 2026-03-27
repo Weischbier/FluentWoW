@@ -8,10 +8,10 @@ FluentWoW ships with two built-in themes (**Dark** and **Light**) and provides a
 
 | Theme | Registered Name | Description |
 |---|---|---|
-| Dark (default) | `"Default"` | Dark surfaces, light text, blue accent |
+| Dark (default) | `"Dark"` | Dark surfaces, light text, blue accent |
 | Light | `"Light"` | Light surfaces, dark text, deeper blue accent |
 
-The dark theme loads via `Tokens/DefaultTheme.lua` and the light theme via `Tokens/LightTheme.lua`. Both are always available.
+The dark theme loads via `Tokens/DarkTheme.lua` and the light theme via `Tokens/LightTheme.lua`. Both are always available.
 
 ---
 
@@ -22,14 +22,14 @@ The dark theme loads via `Tokens/DefaultTheme.lua` and the light theme via `Toke
 FluentWoW.Tokens:SetTheme("Light")
 
 -- Switch back to dark mode
-FluentWoW.Tokens:SetTheme("Default")
+FluentWoW.Tokens:SetTheme("Dark")
 
 -- Check current theme
-local name = FluentWoW.Tokens:GetThemeName()  -- "Default" or "Light"
+local name = FluentWoW.Tokens:GetThemeName()  -- "Dark" or "Light"
 
 -- List available themes
 local themes = FluentWoW.Tokens:GetAvailableThemes()
--- { Default = true, Light = true }
+-- { Dark = true, Light = true }
 ```
 
 ### Automatic Control Updates
@@ -40,7 +40,7 @@ When `SetTheme()` is called, the EventBus emits a `"ThemeChanged"` event. All bu
 
 ## Creating a Custom Theme
 
-A theme is a Lua table whose keys match the token names from the [Token System](Token-System) reference. You only need to include the tokens you want to change — missing keys fall through to the `"Default"` theme.
+A theme is a Lua table whose keys match the token names from the [Token System](Token-System) reference. You only need to include the Color tokens you want to change — missing keys fall through to the `"Dark"` theme.
 
 ### Step 1 — Define the Token Table
 
@@ -55,11 +55,6 @@ local myTheme = {
     -- Darker surfaces
     ["Color.Surface.Base"]    = { 0.08, 0.08, 0.10, 1 },
     ["Color.Surface.Raised"]  = { 0.12, 0.12, 0.14, 1 },
-
-    -- Custom typography
-    Typography = {
-        Display = { font = "Fonts\\MORPHEUS.ttf", size = 32, flags = "" },
-    },
 }
 ```
 
@@ -181,12 +176,13 @@ Token("Color.Accent.Primary")
   ↓
 2. Check active theme ("Light")     → found? return
   ↓
-3. Check default theme ("Default")  → found? return
+3. Check Dark theme ("Dark")         → found? return
   ↓
 4. Return nil (+ debug warning)
 ```
 
 This three-tier system means:
-- Consumer addons can tweak specific tokens via `Override()` without building a theme
-- Custom themes only need to specify changed tokens — everything else inherits from Default
-- The Default theme always provides a complete fallback
+- Consumer addons can tweak specific Color tokens via `Override()` without building a theme
+- Custom themes only need to specify changed Color tokens — everything else inherits from Dark
+- The Dark theme always provides a complete color fallback
+- Spacing, typography, radii, motion, opacity, and icon sizes are hardcoded design constants and not part of the theme chain
