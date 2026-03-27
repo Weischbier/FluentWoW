@@ -26,14 +26,17 @@ Every control MUST follow this structure:
 
 ## Token-Driven Styling (Rule #1)
 
+Colors MUST come from the token system (they are themeable):
 ```lua
 -- CORRECT
 local r, g, b, a = T:GetColor("Color.Accent.Primary")
 self.Label:SetTextColor(r, g, b, a)
 
 -- FORBIDDEN
-self.Label:SetTextColor(0.26, 0.56, 0.94, 1)  -- hardcoded!
+self.Label:SetTextColor(0.26, 0.56, 0.94, 1)  -- hardcoded color!
 ```
+
+Spacing, font sizes, radii, motion, opacity, and icon sizes are **hardcoded design constants** — they are read via `T:GetNumber()`, `T:GetSpacing()`, `T:GetFont()` etc. but are immune to theme overrides. This is by design.
 
 ## Combat Safety (Rules #2, #4)
 

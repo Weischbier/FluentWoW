@@ -12,12 +12,14 @@ applyTo: "FluentWoW/Tokens/**"
 
 ## Invariants
 
-- The resolution order (override → theme → default) is non-negotiable
-- `Registry:Override()` always has highest priority
+- **Only Color tokens are themeable** — spacing, typography, radii, motion, opacity, layer, density, and icon sizes are hardcoded design constants in `Registry.lua` (`_DESIGN` table) and cannot be overridden by themes or addon overrides
+- For Color tokens: resolution order (override → theme → default) is non-negotiable
+- `Registry:Override()` only accepts `Color.*` keys; non-color keys are rejected with a debug message
 - `Registry:RegisterTheme()` fires `ThemeRegistered` event
 - `Registry:SetTheme()` fires `ThemeChanged` event
 - `Registry:Override()` fires `TokensOverridden` event
 - The flat-key fast path (`tbl[path]`) MUST remain as the first lookup attempt
+- `_DESIGN` is checked first by `Get()` — design constants always win over theme resolution
 
 ## Naming Convention
 
@@ -40,13 +42,22 @@ See `.docs/TokenReference.md` for the complete catalog.
 
 ## Adding New Tokens
 
-1. Add the default value to `DefaultTheme.lua` in the correct category
+### Color tokens (themeable)
+1. Add the default value to `DefaultTheme.lua` under the `Color` category
+2. Add the light-mode variant to `LightTheme.lua`
+3. Document the token in `.docs/TokenReference.md`
+4. Use the token in the control via `T:GetColor()` or `T:Get("Color.*")`
+
+### Design constants (hardcoded — spacing, typography, radii, motion, opacity, layer, density, icon)
+1. Add the value to the `_DESIGN` table in `Registry.lua`
 2. Document the token in `.docs/TokenReference.md`
-3. Use the token in the control via `T:GetColor()`, `T:GetSpacing()`, `T:GetFont()`, or `T:Get()`
+3. Use the token via `T:GetSpacing()`, `T:GetFont()`, `T:GetNumber()`, or `T:Get()`
+4. **Do NOT add these to theme files** — they are fixed by design philosophy
 
 ## Prohibited
 
-- Never hardcode a value that should be a token — even "just for testing"
-- Never bypass the resolution order
-- Never store resolved values — always call `T:Get*()` at usage time so theme changes apply
+- Never hardcode a **color** value — always use `Tokens:GetColor()`
+- Gaps, font sizes, radii, timing, opacity, icons, and layer order are intentionally hardcoded design constants — never move them into theme tables
+- Never bypass the resolution order for color tokens
+- Never store resolved color values — always call `T:GetColor()` at usage time so theme changes apply
 - Never add tokens that duplicate existing ones — check the catalog first

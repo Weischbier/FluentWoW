@@ -1,5 +1,8 @@
 --- FluentWoW – Tokens/Registry.lua
 -- Design-token registry with resolution: override > active theme > default.
+-- Structural design constants (spacing, typography, radii, motion, opacity,
+-- layer, density, icon sizes) are HARDCODED and cannot be overridden by themes
+-- or addon overrides.  Only Color tokens are themeable.
 -------------------------------------------------------------------------------
 
 local lib = FluentWoW
@@ -10,6 +13,85 @@ lib:RegisterModule("Tokens", Registry)
 local _themes    = {}
 local _overrides = {}
 local _active    = "Default"
+
+-------------------------------------------------------------------------------
+-- Hardcoded design constants — NOT overridable by themes or overrides.
+-- This is the core design language; gaps, font sizes, radii, timing, opacity,
+-- layer ordering, density, and icon sizes are fixed by design philosophy.
+-------------------------------------------------------------------------------
+
+local _DESIGN = {
+    Spacing = {
+        XS   = 2,
+        SM   = 4,
+        MD   = 8,
+        LG   = 12,
+        XL   = 16,
+        XXL  = 24,
+        XXXL = 32,
+    },
+
+    Typography = {
+        Display  = { font = "Fonts\\MORPHEUS.ttf",  size = 28, flags = "" },
+        Header   = { font = "Fonts\\FRIZQT__.TTF",  size = 20, flags = "" },
+        Title    = { font = "Fonts\\FRIZQT__.TTF",  size = 16, flags = "" },
+        Body     = { font = "Fonts\\ARIALN.TTF",    size = 13, flags = "" },
+        BodyBold = { font = "Fonts\\ARIALN.TTF",    size = 13, flags = "OUTLINE" },
+        Caption  = { font = "Fonts\\ARIALN.TTF",    size = 11, flags = "" },
+        Mono     = { font = "Fonts\\ARIALN.TTF",    size = 11, flags = "" },
+    },
+
+    Radii = {
+        None = 0,
+        SM   = 2,
+        MD   = 4,
+        LG   = 8,
+        Full = 999,
+    },
+
+    Motion = {
+        Duration = {
+            Instant  = 0,
+            Fast     = 0.10,
+            Normal   = 0.20,
+            Slow     = 0.35,
+            Entrance = 0.25,
+            Exit     = 0.15,
+        },
+        Easing = {
+            Standard   = "Smooth",
+            Decelerate = "Smooth",
+            Accelerate = "Linear",
+            Linear     = "Linear",
+        },
+    },
+
+    Opacity = {
+        Disabled = 0.40,
+        Overlay  = 0.60,
+        Ghost    = 0.70,
+    },
+
+    Layer = {
+        Base    = 1,
+        Raised  = 2,
+        Overlay = 3,
+        Dialog  = 4,
+        Toast   = 5,
+    },
+
+    Density = {
+        Compact     = 0.75,
+        Normal      = 1.00,
+        Comfortable = 1.30,
+    },
+
+    Icon = {
+        SM = 12,
+        MD = 16,
+        LG = 20,
+    },
+}
 
 -------------------------------------------------------------------------------
 -- Theme management
@@ -40,7 +122,11 @@ end
 ---@param overrides table
 function Registry:Override(overrides)
     for k, v in pairs(overrides) do
-        _overrides[k] = v
+        if k:match("^Color%.") then
+            _overrides[k] = v
+        else
+            lib:Debug("Override: '" .. tostring(k) .. "' is a hardcoded design constant and cannot be overridden")
+        end
     end
     lib.EventBus:Emit("TokensOverridden", overrides)
 end
@@ -66,6 +152,10 @@ end
 ---@param key string
 ---@return any|nil
 function Registry:Get(key)
+    -- Design constants are checked first and are immutable
+    local design = resolve(_DESIGN, key)
+    if design ~= nil then return design end
+    -- Color tokens resolve through: override > active theme > default theme
     return _overrides[key]
         or resolve(_themes[_active] or {}, key)
         or resolve(_themes["Default"] or {}, key)
@@ -88,13 +178,15 @@ end
 ---@param key string
 ---@return number
 function Registry:GetSpacing(key)
-    return tonumber(self:Get("Spacing." .. key) or self:Get(key)) or 0
+    local s = key:match("^Spacing%.(.+)") or key
+    return _DESIGN.Spacing[s] or 0
 end
 
 ---@param key string
 ---@return string, number, string
 function Registry:GetFont(key)
-    local t = self:Get("Typography." .. key) or self:Get(key)
+    local s = key:match("^Typography%.(.+)") or key
+    local t = _DESIGN.Typography[s]
     if type(t) == "table" then
         return t.font or "Fonts\\FRIZQT__.TTF",
                t.size or 12,

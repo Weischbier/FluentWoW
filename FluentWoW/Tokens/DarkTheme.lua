@@ -1,5 +1,7 @@
---- FluentWoW – Tokens/DefaultTheme.lua
--- Default dark theme token table. All color values are {r, g, b, a} in 0-1.
+--- FluentWoW – Tokens/DarkTheme.lua
+-- WinUI-inspired dark theme color table. All color values are {r, g, b, a} in 0-1.
+-- Only Color tokens live here — spacing, typography, radii, motion, opacity,
+-- layer, density, and icon sizes are hardcoded design constants in Registry.lua.
 -------------------------------------------------------------------------------
 
 local lib = FluentWoW
@@ -91,77 +93,6 @@ local tokens = {
             Hover  = c(1, 1, 1, 0.08),
             Press  = c(1, 1, 1, 0.16),
         },
-    },
-
-    Spacing = {
-        XS   = 2,
-        SM   = 4,
-        MD   = 8,
-        LG   = 12,
-        XL   = 16,
-        XXL  = 24,
-        XXXL = 32,
-    },
-
-    Typography = {
-        Display  = { font = "Fonts\\MORPHEUS.ttf",  size = 28, flags = "" },
-        Header   = { font = "Fonts\\FRIZQT__.TTF",  size = 20, flags = "" },
-        Title    = { font = "Fonts\\FRIZQT__.TTF",  size = 16, flags = "" },
-        Body     = { font = "Fonts\\ARIALN.TTF",    size = 13, flags = "" },
-        BodyBold = { font = "Fonts\\ARIALN.TTF",    size = 13, flags = "OUTLINE" },
-        Caption  = { font = "Fonts\\ARIALN.TTF",    size = 11, flags = "" },
-        Mono     = { font = "Fonts\\ARIALN.TTF",    size = 11, flags = "" },
-    },
-
-    Radii = {
-        None = 0,
-        SM   = 2,
-        MD   = 4,
-        LG   = 8,
-        Full = 999,
-    },
-
-    Motion = {
-        Duration = {
-            Instant  = 0,
-            Fast     = 0.10,
-            Normal   = 0.20,
-            Slow     = 0.35,
-            Entrance = 0.25,
-            Exit     = 0.15,
-        },
-        Easing = {
-            Standard   = "Smooth",
-            Decelerate = "Smooth",
-            Accelerate = "Linear",
-            Linear     = "Linear",
-        },
-    },
-
-    Opacity = {
-        Disabled = 0.40,
-        Overlay  = 0.60,
-        Ghost    = 0.70,
-    },
-
-    Layer = {
-        Base    = 1,
-        Raised  = 2,
-        Overlay = 3,
-        Dialog  = 4,
-        Toast   = 5,
-    },
-
-    Density = {
-        Compact     = 0.75,
-        Normal      = 1.00,
-        Comfortable = 1.30,
-    },
-
-    Icon = {
-        SM = 12,
-        MD = 16,
-        LG = 20,
     },
 }
 

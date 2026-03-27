@@ -17,7 +17,7 @@ applyTo: "FluentWoW/**"
 
 ## Non-Negotiable Rules (ARCHITECTURE.md §16)
 
-1. Never hardcode colour values — always use `Tokens:GetColor()`
+1. Never hardcode colour values — always use `Tokens:GetColor()` (spacing/font/radii/motion/opacity ARE intentionally hardcoded design constants)
 2. Never call `Show()` on a protected frame in combat
 3. Never use absolute pixel positions — anchor relative to parent
 4. Always gate popup/dialog operations with `InCombatLockdown()`
@@ -35,8 +35,9 @@ applyTo: "FluentWoW/**"
 - Use `local` for all file-scoped variables and functions
 - Global functions are ONLY allowed for XML script handlers (`FWoW<Name>_<Event>`)
 - Callbacks from consumers should be invoked via `lib.Utils.SafeCall()`
-- All colors, spacing, fonts, and timing values must come from the token system
-- Prefer `Tokens:GetColor()`, `Tokens:GetSpacing()`, `Tokens:GetFont()`, `Tokens:Get()`
+- **Colors** must come from the token system and are themeable: `Tokens:GetColor()`
+- **Spacing, font sizes, radii, motion, opacity, icon sizes, and layer order** are hardcoded design constants — read them via `Tokens:GetSpacing()`, `Tokens:GetFont()`, `Tokens:GetNumber()`, or `Tokens:Get()` but they cannot be overridden by themes
+- Never move design constants (gaps, font sizes, etc.) into theme tables — the core layout is fixed by design philosophy
 
 ## Combat Safety
 

@@ -67,8 +67,8 @@ FluentWoW/
 │   ├── StateMachine.lua         Visual state machine (VSM) for controls
 │   └── FramePool.lua            Frame recycling for lists / dropdowns
 ├── Tokens/
-│   ├── Registry.lua             Token resolution (override → theme → default)
-│   └── DefaultTheme.lua         Full dark-theme token table
+│   ├── Registry.lua             Token resolution + hardcoded design constants
+│   └── DefaultTheme.lua         Dark-theme color table (colors only)
 ├── Controls/
 │   ├── Base/ControlBase.lua     Shared mixin: VSM, tooltip, enable/disable
 │   ├── Button/                  Button, IconButton, ToggleButton
@@ -340,7 +340,8 @@ Pages:
 ## 12. Testing Strategy
 
 ### Unit tests (Lua-side, no WoW API required)
-- Token resolution order (override → theme → default)
+- Token resolution order (override → theme → default) for Color tokens
+- Design constants immutability (spacing, typography, radii, motion, opacity cannot be overridden)
 - StateMachine transitions (all valid state paths)
 - StackLayout measurement (height = sum of children + gaps + padding)
 - FramePool acquire/release counts
@@ -471,7 +472,7 @@ session is always used.
 10. SettingsCard + SettingsExpander
 
 **Top 10 design rules that must never be violated**:
-1. Never hardcode colour values — always use `Tokens:GetColor()`
+1. Never hardcode colour values — always use `Tokens:GetColor()` (spacing, font sizes, radii, motion, and opacity ARE intentionally hardcoded design constants and must not be moved to themes)
 2. Never call `Show()` on a protected frame in combat
 3. Never use absolute pixel positions — anchor relative to parent
 4. Always gate destructive operations with `InCombatLockdown()`
@@ -489,7 +490,7 @@ session is always used.
 FluentWoW is **viable** under the following discipline constraints:
 
 - **Library-first**: Never ship FluentWoW as a standalone visible addon.
-- **Token-driven**: Resist the urge to hardcode any visual value.
+- **Token-driven**: Colors come from the theme system; spacing, font sizes, radii, motion, and opacity are hardcoded design constants in `Registry.lua`.
 - **Combat-aware**: Every popup/dialog must guard `InCombatLockdown()`.
 - **Performance budget**: `OnUpdate` handlers must terminate; frame pools are
   mandatory for list-like content.
