@@ -31,6 +31,29 @@ local function unregisterThemeListener(self)
     self._themeListenerRegistered = false
 end
 
+local function updateLayout(self)
+    local actionMinWidth = T:GetNumber("Spacing.XXXL") * 5
+    local actionWidth = actionMinWidth
+
+    if self._actionControl then
+        actionWidth = math.max(actionMinWidth, self._actionControl:GetWidth())
+    end
+
+    self.Action:SetWidth(actionWidth)
+
+    self.TitleLabel:ClearAllPoints()
+    if self.Icon:IsShown() then
+        self.TitleLabel:SetPoint("TOPLEFT", self.Icon, "TOPRIGHT", T:GetNumber("Spacing.LG"), 0)
+    else
+        self.TitleLabel:SetPoint("TOPLEFT", self, "TOPLEFT", T:GetNumber("Spacing.XL"), -T:GetNumber("Spacing.LG"))
+    end
+    self.TitleLabel:SetPoint("RIGHT", self.Action, "LEFT", -T:GetNumber("Spacing.XL"), 0)
+
+    self.DescLabel:ClearAllPoints()
+    self.DescLabel:SetPoint("TOPLEFT", self.TitleLabel, "BOTTOMLEFT", 0, -T:GetNumber("Spacing.LG"))
+    self.DescLabel:SetPoint("RIGHT", self.TitleLabel, "RIGHT", 0, 0)
+end
+
 local function applyVisuals(self, state)
     state = state or self:GetState()
 
@@ -91,7 +114,7 @@ function CardMixin:SetDescription(text)
         self.DescLabel:Show()
         -- Expand height for two-line card
         local padT  = T:GetNumber("Spacing.LG")   -- 12
-        local gap   = T:GetNumber("Spacing.XS")    -- 2
+        local gap   = T:GetNumber("Spacing.LG")   -- 12
         local padB  = T:GetNumber("Spacing.XL")    -- 16
         local h = padT + self.TitleLabel:GetStringHeight() + gap + self.DescLabel:GetStringHeight() + padB
         local minH = padT + self.TitleLabel:GetStringHeight() + padB
@@ -111,11 +134,8 @@ function CardMixin:SetIconTexture(path)
         self.Icon:Show()
     else
         self.Icon:Hide()
-        -- Re-anchor title to left edge
-        self.TitleLabel:ClearAllPoints()
-        self.TitleLabel:SetPoint("TOPLEFT", self, "TOPLEFT", T:GetNumber("Spacing.XL"), -T:GetNumber("Spacing.LG"))
-        self.TitleLabel:SetPoint("RIGHT", self.Action, "LEFT", -T:GetNumber("Spacing.MD"), 0)
     end
+    updateLayout(self)
 end
 
 ---@param control Frame  any WinUILib control (ToggleSwitch, ComboBox, Button, etc.)
@@ -131,6 +151,7 @@ function CardMixin:SetActionControl(control)
         control:SetPoint("RIGHT", self.Action, "RIGHT")
         control:Show()
     end
+    updateLayout(self)
 end
 
 ---@return Frame|nil
@@ -169,6 +190,8 @@ function WUILSettingsCard_OnLoad(self)
     if descFont then
         self.DescLabel:SetFont(descFont.font, descFont.size, descFont.flags)
     end
+
+    updateLayout(self)
 
     applyVisuals(self)
 

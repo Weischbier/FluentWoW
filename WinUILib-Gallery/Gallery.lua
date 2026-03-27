@@ -21,6 +21,68 @@ local function refreshDemoPage(scroll, content, stack, parent)
     scroll:SetContentHeight(content:GetHeight())
 end
 
+local function createSurface(parent, colorKey)
+    local frame = CreateFrame("Frame", nil, parent)
+    frame:SetClipsChildren(true)
+
+    local bg = frame:CreateTexture(nil, "BACKGROUND")
+    bg:SetAllPoints()
+    bg:SetColorTexture(T:GetColor(colorKey or "Color.Surface.Raised"))
+    frame.BG = bg
+
+    local edgeTop = frame:CreateTexture(nil, "BORDER")
+    edgeTop:SetHeight(1)
+    edgeTop:SetPoint("TOPLEFT")
+    edgeTop:SetPoint("TOPRIGHT")
+    edgeTop:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+
+    local edgeBottom = frame:CreateTexture(nil, "BORDER")
+    edgeBottom:SetHeight(1)
+    edgeBottom:SetPoint("BOTTOMLEFT")
+    edgeBottom:SetPoint("BOTTOMRIGHT")
+    edgeBottom:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+
+    local edgeLeft = frame:CreateTexture(nil, "BORDER")
+    edgeLeft:SetWidth(1)
+    edgeLeft:SetPoint("TOPLEFT", 0, -1)
+    edgeLeft:SetPoint("BOTTOMLEFT", 0, 1)
+    edgeLeft:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+
+    local edgeRight = frame:CreateTexture(nil, "BORDER")
+    edgeRight:SetWidth(1)
+    edgeRight:SetPoint("TOPRIGHT", 0, -1)
+    edgeRight:SetPoint("BOTTOMRIGHT", 0, 1)
+    edgeRight:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+
+    return frame
+end
+
+local function createExampleBlock(parent, headerText, height)
+    local block = CreateFrame("Frame", nil, parent)
+    block:SetHeight(height + T:GetNumber("Spacing.XXXL"))
+
+    local header = lib:CreateTextBlock(block)
+    header:SetStyle("BodyBold")
+    header:SetText(headerText)
+    header:SetPoint("TOPLEFT", block, "TOPLEFT", 0, 0)
+    header:SetPoint("TOPRIGHT", block, "TOPRIGHT", 0, 0)
+
+    local body = createSurface(block)
+    body:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -T:GetNumber("Spacing.LG"))
+    body:SetPoint("TOPRIGHT", header, "BOTTOMRIGHT", 0, -T:GetNumber("Spacing.LG"))
+    body:SetHeight(height)
+
+    return block, body
+end
+
+function Gallery:CreateSurface(parent, colorKey)
+    return createSurface(parent, colorKey)
+end
+
+function Gallery:CreateExampleBlock(parent, headerText, height)
+    return createExampleBlock(parent, headerText, height)
+end
+
 ---@param key string
 ---@param title string
 ---@param builder function(contentParent)  builds page content into the parent
@@ -72,6 +134,8 @@ local function EnsureFrame()
     mainFrame:ClearAllPoints()
     mainFrame:SetPoint("CENTER")
 
+    local history = {}
+
     ---------------------------------------------------------------------------
     -- Sidebar (navigation pane)
     ---------------------------------------------------------------------------
@@ -104,8 +168,29 @@ local function EnsureFrame()
     local navButtons = {}
     local selectedKey = nil
 
-    local function selectPage(key)
+    local function refreshNavLayout(filterText)
+        local yOff = -8
+        local query = filterText and filterText:lower() or ""
+        for _, key in ipairs(Gallery.pageOrder) do
+            local btn = navButtons[key]
+            local page = Gallery.pages[key]
+            local visible = query == "" or page.title:lower():find(query, 1, true) ~= nil
+            btn:SetShown(visible)
+            if visible then
+                btn:ClearAllPoints()
+                btn:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 4, yOff)
+                btn:SetPoint("RIGHT", sidebar, "RIGHT", -4, 0)
+                yOff = yOff - 32
+            end
+        end
+    end
+
+    local function selectPage(key, addToHistory)
         if selectedKey == key then return end
+
+        if addToHistory ~= false and selectedKey then
+            table.insert(history, selectedKey)
+        end
 
         -- Deselect previous
         if selectedKey and navButtons[selectedKey] then
@@ -142,13 +227,10 @@ local function EnsureFrame()
         end
     end
 
-    local yOff = -8
     for _, key in ipairs(Gallery.pageOrder) do
         local page = Gallery.pages[key]
         local btn = CreateFrame("Button", nil, sidebar)
         btn:SetHeight(32)
-        btn:SetPoint("TOPLEFT", sidebar, "TOPLEFT", 4, yOff)
-        btn:SetPoint("RIGHT", sidebar, "RIGHT", -4, 0)
 
         local bg = btn:CreateTexture(nil, "BACKGROUND")
         bg:SetAllPoints()
@@ -177,12 +259,30 @@ local function EnsureFrame()
         end)
 
         navButtons[key] = btn
-        yOff = yOff - 32
     end
+
+    refreshNavLayout(nil)
+
+    local backButton = lib:CreateButton(mainFrame, nil, "Subtle")
+    backButton:SetText("←")
+    backButton:SetOnClick(function()
+        local previous = table.remove(history)
+        if previous then
+            selectPage(previous, false)
+        end
+    end)
+    mainFrame:SetTitleBarLeftControl(backButton, 36)
+
+    local searchBox = lib:CreateSearchBox(mainFrame)
+    searchBox:SetPlaceholder("Search pages")
+    searchBox:SetOnTextChanged(function(_, text)
+        refreshNavLayout(text)
+    end)
+    mainFrame:SetTitleBarRightControl(searchBox, 220)
 
     -- Select first page
     if Gallery.pageOrder[1] then
-        selectPage(Gallery.pageOrder[1])
+        selectPage(Gallery.pageOrder[1], false)
     end
 
     return mainFrame

@@ -79,6 +79,27 @@ local function registerThemeListener(self)
     self._themeListenerRegistered = true
 end
 
+local function setTitleBarSlot(slot, control, width)
+    if slot._content and slot._content ~= control then
+        slot._content:ClearAllPoints()
+        slot._content:SetParent(nil)
+    end
+
+    slot._content = control
+    if not control then
+        slot:SetWidth(1)
+        slot:Hide()
+        return
+    end
+
+    slot:SetWidth(width or control:GetWidth() or 1)
+    slot:Show()
+    control:SetParent(slot)
+    control:ClearAllPoints()
+    control:SetAllPoints(slot)
+    control:Show()
+end
+
 local function unregisterThemeListener(self)
     if not self._themeListenerRegistered or not self._themeListener then return end
     lib.EventBus:Off("ThemeChanged", self._themeListener)
@@ -104,11 +125,31 @@ function MainFrameMixin:SetIcon(path)
     if path then
         self.TitleBar.Icon:SetTexture(path)
         self.TitleBar.Icon:Show()
-        self.TitleBar.Title:SetPoint("LEFT", self.TitleBar.Icon, "RIGHT", T:GetNumber("Spacing.MD"), 0)
     else
         self.TitleBar.Icon:Hide()
-        self.TitleBar.Title:SetPoint("LEFT", self.TitleBar, "LEFT", T:GetNumber("Spacing.XL"), 0)
     end
+end
+
+---@param control Frame|nil
+---@param width? number
+function MainFrameMixin:SetTitleBarLeftControl(control, width)
+    setTitleBarSlot(self.TitleBar.LeftSlot, control, width)
+end
+
+---@param control Frame|nil
+---@param width? number
+function MainFrameMixin:SetTitleBarRightControl(control, width)
+    setTitleBarSlot(self.TitleBar.RightSlot, control, width)
+end
+
+---@return Frame
+function MainFrameMixin:GetTitleBarLeftArea()
+    return self.TitleBar.LeftSlot
+end
+
+---@return Frame
+function MainFrameMixin:GetTitleBarRightArea()
+    return self.TitleBar.RightSlot
 end
 
 -------------------------------------------------------------------------------
@@ -226,6 +267,8 @@ function WUILMainFrame_OnLoad(self)
     self._status      = nil
     self._resizable   = true
     self._themeListenerRegistered = false
+    self.TitleBar.LeftSlot:SetWidth(1)
+    self.TitleBar.RightSlot:SetWidth(1)
 
     -- Register for ESC-to-close
     if self:GetName() then

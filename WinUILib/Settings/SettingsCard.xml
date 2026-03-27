@@ -21,20 +21,20 @@
                 <Texture parentKey="Icon" hidden="true">
                     <Size x="20" y="20"/>
                     <Anchors>
-                        <Anchor point="LEFT" x="16" y="0"/>
+                        <Anchor point="TOPLEFT" x="16" y="-12"/>
                     </Anchors>
                 </Texture>
                 <!-- Title -->
                 <FontString parentKey="TitleLabel" inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.Icon" relativePoint="TOPRIGHT" x="12" y="0"/>
-                        <Anchor point="RIGHT" x="-100" y="0"/>
+                        <Anchor point="RIGHT" relativeKey="$parent.Action" relativePoint="LEFT" x="-16" y="0"/>
                     </Anchors>
                 </FontString>
                 <!-- Description (below title) -->
                 <FontString parentKey="DescLabel" inherits="GameFontNormal" justifyH="LEFT" hidden="true">
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.TitleLabel" relativePoint="BOTTOMLEFT" x="0" y="-2"/>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.TitleLabel" relativePoint="BOTTOMLEFT" x="0" y="-12"/>
                         <Anchor point="RIGHT" relativeKey="$parent.TitleLabel" relativePoint="RIGHT"/>
                     </Anchors>
                 </FontString>
@@ -47,7 +47,7 @@
 
         <!-- Action control region (right side) -->
         <Frame name="$parent_Action" parentKey="Action">
-            <Size x="80" y="32"/>
+            <Size x="160" y="32"/>
             <Anchors>
                 <Anchor point="RIGHT" x="-16" y="0"/>
             </Anchors>

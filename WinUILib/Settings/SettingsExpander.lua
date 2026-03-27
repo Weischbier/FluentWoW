@@ -28,6 +28,20 @@ local function unregisterThemeListener(self)
     self._themeListenerRegistered = false
 end
 
+local function updateHeaderLayout(self)
+    self.Header.TitleLabel:ClearAllPoints()
+    if self.Header.Icon:IsShown() then
+        self.Header.TitleLabel:SetPoint("TOPLEFT", self.Header.Icon, "TOPRIGHT", T:GetNumber("Spacing.LG"), 0)
+    else
+        self.Header.TitleLabel:SetPoint("TOPLEFT", self.Header, "TOPLEFT", T:GetNumber("Spacing.XL"), -T:GetNumber("Spacing.LG"))
+    end
+    self.Header.TitleLabel:SetPoint("RIGHT", self.Header.Chevron, "LEFT", -T:GetNumber("Spacing.XL"), 0)
+
+    self.Header.DescLabel:ClearAllPoints()
+    self.Header.DescLabel:SetPoint("TOPLEFT", self.Header.TitleLabel, "BOTTOMLEFT", 0, -T:GetNumber("Spacing.LG"))
+    self.Header.DescLabel:SetPoint("RIGHT", self.Header.TitleLabel, "RIGHT", 0, 0)
+end
+
 local function applyVisuals(self, state)
     state = state or self:GetState()
     local hdr = self.Header
@@ -198,7 +212,7 @@ function ExpanderMixin:SetDescription(text)
         self.Header.DescLabel:SetText(text)
         self.Header.DescLabel:Show()
         local padT  = T:GetNumber("Spacing.LG")   -- 12
-        local gap   = T:GetNumber("Spacing.XS")    -- 2
+        local gap   = T:GetNumber("Spacing.LG")   -- 12
         local padB  = T:GetNumber("Spacing.LG")    -- 12
         local minH  = T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.XL")  -- 48
         local h = padT + self.Header.TitleLabel:GetStringHeight() + gap + self.Header.DescLabel:GetStringHeight() + padB
@@ -216,10 +230,8 @@ function ExpanderMixin:SetIconTexture(path)
         self.Header.Icon:Show()
     else
         self.Header.Icon:Hide()
-        self.Header.TitleLabel:ClearAllPoints()
-        self.Header.TitleLabel:SetPoint("TOPLEFT", self.Header, "TOPLEFT", T:GetNumber("Spacing.XL"), -T:GetNumber("Spacing.LG"))
-        self.Header.TitleLabel:SetPoint("RIGHT", self.Header.Chevron, "LEFT", -T:GetNumber("Spacing.MD"), 0)
     end
+    updateHeaderLayout(self)
 end
 
 ---@param callback function(self, expanded)
@@ -254,6 +266,7 @@ function WUILSettingsExpander_OnLoad(self)
     end
 
     self.Header.Chevron:SetText("\226\150\184")  -- ▸
+    updateHeaderLayout(self)
 
     applyVisuals(self)
     self._themeListener = function() applyVisuals(self) end

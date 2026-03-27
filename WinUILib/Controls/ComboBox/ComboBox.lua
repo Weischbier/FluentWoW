@@ -134,7 +134,12 @@ function ComboMixin:_BuildDropdown()
 
     local items = self._items or {}
     local itemHeight = T:GetNumber("Spacing.XXL") + T:GetNumber("Spacing.SM")  -- 24+4 = 28
+    local dropdownWidth = math.max(self:GetWidth(), T:GetNumber("Spacing.XXXL") * 6 + T:GetNumber("Spacing.XL"))
+    local contentWidth = math.max(1, dropdownWidth - T:GetNumber("Spacing.MD") * 2)
     local yOff = 0
+
+    self.Dropdown:SetWidth(dropdownWidth)
+    self.Dropdown.Scroll.Child:SetWidth(contentWidth)
 
     for i, item in ipairs(items) do
         local btn = self._itemPool:Acquire()
@@ -142,6 +147,7 @@ function ComboMixin:_BuildDropdown()
         btn:ClearAllPoints()
         btn:SetPoint("TOPLEFT", 0, -yOff)
         btn:SetPoint("RIGHT", 0, 0)
+        btn:SetWidth(contentWidth)
         btn.Text:SetText(item.text or "")
         btn.Text:SetTextColor(T:GetColor("Color.Text.Primary"))
         btn.Highlight:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
@@ -164,6 +170,7 @@ function WUILComboBox_OnLoad(self)
     self:WUILInit()
     self._items = {}
     self.Dropdown.Scroll:SetScrollChild(self.Dropdown.Scroll.Child)
+    self.Dropdown.Scroll:EnableMouseWheel(true)
     local font = T:Get("Typography.BodyBold")
     if font then
         self.SelectedLabel:SetFont(font.font, font.size, font.flags)

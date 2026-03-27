@@ -15,6 +15,25 @@ local Mot = lib.Motion
 ---@class WUILTabView
 local TabViewMixin = {}
 
+local function setStripSlot(slot, control, width)
+    if slot._content and slot._content ~= control then
+        slot._content:ClearAllPoints()
+        slot._content:SetParent(nil)
+    end
+    slot._content = control
+    if not control then
+        slot:SetWidth(1)
+        slot:Hide()
+        return
+    end
+    slot:SetWidth(width or control:GetWidth() or 1)
+    slot:Show()
+    control:SetParent(slot)
+    control:ClearAllPoints()
+    control:SetAllPoints(slot)
+    control:Show()
+end
+
 function TabViewMixin:OnStateChanged(newState, prevState)
     if newState == "Disabled" then
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -26,6 +45,8 @@ end
 function TabViewMixin:_ApplyTokens()
     self.TabStrip.StripBG:SetColorTexture(T:GetColor("Color.Surface.Base"))
     self.ContentArea.ContentBG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+    self.TabStrip.AddButton.BG:SetColorTexture(T:GetColor("Color.Surface.Elevated"))
+    self.TabStrip.AddButton.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
 end
 
 function TabViewMixin:_RefreshTabs()
@@ -36,7 +57,18 @@ function TabViewMixin:_RefreshTabs()
         self._tabPool = lib.FramePool:New("Button", self.TabStrip, "WUILTabItemTemplate")
     end
 
-    local xOff = 0
+    local xOff = self.TabStrip.HeaderSlot:IsShown() and (self.TabStrip.HeaderSlot:GetWidth() + T:GetNumber("Spacing.XL")) or 0
+    local stripLimit = self:GetWidth()
+    if self.TabStrip.FooterSlot:IsShown() then
+        stripLimit = stripLimit - self.TabStrip.FooterSlot:GetWidth() - T:GetNumber("Spacing.XL")
+    end
+    if self._addButtonVisible then
+        self.TabStrip.AddButton:Show()
+        stripLimit = stripLimit - self.TabStrip.AddButton:GetWidth() - T:GetNumber("Spacing.XL")
+    else
+        self.TabStrip.AddButton:Hide()
+    end
+
     for i, tab in ipairs(self._tabs) do
         local btn = self._tabPool:Acquire()
         btn:SetParent(self.TabStrip)
@@ -48,9 +80,35 @@ function TabViewMixin:_RefreshTabs()
         btn._tabView = self
         btn.Hover:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
 
+        btn.Label:ClearAllPoints()
+        if tab.icon then
+            btn.Icon:SetTexture(tab.icon)
+            btn.Icon:Show()
+            btn.Label:SetPoint("LEFT", btn.Icon, "RIGHT", 8, 0)
+        else
+            btn.Icon:Hide()
+            btn.Label:SetPoint("LEFT", btn, "LEFT", 12, 0)
+        end
+
+        if tab.closable then
+            btn.CloseBtn:Show()
+            btn.CloseBtn._tabIndex = i
+            btn.CloseBtn._tabView = self
+            btn.Label:SetPoint("RIGHT", btn.CloseBtn, "LEFT", -8, 0)
+        else
+            btn.CloseBtn:Hide()
+            btn.Label:SetPoint("RIGHT", btn, "RIGHT", -12, 0)
+        end
+
         -- auto-width based on text
-        local textWidth = btn.Label:GetStringWidth() + T:GetNumber("Spacing.XXL")  -- 24
-        btn:SetWidth(math.max(T:GetNumber("Spacing.XXXL") * 2 + T:GetNumber("Spacing.XL"), textWidth))  -- ~80
+        local textWidth = btn.Label:GetStringWidth() + T:GetNumber("Spacing.XXL")
+        if tab.icon then textWidth = textWidth + 22 end
+        if tab.closable then textWidth = textWidth + 24 end
+        local targetWidth = math.max(T:GetNumber("Spacing.XXXL") * 2 + T:GetNumber("Spacing.XL"), textWidth)
+        if self._tabWidthMode == "Equal" and #self._tabs > 0 then
+            targetWidth = math.max(80, math.floor((stripLimit - xOff) / (#self._tabs - i + 1)))
+        end
+        btn:SetWidth(targetWidth)
         xOff = xOff + btn:GetWidth()
 
         if i == self._selectedIndex then
@@ -70,6 +128,26 @@ end
 function TabViewMixin:SetTabs(tabs)
     self._tabs = tabs
     self._selectedIndex = #tabs > 0 and 1 or nil
+    self:_RefreshTabs()
+    self:_ShowContent()
+end
+
+---@param tab table
+function TabViewMixin:AddTab(tab)
+    table.insert(self._tabs, tab)
+    self:SelectTab(#self._tabs)
+    self:_RefreshTabs()
+end
+
+---@param index integer
+function TabViewMixin:RemoveTab(index)
+    if index < 1 or index > #self._tabs then return end
+    table.remove(self._tabs, index)
+    if #self._tabs == 0 then
+        self._selectedIndex = nil
+    elseif self._selectedIndex and self._selectedIndex > #self._tabs then
+        self._selectedIndex = #self._tabs
+    end
     self:_RefreshTabs()
     self:_ShowContent()
 end
@@ -113,6 +191,42 @@ function TabViewMixin:SetOnTabChanged(fn)
     self._onTabChanged = fn
 end
 
+---@param fn function
+function TabViewMixin:SetOnAddTab(fn)
+    self._onAddTab = fn
+end
+
+---@param fn function
+function TabViewMixin:SetOnTabCloseRequested(fn)
+    self._onTabCloseRequested = fn
+end
+
+---@param visible boolean
+function TabViewMixin:SetAddButtonVisible(visible)
+    self._addButtonVisible = visible == true
+    self:_RefreshTabs()
+end
+
+---@param control Frame|nil
+---@param width? number
+function TabViewMixin:SetTabStripHeader(control, width)
+    setStripSlot(self.TabStrip.HeaderSlot, control, width)
+    self:_RefreshTabs()
+end
+
+---@param control Frame|nil
+---@param width? number
+function TabViewMixin:SetTabStripFooter(control, width)
+    setStripSlot(self.TabStrip.FooterSlot, control, width)
+    self:_RefreshTabs()
+end
+
+---@param mode string
+function TabViewMixin:SetTabWidthMode(mode)
+    self._tabWidthMode = mode == "Equal" and "Equal" or "SizeToContent"
+    self:_RefreshTabs()
+end
+
 -------------------------------------------------------------------------------
 -- Script handlers
 -------------------------------------------------------------------------------
@@ -122,6 +236,8 @@ function WUILTabView_OnLoad(self)
     self:WUILInit()
     self._tabs = {}
     self._selectedIndex = nil
+    self._addButtonVisible = false
+    self._tabWidthMode = "SizeToContent"
     self:_ApplyTokens()
 end
 
@@ -129,6 +245,22 @@ function WUILTabItem_OnClick(self)
     local tabView = self._tabView
     if not tabView or not tabView._enabled then return end
     tabView:SelectTab(self._tabIndex)
+end
+
+function WUILTabItem_Close_OnClick(self)
+    local tabView = self._tabView
+    if not tabView or not tabView._enabled then return end
+    if tabView._onTabCloseRequested then
+        lib.Utils.SafeCall(tabView._onTabCloseRequested, tabView, self._tabIndex)
+    else
+        tabView:RemoveTab(self._tabIndex)
+    end
+end
+
+function WUILTabView_AddButton_OnClick(self)
+    local tabView = self:GetParent():GetParent()
+    if not tabView or not tabView._enabled or not tabView._onAddTab then return end
+    lib.Utils.SafeCall(tabView._onAddTab, tabView)
 end
 
 -------------------------------------------------------------------------------

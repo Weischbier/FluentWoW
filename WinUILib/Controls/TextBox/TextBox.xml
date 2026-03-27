@@ -7,81 +7,98 @@
     <Frame name="WUILTextBoxTemplate" virtual="true" enableMouse="true">
         <Size x="200" y="32"/>
         <Layers>
-            <Layer level="BACKGROUND">
-                <Texture name="$parent_Shadow" parentKey="Shadow">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" y="-1"/>
-                        <Anchor point="BOTTOMRIGHT" y="1"/>
-                    </Anchors>
-                </Texture>
-                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
-            </Layer>
-            <Layer level="BORDER">
-                <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
-                <Texture name="$parent_TopEdge" parentKey="TopEdge">
-                    <Size x="0" y="1"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT"/>
-                        <Anchor point="TOPRIGHT"/>
-                    </Anchors>
-                </Texture>
-            </Layer>
-            <Layer level="BORDER" textureSubLevel="1">
-                <Texture name="$parent_BottomEdge" parentKey="BottomEdge">
-                    <Size x="0" y="2"/>
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT"/>
-                        <Anchor point="BOTTOMRIGHT"/>
-                    </Anchors>
-                </Texture>
-            </Layer>
-        </Layers>
-        <Frames>
-            <EditBox name="$parent_EditBox" parentKey="EditBox" autoFocus="false">
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="12" y="-8"/>
-                    <Anchor point="BOTTOMRIGHT" x="-32" y="8"/>
-                </Anchors>
-                <FontString inherits="GameFontHighlight"/>
-                <Scripts>
-                    <OnTextChanged function="WUILTextBox_OnTextChanged"/>
-                    <OnEditFocusGained function="WUILTextBox_OnFocusGained"/>
-                    <OnEditFocusLost function="WUILTextBox_OnFocusLost"/>
-                    <OnEnterPressed function="WUILTextBox_OnEnterPressed"/>
-                    <OnEscapePressed function="WUILTextBox_OnEscapePressed"/>
-                </Scripts>
-            </EditBox>
-            <Button name="$parent_ClearBtn" parentKey="ClearBtn" hidden="true">
-                <Size x="20" y="20"/>
-                <Anchors>
-                    <Anchor point="RIGHT" x="-8" y="0"/>
-                </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString name="$parent_X" parentKey="X"
-                            inherits="GameFontNormal" justifyH="CENTER" text="×">
-                            <Anchors>
-                                <Anchor point="CENTER"/>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-                <Scripts>
-                    <OnClick function="WUILTextBox_OnClear"/>
-                </Scripts>
-            </Button>
-        </Frames>
-        <Layers>
             <Layer level="ARTWORK">
-                <FontString name="$parent_Placeholder" parentKey="Placeholder"
-                    inherits="GameFontDisable" justifyH="LEFT">
+                <FontString name="$parent_HeaderLabel" parentKey="HeaderLabel"
+                    inherits="GameFontNormalSmall" justifyH="LEFT" hidden="true">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="12" y="-8"/>
-                        <Anchor point="BOTTOMRIGHT" x="-32" y="8"/>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
+                        <Anchor point="TOPRIGHT" x="0" y="0"/>
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
+        <Frames>
+            <Frame name="$parent_Field" parentKey="Field">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Shadow" parentKey="Shadow">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" y="-1"/>
+                                <Anchor point="BOTTOMRIGHT" y="1"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
+                        <Texture name="$parent_TopEdge" parentKey="TopEdge">
+                            <Size x="0" y="1"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT"/>
+                                <Anchor point="TOPRIGHT"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="BORDER" textureSubLevel="1">
+                        <Texture name="$parent_BottomEdge" parentKey="BottomEdge">
+                            <Size x="0" y="2"/>
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT"/>
+                                <Anchor point="BOTTOMRIGHT"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Placeholder" parentKey="Placeholder"
+                            inherits="GameFontDisable" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="12" y="-8"/>
+                                <Anchor point="BOTTOMRIGHT" x="-32" y="8"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <EditBox name="$parent_EditBox" parentKey="EditBox" autoFocus="false">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="12" y="-8"/>
+                            <Anchor point="BOTTOMRIGHT" x="-32" y="8"/>
+                        </Anchors>
+                        <FontString inherits="GameFontHighlight"/>
+                        <Scripts>
+                            <OnTextChanged function="WUILTextBox_OnTextChanged"/>
+                            <OnEditFocusGained function="WUILTextBox_OnFocusGained"/>
+                            <OnEditFocusLost function="WUILTextBox_OnFocusLost"/>
+                            <OnEnterPressed function="WUILTextBox_OnEnterPressed"/>
+                            <OnEscapePressed function="WUILTextBox_OnEscapePressed"/>
+                        </Scripts>
+                    </EditBox>
+                    <Button name="$parent_ClearBtn" parentKey="ClearBtn" hidden="true">
+                        <Size x="20" y="20"/>
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-8" y="0"/>
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <FontString name="$parent_X" parentKey="X"
+                                    inherits="GameFontNormal" justifyH="CENTER" text="×">
+                                    <Anchors>
+                                        <Anchor point="CENTER"/>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                        <Scripts>
+                            <OnClick function="WUILTextBox_OnClear"/>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnLoad function="WUILTextBox_OnLoad"/>
             <OnEnter function="WUILTextBox_OnEnter"/>
@@ -94,6 +111,16 @@
          WUILSearchBoxTemplate — TextBox with search icon (inherits TextBox)
          ================================================================ -->
     <Frame name="WUILSearchBoxTemplate" virtual="true" inherits="WUILTextBoxTemplate">
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_SearchIcon" parentKey="SearchIcon">
+                    <Size x="14" y="14"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeTo="$parent_Field" relativePoint="LEFT" x="10" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnLoad function="WUILSearchBox_OnLoad"/>
         </Scripts>

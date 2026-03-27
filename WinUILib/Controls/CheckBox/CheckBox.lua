@@ -40,9 +40,11 @@ function CheckBoxMixin:OnStateChanged(newState, prevState)
 
     if self._checked then
         self.Check:Show()
+        self.Check:SetSize(10, 10)
         self.Check:SetVertexColor(T:GetColor("Color.Icon.OnAccent"))
     elseif self._indeterminate then
         self.Check:Show()
+        self.Check:SetSize(10, 2)
         self.Check:SetVertexColor(T:GetColor("Color.Icon.OnAccent"))
     else
         self.Check:Hide()
@@ -68,12 +70,36 @@ end
 ---@param indeterminate boolean
 function CheckBoxMixin:SetIndeterminate(indeterminate)
     self._indeterminate = indeterminate
+    if indeterminate then
+        self._checked = false
+    end
     self:OnStateChanged(self._vsm:GetState())
 end
 
 ---@return boolean
 function CheckBoxMixin:IsIndeterminate()
     return self._indeterminate == true
+end
+
+---@param enabled boolean
+function CheckBoxMixin:SetThreeState(enabled)
+    self._threeState = enabled == true
+end
+
+---@return boolean
+function CheckBoxMixin:IsThreeState()
+    return self._threeState == true
+end
+
+---@return string
+function CheckBoxMixin:GetCheckState()
+    if self._indeterminate then
+        return "Indeterminate"
+    end
+    if self._checked then
+        return "Checked"
+    end
+    return "Unchecked"
 end
 
 ---@param text string
@@ -100,21 +126,36 @@ function WUILCheckBox_OnLoad(self)
     self:WUILInit()
     self._checked = false
     self._indeterminate = false
+    self._threeState = false
     self.Check:SetColorTexture(T:GetColor("Color.Base.White"))
     self:OnStateChanged("Normal")
 end
 
 function WUILCheckBox_OnClick(self)
     if not self._enabled then return end
-    self._indeterminate = false
-    self._checked = not self._checked
-    if self._checked then
+    if self._threeState then
+        if not self._checked and not self._indeterminate then
+            self._checked = true
+            self._indeterminate = false
+        elseif self._checked then
+            self._checked = false
+            self._indeterminate = true
+        else
+            self._checked = false
+            self._indeterminate = false
+        end
+    else
+        self._indeterminate = false
+        self._checked = not self._checked
+    end
+
+    if self._checked or self._indeterminate then
         self._vsm:SetState("Checked")
     else
         self._vsm:SetState("Normal")
     end
     if self._onChanged then
-        lib.Utils.SafeCall(self._onChanged, self, self._checked)
+        lib.Utils.SafeCall(self._onChanged, self, self._checked, self:GetCheckState())
     end
 end
 
@@ -126,7 +167,7 @@ end
 
 function WUILCheckBox_OnLeave(self)
     if not self._enabled then return end
-    if self._checked then
+    if self._checked or self._indeterminate then
         self._vsm:SetState("Checked")
     else
         self._vsm:SetState("Normal")

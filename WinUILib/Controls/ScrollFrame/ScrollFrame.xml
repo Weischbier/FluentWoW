@@ -46,6 +46,10 @@
                                 <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
                             </Layer>
                         </Layers>
+                        <Scripts>
+                            <OnMouseDown function="WUILScrollFrame_Thumb_OnMouseDown"/>
+                            <OnMouseUp function="WUILScrollFrame_Thumb_OnMouseUp"/>
+                        </Scripts>
                     </Frame>
                 </Frames>
             </Frame>

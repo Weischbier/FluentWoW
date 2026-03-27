@@ -56,6 +56,12 @@
                     <OnMouseUp function="WUILSlider_OnMouseUp"/>
                 </Scripts>
             </Slider>
+            <Frame name="$parent_TickContainer" parentKey="TickContainer">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+            </Frame>
         </Frames>
         <Layers>
             <Layer level="OVERLAY">
@@ -70,6 +76,15 @@
         <Scripts>
             <OnLoad function="WUILSlider_OnLoad"/>
         </Scripts>
+    </Frame>
+
+    <Frame name="WUILSliderTickTemplate" virtual="true">
+        <Size x="1" y="6"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_Line" parentKey="Line" setAllPoints="true"/>
+            </Layer>
+        </Layers>
     </Frame>
 
 </Ui>

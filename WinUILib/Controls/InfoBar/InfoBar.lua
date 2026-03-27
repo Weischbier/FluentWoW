@@ -27,6 +27,62 @@ local SEVERITY = {
 ---@class WUILInfoBar
 local InfoBarMixin = {}
 
+local function updateLayout(self)
+    local leftInset = self._iconVisible == false and T:GetNumber("Spacing.XL") or 44
+    local rightInset = T:GetNumber("Spacing.XL")
+    local topInset = T:GetNumber("Spacing.LG")
+    local actionWidth = 0
+    local actionHeight = 0
+
+    if self._actionControl then
+        self.ActionSlot:SetShown(true)
+        self._actionControl:SetParent(self.ActionSlot)
+        self._actionControl:ClearAllPoints()
+        self._actionControl:SetPoint("TOPRIGHT", self.ActionSlot, "TOPRIGHT", 0, 0)
+        actionWidth = math.max(self._actionControl:GetWidth(), 80)
+        actionHeight = self._actionControl:GetHeight()
+        self.ActionSlot:SetSize(actionWidth, actionHeight)
+    else
+        self.ActionSlot:Hide()
+    end
+
+    self.Title:ClearAllPoints()
+    self.Message:ClearAllPoints()
+
+    local anchorRight = -rightInset
+    if self._closable then
+        anchorRight = -40
+    end
+    if self._actionControl then
+        anchorRight = -(actionWidth + T:GetNumber("Spacing.XL") + (self._closable and 32 or 0))
+    end
+
+    if self._iconVisible == false then
+        self.Icon:Hide()
+    else
+        self.Icon:Show()
+    end
+
+    self.Title:SetPoint("TOPLEFT", self, "TOPLEFT", leftInset, -topInset)
+    self.Title:SetPoint("RIGHT", self, "RIGHT", anchorRight, 0)
+
+    if self.Title:GetText() == nil or self.Title:GetText() == "" then
+        self.Title:Hide()
+        self.Message:SetPoint("TOPLEFT", self, "TOPLEFT", leftInset, -topInset)
+    else
+        self.Title:Show()
+        self.Message:SetPoint("TOPLEFT", self.Title, "BOTTOMLEFT", 0, -4)
+    end
+    self.Message:SetPoint("RIGHT", self, "RIGHT", anchorRight, 0)
+    self.Message:SetJustifyV("TOP")
+
+    local titleHeight = self.Title:IsShown() and self.Title:GetStringHeight() or 0
+    local messageHeight = self.Message:GetStringHeight()
+    local textHeight = titleHeight + messageHeight + (self.Title:IsShown() and 4 or 0)
+    local contentHeight = math.max(16, textHeight, actionHeight, self._iconVisible == false and 0 or 16) + (topInset * 2)
+    self:SetHeight(math.max(48, contentHeight))
+end
+
 function InfoBarMixin:OnStateChanged(newState, prevState)
     if newState == "Disabled" then
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -45,6 +101,7 @@ function InfoBarMixin:_ApplySeverity()
     self.Title:SetTextColor(T:GetColor("Color.Text.Primary"))
     self.Message:SetTextColor(T:GetColor("Color.Text.Secondary"))
     self.CloseBtn.X:SetTextColor(T:GetColor("Color.Text.Secondary"))
+    updateLayout(self)
 end
 
 ---@param severity string  "Info"|"Success"|"Warning"|"Error"
@@ -61,17 +118,32 @@ end
 ---@param text string
 function InfoBarMixin:SetTitle(text)
     self.Title:SetText(text)
+    updateLayout(self)
 end
 
 ---@param text string
 function InfoBarMixin:SetMessage(text)
     self.Message:SetText(text)
+    updateLayout(self)
 end
 
 ---@param show boolean
 function InfoBarMixin:SetClosable(show)
     self._closable = show
     if show then self.CloseBtn:Show() else self.CloseBtn:Hide() end
+    updateLayout(self)
+end
+
+---@param show boolean
+function InfoBarMixin:SetIconVisible(show)
+    self._iconVisible = show ~= false
+    updateLayout(self)
+end
+
+---@param control Frame|nil
+function InfoBarMixin:SetActionControl(control)
+    self._actionControl = control
+    updateLayout(self)
 end
 
 ---@param fn function
@@ -110,6 +182,8 @@ function WUILInfoBar_OnLoad(self)
     self:WUILInit()
     self._severity = "Info"
     self._closable = true
+    self._iconVisible = true
+    self._actionControl = nil
     self:_ApplySeverity()
 end
 

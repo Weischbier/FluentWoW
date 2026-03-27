@@ -54,6 +54,24 @@ function ScrollMixin:_UpdateThumb()
     self.ScrollBar.Thumb:SetPoint("TOP", self.ScrollBar, "TOP", 0, -thumbOffset)
 end
 
+function ScrollMixin:_UpdateFromThumbDrag()
+    local sf = self.ScrollFrame
+    local scrollRange = sf:GetVerticalScrollRange()
+    if scrollRange <= 0 then return end
+
+    local scale = self.ScrollBar:GetEffectiveScale()
+    local _, cursorY = GetCursorPosition()
+    cursorY = cursorY / scale
+
+    local top = self.ScrollBar:GetTop() or 0
+    local thumbHeight = self.ScrollBar.Thumb:GetHeight()
+    local trackSpace = math.max(1, self.ScrollBar:GetHeight() - thumbHeight)
+    local thumbOffset = math.max(0, math.min(top - cursorY - (thumbHeight * 0.5), trackSpace))
+    local scrollOffset = (thumbOffset / trackSpace) * scrollRange
+    sf:SetVerticalScroll(scrollOffset)
+    self:_UpdateThumb()
+end
+
 --- Returns the scroll child for embedding content.
 ---@return Frame
 function ScrollMixin:GetScrollChild()
@@ -109,6 +127,23 @@ function WUILScrollFrame_OnMouseWheel(self, delta)
     newScroll = math.max(0, math.min(newScroll, maxScroll))
     self:SetVerticalScroll(newScroll)
     parent:_UpdateThumb()
+end
+
+function WUILScrollFrame_Thumb_OnMouseDown(self)
+    local parent = self:GetParent():GetParent()
+    if not parent or not parent._enabled then return end
+    parent._draggingThumb = true
+    parent:SetScript("OnUpdate", function(frame)
+        frame:_UpdateFromThumbDrag()
+    end)
+    parent:_UpdateFromThumbDrag()
+end
+
+function WUILScrollFrame_Thumb_OnMouseUp(self)
+    local parent = self:GetParent():GetParent()
+    if not parent then return end
+    parent._draggingThumb = false
+    parent:SetScript("OnUpdate", nil)
 end
 
 -------------------------------------------------------------------------------

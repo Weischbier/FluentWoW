@@ -5,7 +5,7 @@
          Size: 400×48  |  Parts: BG, LeftEdge, Icon, Title, Message, CloseBtn
          ================================================================ -->
     <Frame name="WUILInfoBarTemplate" virtual="true" enableMouse="true">
-        <Size x="400" y="48"/>
+        <Size x="400" y="64"/>
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
@@ -31,7 +31,7 @@
                 <FontString name="$parent_Title" parentKey="Title"
                     inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="LEFT" relativeTo="$parent_Icon" relativePoint="RIGHT" x="12" y="0"/>
+                        <Anchor point="TOPLEFT" relativeTo="$parent_Icon" relativePoint="TOPRIGHT" x="12" y="-14"/>
                     </Anchors>
                 </FontString>
             </Layer>
@@ -39,17 +39,23 @@
                 <FontString name="$parent_Message" parentKey="Message"
                     inherits="GameFontHighlight" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="LEFT" relativeTo="$parent_Title" relativePoint="RIGHT" x="8" y="0"/>
+                        <Anchor point="TOPLEFT" relativeTo="$parent_Title" relativePoint="BOTTOMLEFT" x="0" y="-4"/>
                         <Anchor point="RIGHT" x="-40" y="0"/>
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
+            <Frame name="$parent_ActionSlot" parentKey="ActionSlot">
+                <Size x="1" y="1"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-40" y="-12"/>
+                </Anchors>
+            </Frame>
             <Button name="$parent_CloseBtn" parentKey="CloseBtn">
                 <Size x="20" y="20"/>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-12" y="0"/>
+                    <Anchor point="TOPRIGHT" x="-12" y="-12"/>
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">

@@ -77,8 +77,9 @@ local function applyVisuals(self)
 
     if overlayKey then
         self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+        self.Overlay:Show()
     else
-        self.Overlay:SetColorTexture(0, 0, 0, 0)
+        self.Overlay:Hide()
     end
 
     if state == "Disabled" then
@@ -142,8 +143,9 @@ local function applyToggleVisuals(self)
 
     if overlayKey then
         self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+        self.Overlay:Show()
     else
-        self.Overlay:SetColorTexture(0, 0, 0, 0)
+        self.Overlay:Hide()
     end
 
     if state == "Disabled" then
@@ -228,8 +230,9 @@ function IconMixin:OnStateChanged(newState, prevState)
 
     if overlayKey then
         self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+        self.Overlay:Show()
     else
-        self.Overlay:SetColorTexture(0, 0, 0, 0)
+        self.Overlay:Hide()
     end
 
     local iconKey = (state == "Disabled") and "Color.Icon.Disabled" or "Color.Icon.Default"

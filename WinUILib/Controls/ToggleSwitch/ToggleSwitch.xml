@@ -6,13 +6,21 @@
          Parts: Track, Thumb, OnLabel, OffLabel, HeaderLabel
          ================================================================ -->
     <Frame name="WUILToggleSwitchTemplate" virtual="true" enableMouse="true">
-        <Size x="200" y="28"/>
+        <Size x="220" y="32"/>
         <Layers>
             <Layer level="ARTWORK">
                 <FontString name="$parent_HeaderLabel" parentKey="HeaderLabel"
                     inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="LEFT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_StateLabel" parentKey="StateLabel"
+                    inherits="GameFontNormalSmall" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="RIGHT" relativeTo="$parent_Track" relativePoint="LEFT" x="-12" y="0"/>
                     </Anchors>
                 </FontString>
             </Layer>
@@ -35,6 +43,14 @@
                     <Anchor point="LEFT" relativeTo="$parent_Track" x="3" y="0"/>
                 </Anchors>
                 <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Shadow" parentKey="Shadow">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="0" y="-1"/>
+                                <Anchor point="BOTTOMRIGHT" x="0" y="1"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
                     <Layer level="OVERLAY">
                         <Texture name="$parent_Dot" parentKey="Dot" setAllPoints="true"/>
                     </Layer>

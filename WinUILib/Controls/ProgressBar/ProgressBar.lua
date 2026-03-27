@@ -14,6 +14,16 @@ local T   = lib.Tokens
 ---@class WUILProgressBar
 local BarMixin = {}
 
+local function currentBarColorKey(self)
+    if self._visualState == "Error" then
+        return "Color.Feedback.Error"
+    end
+    if self._visualState == "Paused" then
+        return "Color.Feedback.Warning"
+    end
+    return "Color.Accent.Primary"
+end
+
 function BarMixin:OnStateChanged(newState, prevState)
     if newState == "Disabled" then
         self.Bar.Track:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
@@ -22,7 +32,7 @@ function BarMixin:OnStateChanged(newState, prevState)
     else
         self:SetAlpha(1)
         self.Bar.Track:SetColorTexture(T:GetColor("Color.Border.Subtle"))
-        self.Bar.Fill:SetColorTexture(T:GetColor("Color.Accent.Primary"))
+        self.Bar.Fill:SetColorTexture(T:GetColor(currentBarColorKey(self)))
     end
 end
 
@@ -52,6 +62,30 @@ end
 function BarMixin:SetHeader(text)
     self.HeaderLabel:SetText(text)
     self.HeaderLabel:Show()
+end
+
+---@param visualState string
+function BarMixin:SetVisualState(visualState)
+    self._visualState = visualState or "Running"
+    self:OnStateChanged(self._vsm:GetState())
+end
+
+---@param paused boolean
+function BarMixin:SetPaused(paused)
+    if paused then
+        self:SetVisualState("Paused")
+    elseif self._visualState == "Paused" then
+        self:SetVisualState("Running")
+    end
+end
+
+---@param hasError boolean
+function BarMixin:SetError(hasError)
+    if hasError then
+        self:SetVisualState("Error")
+    elseif self._visualState == "Error" then
+        self:SetVisualState("Running")
+    end
 end
 
 function BarMixin:_StartIndeterminate()
@@ -116,6 +150,7 @@ function WUILProgressBar_OnLoad(self)
     self:WUILInit()
     self._indeterminate = false
     self._indeterminateRunning = false
+    self._visualState = "Running"
     self.Bar:SetValue(0)
     self:OnStateChanged("Normal")
 end
