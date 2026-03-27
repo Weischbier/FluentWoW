@@ -2,6 +2,8 @@
 
 # Local reference materials (Blizzard source, WinUI source, Ace3, etc.)
 .help/
+.docs/
+
 
 # VS Code personal config
 .vscode/

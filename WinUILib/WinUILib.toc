@@ -19,6 +19,9 @@ Core/FramePool.lua
 Tokens/Registry.lua
 Tokens/DefaultTheme.lua
 
+# ── Assets (icon maps, font references) ──────────────────────
+Assets/FluentIcons.lua
+
 # ── Base control mixin ────────────────────────────────────────
 Controls/Base/ControlBase.lua
 

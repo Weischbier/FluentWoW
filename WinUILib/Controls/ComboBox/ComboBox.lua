@@ -8,6 +8,37 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+local function applyLayout(self)
+    local headerHeight = self._headerText ~= nil and self._headerText ~= "" and (T:GetNumber("Spacing.XL") + T:GetNumber("Spacing.SM")) or 0
+    local fieldHeight = 32
+
+    self:SetHeight(fieldHeight + headerHeight)
+    self.HeaderLabel:SetShown(headerHeight > 0)
+    self.HeaderLabel:SetText(self._headerText or "")
+    self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
+
+    self.Field:ClearAllPoints()
+    if headerHeight > 0 then
+        self.Field:SetPoint("TOPLEFT", self, "TOPLEFT", 0, -headerHeight)
+        self.Field:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, -headerHeight)
+        self.Field:SetHeight(fieldHeight)
+    else
+        self.Field:SetAllPoints(self)
+    end
+end
+
+local function updateText(self)
+    local items = self._items or {}
+    local item = self._selectedIndex and items[self._selectedIndex] or nil
+    if item and item.text and item.text ~= "" then
+        self.SelectedLabel:SetText(item.text)
+        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
+    else
+        self.SelectedLabel:SetText(self._placeholderText or "")
+        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
+    end
+end
+
 -------------------------------------------------------------------------------
 -- Active ComboBox tracking (cross-close)
 -------------------------------------------------------------------------------
@@ -25,50 +56,53 @@ function ComboMixin:OnStateChanged(newState, prevState)
     local state = newState
     local shadowR, shadowG, shadowB = T:GetColor("Color.Surface.Base")
 
-    self.Shadow:SetColorTexture(shadowR, shadowG, shadowB, 0.85)
+    self.Field.Shadow:SetColorTexture(shadowR, shadowG, shadowB, 0.85)
     self.Dropdown.DropBG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
     self.Dropdown.DropBorder:SetColorTexture(T:GetColor("Color.Border.Subtle"))
 
     if state == "Disabled" then
-        self.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-        self.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
-        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
-        self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Field.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
+        self.Field.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
-        self.Arrow:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self.Field.Arrow:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
     elseif state == "Expanded" then
         self:SetAlpha(1)
-        self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        self.Border:SetColorTexture(T:GetColor("Color.Border.Focus"))
-        self.TopEdge:SetColorTexture(T:GetColor("Color.Accent.Light"))
-        self.BottomEdge:SetColorTexture(T:GetColor("Color.Accent.Primary"))
-        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
-        self.Arrow:SetTextColor(T:GetColor("Color.Accent.Primary"))
+        self.Field.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+        self.Field.Border:SetColorTexture(T:GetColor("Color.Border.Focus"))
+        self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Accent.Light"))
+        self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Accent.Primary"))
+        self.Field.Arrow:SetTextColor(T:GetColor("Color.Accent.Primary"))
+        self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
     elseif state == "Hover" then
         self:SetAlpha(1)
-        self.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
-        self.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
-        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Focus"))
-        self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
-        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
-        self.Arrow:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.Field.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
+        self.Field.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Focus"))
+        self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Field.Arrow:SetTextColor(T:GetColor("Color.Text.Primary"))
+        self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
     else
         self:SetAlpha(1)
-        self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
-        self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
-        self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
-        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
-        self.Arrow:SetTextColor(T:GetColor("Color.Text.Secondary"))
+        self.Field.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+        self.Field.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Field.Arrow:SetTextColor(T:GetColor("Color.Text.Secondary"))
+        self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
     end
+
+    updateText(self)
 end
 
 ---@param items table array of { text=string, value=any }
 function ComboMixin:SetItems(items)
     self._items = items
     self._selectedIndex = nil
-    self.SelectedLabel:SetText("")
+    updateText(self)
 end
 
 ---@return table
@@ -81,7 +115,7 @@ function ComboMixin:SetSelectedIndex(index)
     local items = self._items or {}
     if index < 1 or index > #items then return end
     self._selectedIndex = index
-    self.SelectedLabel:SetText(items[index].text or "")
+    updateText(self)
 end
 
 ---@return integer|nil
@@ -99,6 +133,19 @@ end
 ---@param fn function
 function ComboMixin:SetOnSelectionChanged(fn)
     self._onSelectionChanged = fn
+end
+
+---@param text string
+function ComboMixin:SetHeader(text)
+    self._headerText = text
+    applyLayout(self)
+    self:OnStateChanged(self._vsm:GetState())
+end
+
+---@param text string
+function ComboMixin:SetPlaceholder(text)
+    self._placeholderText = text
+    updateText(self)
 end
 
 function ComboMixin:_Open()
@@ -169,12 +216,15 @@ function WUILComboBox_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, ComboMixin)
     self:WUILInit()
     self._items = {}
+    self._headerText = nil
+    self._placeholderText = ""
     self.Dropdown.Scroll:SetScrollChild(self.Dropdown.Scroll.Child)
     self.Dropdown.Scroll:EnableMouseWheel(true)
     local font = T:Get("Typography.BodyBold")
     if font then
         self.SelectedLabel:SetFont(font.font, font.size, font.flags)
     end
+    applyLayout(self)
     self:OnStateChanged("Normal")
 end
 

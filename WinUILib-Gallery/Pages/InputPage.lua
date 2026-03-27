@@ -155,6 +155,8 @@ Gallery:RegisterPage("input", "Input Controls", function(parent)
 
     local combo = lib:CreateComboBox(choiceArea)
     combo:SetWidth(240)
+    combo:SetHeader("Accent color")
+    combo:SetPlaceholder("Pick a color")
     combo:SetItems({
         { text = "Red", value = "red" },
         { text = "Green", value = "green" },
@@ -163,6 +165,17 @@ Gallery:RegisterPage("input", "Input Controls", function(parent)
     })
     combo:SetSelectedIndex(2)
     combo:SetPoint("TOPLEFT", rb2, "BOTTOMLEFT", 0, -16)
+
+    local comboPlaceholder = lib:CreateComboBox(choiceArea)
+    comboPlaceholder:SetWidth(240)
+    comboPlaceholder:SetHeader("No selection")
+    comboPlaceholder:SetPlaceholder("Choose an option")
+    comboPlaceholder:SetItems({
+        { text = "Option 1", value = 1 },
+        { text = "Option 2", value = 2 },
+        { text = "Option 3", value = 3 },
+    })
+    comboPlaceholder:SetPoint("TOPLEFT", combo, "BOTTOMLEFT", 0, -12)
 
     local choiceOutputTitle = createCardTitle(choiceOutput, "Output")
     choiceOutputTitle:SetPoint("TOPLEFT", choiceOutput, "TOPLEFT", 12, -10)
@@ -206,6 +219,9 @@ Gallery:RegisterPage("input", "Input Controls", function(parent)
     option3:SetOnChanged(syncSelectAll)
     combo:SetOnSelectionChanged(function(control)
         choiceOutputLabel:SetText("ComboBox selected: " .. tostring(control:GetSelectedValue()))
+    end)
+    comboPlaceholder:SetOnSelectionChanged(function(control)
+        choiceOutputLabel:SetText("Placeholder ComboBox selected: " .. tostring(control:GetSelectedValue()))
     end)
     stack:AddChild(choiceExample)
 
