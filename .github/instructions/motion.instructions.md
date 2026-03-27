@@ -1,5 +1,5 @@
 ---
-applyTo: "WinUILib/Motion/**"
+applyTo: "FluentWoW/Motion/**"
 ---
 
 # Motion Module Rules
@@ -23,9 +23,9 @@ applyTo: "WinUILib/Motion/**"
 
 ## Vendored Motion Libraries
 
-- `WinUILib/Libs/Motion/flux.lua` — tween engine (rxi/flux) via `__MetroLib_Load()` wrapper
-- `WinUILib/Libs/Motion/knife.base.lua` — OOP base class
-- `WinUILib/Libs/Motion/knife.timer.lua` — timer utilities
+- `FluentWoW/Libs/Motion/flux.lua` — tween engine (rxi/flux) via `__MetroLib_Load()` wrapper
+- `FluentWoW/Libs/Motion/knife.base.lua` — OOP base class
+- `FluentWoW/Libs/Motion/knife.timer.lua` — timer utilities
 - These libs must NOT be modified — use as-is
 - Exposed as `_G.MetroLibFlux`, `_G.MetroLibKnifeBase`, `_G.MetroLibKnifeTimer`
 

@@ -1,4 +1,4 @@
---- WinUILib – Controls/ContentDialog/ContentDialog.lua
+--- FluentWoW – Controls/ContentDialog/ContentDialog.lua
 -- Modal dialog with title, body, primary/secondary buttons, and overlay.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/dialogs-and-flyouts/dialogs
 -- Pixel-fidelity: DesignSpecs §2.2 — title top 32px, title-body 24px,
@@ -7,7 +7,7 @@
 -- COMBAT SAFE: Show() blocked during InCombatLockdown (Rule #2, #4).
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

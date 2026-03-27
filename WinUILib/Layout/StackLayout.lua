@@ -1,10 +1,10 @@
---- WinUILib – Layout/StackLayout.lua
+--- FluentWoW – Layout/StackLayout.lua
 -- Vertical (VStack) or horizontal (HStack) stack layout container.
 -- Automatically arranges children with token-driven gaps and padding.
 -- States: Normal (no visual states; layout-only control)
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 
 -------------------------------------------------------------------------------

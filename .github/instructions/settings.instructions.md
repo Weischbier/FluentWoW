@@ -1,5 +1,5 @@
 ---
-applyTo: "WinUILib/Settings/**"
+applyTo: "FluentWoW/Settings/**"
 ---
 
 # Settings Controls Rules

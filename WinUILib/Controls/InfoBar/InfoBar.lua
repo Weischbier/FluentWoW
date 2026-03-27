@@ -1,11 +1,11 @@
---- WinUILib – Controls/InfoBar/InfoBar.lua
+--- FluentWoW – Controls/InfoBar/InfoBar.lua
 -- Inline notification bar with severity-coloured left edge and icon.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/infobar
 -- Severities: Info | Success | Warning | Error
 -- States: Normal | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 
@@ -166,7 +166,7 @@ function InfoBarMixin:Close()
     end)
 end
 
----@param iconName string  Fluent icon name (key in WinUILib.Icons) or a raw UTF-8 glyph string
+---@param iconName string  Fluent icon name (key in FluentWoW.Icons) or a raw UTF-8 glyph string
 function InfoBarMixin:SetIcon(iconName)
     local glyph = Icons[iconName] or iconName
     self.Icon:SetText(glyph)

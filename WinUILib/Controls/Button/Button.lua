@@ -1,10 +1,10 @@
---- WinUILib – Controls/Button/Button.lua
+--- FluentWoW – Controls/Button/Button.lua
 -- Button family: Accent (primary), Subtle (secondary), Destructive, Icon, Toggle.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/buttons
 -- States: Normal | Hover | Pressed | Disabled | Checked (Toggle only)
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

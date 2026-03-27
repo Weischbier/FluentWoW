@@ -1,9 +1,9 @@
---- WinUILib – Tokens/LightTheme.lua
+--- FluentWoW – Tokens/LightTheme.lua
 -- WinUI-inspired light theme token table. All color values are {r, g, b, a} in 0-1.
 -- Mirrors the structure of DefaultTheme.lua with light-mode color values.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 local function c(r, g, b, a) return { r, g, b, a or 1 } end
 

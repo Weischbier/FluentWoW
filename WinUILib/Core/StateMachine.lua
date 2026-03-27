@@ -1,10 +1,10 @@
---- WinUILib – Core/StateMachine.lua
+--- FluentWoW – Core/StateMachine.lua
 -- Visual-state-machine (VSM) for controls.
 -- States: Normal | Hover | Pressed | Disabled | Focused |
 --         Selected | Checked | Expanded | Error | Warning
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 local StateMachine = {}
 lib:RegisterModule("StateMachine", StateMachine)

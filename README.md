@@ -1,8 +1,8 @@
-# WinUILib
+# FluentWoW
 
 **WinUI-inspired UI framework for World of Warcraft addon developers.**
 
-WinUILib ports the spirit, quality bar, and design language of [WinUI 3](https://github.com/microsoft/microsoft-ui-xaml) + [WinUI Gallery](https://github.com/microsoft/WinUI-Gallery) + [Windows Community Toolkit](https://github.com/CommunityToolkit/Windows) into the World of Warcraft addon ecosystem — providing reusable controls, a design-token system, layout primitives, motion helpers, and a live gallery addon.
+FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https://github.com/microsoft/microsoft-ui-xaml) + [WinUI Gallery](https://github.com/microsoft/WinUI-Gallery) + [Windows Community Toolkit](https://github.com/CommunityToolkit/Windows) into the World of Warcraft addon ecosystem — providing reusable controls, a design-token system, layout primitives, motion helpers, and a live gallery addon.
 
 > Open the gallery in-game with `/wuil`
 
@@ -26,23 +26,23 @@ WinUILib ports the spirit, quality bar, and design language of [WinUI 3](https:/
 ### 1. Declare dependency in your TOC
 
 ```
-Dependencies: WinUILib
+Dependencies: FluentWoW
 ```
 
 ### 2. Create controls in Lua
 
 ```lua
 -- Button
-local btn = WinUILib:CreateButton(parent, "Accent", "Save Settings")
+local btn = FluentWoW:CreateButton(parent, "Accent", "Save Settings")
 btn.OnActivated = function(self) MyAddon:Save() end
 
 -- ToggleSwitch
-local ts = WinUILib:CreateToggleSwitch(parent, "On", "Off")
+local ts = FluentWoW:CreateToggleSwitch(parent, "On", "Off")
 ts:SetOn(MyAddon_DB.enabled)
 ts.OnToggled = function(self, isOn) MyAddon_DB.enabled = isOn end
 
 -- SettingsCard
-local card = WinUILib:CreateSettingsCard(parent,
+local card = FluentWoW:CreateSettingsCard(parent,
     "Enable MyAddon",
     "Turn the addon on or off without /reload.", ts)
 ```
@@ -50,14 +50,14 @@ local card = WinUILib:CreateSettingsCard(parent,
 ### 3. Use tokens for consistent styling
 
 ```lua
-local r, g, b, a = WinUILib.Tokens:GetColor("Color.Accent.Primary")
-local gap         = WinUILib.Tokens:GetSpacing("MD")  -- 8 px
+local r, g, b, a = FluentWoW.Tokens:GetColor("Color.Accent.Primary")
+local gap         = FluentWoW.Tokens:GetSpacing("MD")  -- 8 px
 ```
 
 ### 4. Override tokens for a custom theme
 
 ```lua
-WinUILib.Tokens:Override({
+FluentWoW.Tokens:Override({
     ["Color.Accent.Primary"] = { 0.9, 0.6, 0.1, 1 },  -- gold accent
 })
 ```
@@ -67,7 +67,7 @@ WinUILib.Tokens:Override({
 ## Structure
 
 ```
-WinUILib/              Main library (add as dependency)
+FluentWoW/              Main library (add as dependency)
   Core/                Bootstrap, Utils, EventBus, StateMachine, FramePool
   Tokens/              Token registry + Default dark theme
   Controls/            All UI controls (XML templates + Lua behaviour)
@@ -75,7 +75,7 @@ WinUILib/              Main library (add as dependency)
   Motion/              FadeIn, FadeOut, SlideIn, ScalePress
   Settings/            SettingsCard, SettingsExpander
 
-WinUILib-Gallery/      Interactive showcase addon (/wuil)
+FluentWoW-Gallery/      Interactive showcase addon (/wuil)
   Pages/               ButtonPage, InputPage, FeedbackPage, LayoutPage, SettingsPage
 ```
 

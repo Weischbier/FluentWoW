@@ -1,4 +1,4 @@
---- WinUILib – Motion/Motion.lua
+--- FluentWoW – Motion/Motion.lua
 -- Tween-based animation engine with rich easing curves and WoW-native presets.
 --
 -- Easing functions derived from rxi/flux (MIT license, Copyright (c) 2016 rxi).
@@ -13,7 +13,7 @@
 --   - OnUpdate tweens used for Alpha, Position, Color (property flexibility)
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 local Motion = {}
 lib:RegisterModule("Motion", Motion)

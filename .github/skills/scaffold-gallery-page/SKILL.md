@@ -1,7 +1,7 @@
 ---
 name: scaffold-gallery-page
 description: >
-  Create or update a WinUILib-Gallery page to showcase a control family.
+  Create or update a FluentWoW-Gallery page to showcase a control family.
   Produces the Lua page file, registers it in Gallery.lua, and updates the TOC.
 ---
 
@@ -16,7 +16,7 @@ description: >
 ## Prerequisites
 
 1. The control must already be created (XML, Lua, TOC, factory method)
-2. Read an existing page for reference: `WinUILib-Gallery/Pages/ButtonPage.lua`
+2. Read an existing page for reference: `FluentWoW-Gallery/Pages/ButtonPage.lua`
 
 ## Inputs
 
@@ -30,7 +30,7 @@ description: >
 
 ### 1. Read Existing Pattern
 
-Read `WinUILib-Gallery/Pages/ButtonPage.lua` for the canonical page pattern:
+Read `FluentWoW-Gallery/Pages/ButtonPage.lua` for the canonical page pattern:
 - Page setup function
 - Section creation with TextBlock headers
 - Control instantiation via factory methods
@@ -42,7 +42,7 @@ Also reference the WinUI Gallery XAML source for the equivalent page:
 
 ### 2. Create Page File
 
-Create `WinUILib-Gallery/Pages/{pageName}.lua`:
+Create `FluentWoW-Gallery/Pages/{pageName}.lua`:
 - Use StackLayout for top-level arrangement
 - Add TextBlock section headers
 - Create all variants of each control
@@ -51,13 +51,13 @@ Create `WinUILib-Gallery/Pages/{pageName}.lua`:
 
 ### 3. Register in Gallery
 
-Update `WinUILib-Gallery/Gallery.lua`:
+Update `FluentWoW-Gallery/Gallery.lua`:
 - Add sidebar navigation entry for the new page
 - Maintain alphabetical order in the sidebar
 
 ### 4. Update TOC
 
-Add to `WinUILib-Gallery/WinUILib-Gallery.toc`:
+Add to `FluentWoW-Gallery/FluentWoW-Gallery.toc`:
 ```
 Pages/{pageName}.lua
 ```
@@ -66,7 +66,7 @@ Pages/{pageName}.lua
 
 | Output | Path |
 |---|---|
-| Page file | `WinUILib-Gallery/Pages/{pageName}.lua` |
+| Page file | `FluentWoW-Gallery/Pages/{pageName}.lua` |
 | Gallery.lua | Modified — sidebar entry added |
 | TOC | Modified — page listed |
 

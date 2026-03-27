@@ -1,7 +1,7 @@
 ---
 name: create-theme
 description: >
-  Create a new WinUILib color theme by defining a token override table and registering it.
+  Create a new FluentWoW color theme by defining a token override table and registering it.
 ---
 
 # create-theme
@@ -14,8 +14,8 @@ description: >
 ## Prerequisites
 
 1. Read `.docs/TokenReference.md` for the complete token catalog
-2. Read `WinUILib/Tokens/DefaultTheme.lua` for the canonical structure
-3. Read `WinUILib/Tokens/Registry.lua` for the registration API
+2. Read `FluentWoW/Tokens/DefaultTheme.lua` for the canonical structure
+3. Read `FluentWoW/Tokens/Registry.lua` for the registration API
 4. View design images in `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for dark/light theme color references
 5. Read `.docs/DesignSpecs.md` for extracted design measurements and color notes
 
@@ -30,12 +30,12 @@ description: >
 
 ### 1. Create Theme File
 
-Create `WinUILib/Tokens/{ThemeName}Theme.lua`:
+Create `FluentWoW/Tokens/{ThemeName}Theme.lua`:
 
 ```lua
---- WinUILib – Tokens/{ThemeName}Theme.lua
+--- FluentWoW – Tokens/{ThemeName}Theme.lua
 -- {Description}
-local lib = WinUILib
+local lib = FluentWoW
 local T = lib.Tokens
 
 T:RegisterTheme("{themeName}", {
@@ -68,7 +68,7 @@ T:RegisterTheme("{themeName}", {
 
 ### 2. Register in TOC (if shipped)
 
-Add to `WinUILib/WinUILib.toc` after `DefaultTheme.lua`:
+Add to `FluentWoW/FluentWoW.toc` after `DefaultTheme.lua`:
 ```
 Tokens/{ThemeName}Theme.lua
 ```
@@ -81,12 +81,12 @@ Add the theme to `.docs/TokenReference.md` §Theme Notes.
 
 | Output | Path |
 |---|---|
-| Theme file | `WinUILib/Tokens/{ThemeName}Theme.lua` |
+| Theme file | `FluentWoW/Tokens/{ThemeName}Theme.lua` |
 | TOC | Modified (if shipped theme) |
 | Docs | `.docs/TokenReference.md` updated |
 
 ## Notes
 
-- Addon authors create themes by calling `T:RegisterTheme()` in their own addon — they don't modify WinUILib files
-- Only Default (dark) theme ships with WinUILib v1.x
+- Addon authors create themes by calling `T:RegisterTheme()` in their own addon — they don't modify FluentWoW files
+- Only Default (dark) theme ships with FluentWoW v1.x
 - The theme system supports partial overrides — you only need to specify tokens that differ

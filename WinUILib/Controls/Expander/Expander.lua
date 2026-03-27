@@ -1,10 +1,10 @@
---- WinUILib – Controls/Expander/Expander.lua
+--- FluentWoW – Controls/Expander/Expander.lua
 -- Collapsible panel with animated expand/collapse.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/expander
 -- States: Normal | Hover | Expanded | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

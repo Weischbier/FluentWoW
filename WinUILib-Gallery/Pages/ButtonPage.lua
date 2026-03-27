@@ -1,8 +1,8 @@
---- WinUILib-Gallery – Pages/ButtonPage.lua
+--- FluentWoW-Gallery – Pages/ButtonPage.lua
 -- Showcases Button (Accent/Subtle/Destructive), IconButton, ToggleButton.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T = lib.Tokens
 local Gallery = lib._gallery
 

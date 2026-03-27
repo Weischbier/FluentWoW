@@ -1,5 +1,5 @@
 ---
-applyTo: "WinUILib/Controls/**"
+applyTo: "FluentWoW/Controls/**"
 ---
 
 # Controls Module Rules
@@ -17,7 +17,7 @@ Every control MUST follow this structure:
 
 2. **Lua behavior** (`Controls/<Name>/<Name>.lua`):
    - Header comment with purpose, WinUI design reference URL, and states list
-   - `local lib = WinUILib`, `local T = lib.Tokens`, `local Mot = lib.Motion`
+   - `local lib = FluentWoW`, `local T = lib.Tokens`, `local Mot = lib.Motion`
    - `OnLoad` handler: `Mixin(self, lib._controls.ControlBase)`, `self:WUILInit()`
    - VSM: `self._vsm = lib.StateMachine:New(self, "Normal")`
    - Script handlers as global functions: `WUIL<Name>_OnLoad`, `WUIL<Name>_OnEnter`, etc.
@@ -61,7 +61,7 @@ Every control MUST match the WinUI pixel measurements exactly:
 
 ## Available Libraries
 
-Vendored in `WinUILib/Libs/` and loaded before Core:
+Vendored in `FluentWoW/Libs/` and loaded before Core:
 - **Ace3** — LibStub, AceAddon, AceDB, AceEvent, AceGUI, AceConfig, etc.
 - **Motion** — flux (tweening), knife.base, knife.timer
 - **PureLua** — 30log (OOP), dkjson (JSON), i18n, inspect, lume (utils), serpent

@@ -1,8 +1,8 @@
---- WinUILib – Core/Utils.lua
+--- FluentWoW – Core/Utils.lua
 -- General-purpose utility helpers used throughout the framework.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 local Utils = {}
 lib:RegisterModule("Utils", Utils)

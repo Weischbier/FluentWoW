@@ -1,8 +1,8 @@
---- WinUILib-Gallery – Pages/LayoutPage.lua
+--- FluentWoW-Gallery – Pages/LayoutPage.lua
 -- Showcases: StackLayout (VStack/HStack), TabView, ScrollFrame.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local Gallery = lib._gallery
 
 local function createCardTitle(parent, text)

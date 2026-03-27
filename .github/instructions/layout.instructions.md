@@ -1,5 +1,5 @@
 ---
-applyTo: "WinUILib/Layout/**"
+applyTo: "FluentWoW/Layout/**"
 ---
 
 # Layout Module Rules

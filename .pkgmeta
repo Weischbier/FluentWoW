@@ -1,4 +1,4 @@
-package-as: WinUILib
+package-as: FluentWoW
 
 enable-nolib-creation: no
 
@@ -15,11 +15,11 @@ ignore:
   - .gitattributes
   - .gitignore
   - ARCHITECTURE.md
-  - WinUILib-Gallery
+  - FluentWoW-Gallery
 
 externals:
-  WinUILib/Libs/LibStub: https://repos.curseforge.com/wow/libstub/trunk
-  WinUILib/Libs/Ace3: https://repos.curseforge.com/wow/ace3/trunk
+  FluentWoW/Libs/LibStub: https://repos.curseforge.com/wow/libstub/trunk
+  FluentWoW/Libs/Ace3: https://repos.curseforge.com/wow/ace3/trunk
 
 move-folders:
-  WinUILib/WinUILib: WinUILib
+  FluentWoW/FluentWoW: FluentWoW

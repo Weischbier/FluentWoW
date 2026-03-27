@@ -1,4 +1,4 @@
--- WinUILib luacheck configuration
+-- FluentWoW luacheck configuration
 -- Target: WoW addon runtime (Lua 5.1)
 
 std = "lua51"
@@ -59,9 +59,9 @@ read_globals = {
     "strlower",
 }
 
--- WinUILib owns these globals
+-- FluentWoW owns these globals
 globals = {
-    "WinUILib",
+    "FluentWoW",
 
     -- XML template script handlers (Controls)
     "WUILButton_OnLoad",
@@ -153,9 +153,9 @@ globals = {
 }
 
 -- Per-file overrides
-files["WinUILib-Gallery/**/*.lua"] = {
+files["FluentWoW-Gallery/**/*.lua"] = {
     read_globals = {
-        "WinUILib",
+        "FluentWoW",
     },
 }
 

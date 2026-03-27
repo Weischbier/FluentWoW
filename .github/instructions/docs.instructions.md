@@ -38,7 +38,7 @@ applyTo: ".docs/**,ARCHITECTURE.md,README.md,CHANGELOG.md"
 - `.help/.sources/microsoft-ui-xaml-main/specs/` — WinUI control specifications
 - `.help/.sources/WinUI-Gallery-main/` — WinUI Gallery XAML source + design images
 - `.help/.helper/AddOns/` — Blizzard native addon source
-- `.help/.helper/Libs/` — Original library sources (vendored into `WinUILib/Libs/`)
+- `.help/.helper/Libs/` — Original library sources (vendored into `FluentWoW/Libs/`)
 
 ## Style
 

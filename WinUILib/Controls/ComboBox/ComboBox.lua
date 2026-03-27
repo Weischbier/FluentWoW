@@ -1,10 +1,10 @@
---- WinUILib – Controls/ComboBox/ComboBox.lua
+--- FluentWoW – Controls/ComboBox/ComboBox.lua
 -- Dropdown selection control with combat-safe popup.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/combo-box
 -- States: Normal | Hover | Expanded | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

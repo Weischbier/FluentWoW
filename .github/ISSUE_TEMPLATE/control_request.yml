@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Request a WinUI control to be ported to WinUILib.
+        Request a WinUI control to be ported to FluentWoW.
 
   - type: input
     id: control-name

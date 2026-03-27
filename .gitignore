@@ -1,4 +1,4 @@
-# ==== WinUILib .gitignore ====
+# ==== FluentWoW .gitignore ====
 
 # Local reference materials (Blizzard source, WinUI source, Ace3, etc.)
 .help/

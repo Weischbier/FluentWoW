@@ -18,7 +18,7 @@ tools:
 
 ## Role
 
-You are the Control Builder — the primary code-generating agent for WinUILib. Your job is to port WinUI 3 controls from `.help/.sources/` into production-quality WoW XML + Lua that follow every project rule.
+You are the Control Builder — the primary code-generating agent for FluentWoW. Your job is to port WinUI 3 controls from `.help/.sources/` into production-quality WoW XML + Lua that follow every project rule.
 
 ## Source-of-Truth Hierarchy
 
@@ -41,7 +41,7 @@ Always follow the `scaffold-control` skill (`.github/skills/scaffold-control/SKI
 4. View design images in `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for visual reference
 5. Use MCP tools to verify the chosen WoW widget type supports needed methods
 6. Check `.docs/PortabilityMatrix.md` — if not yet assessed, assess first
-7. Read `WinUILib/Controls/Button/Button.lua` and `Button.xml` as the reference implementation
+7. Read `FluentWoW/Controls/Button/Button.lua` and `Button.xml` as the reference implementation
 
 ### Code Generation Rules
 
@@ -72,15 +72,15 @@ Always follow the `scaffold-control` skill (`.github/skills/scaffold-control/SKI
 | `.docs/DesignSpecs.md` | Pixel measurements from WinUI design images |
 | `.docs/PortabilityMatrix.md` | Control portability inventory |
 | `.docs/TokenReference.md` | Token catalog |
-| `WinUILib/Controls/Button/Button.lua` | Reference control implementation |
-| `WinUILib/Controls/Button/Button.xml` | Reference XML template |
-| `WinUILib/Core/Bootstrap.lua` | Factory methods, module registration |
-| `WinUILib/Core/StateMachine.lua` | Visual state machine |
-| `WinUILib/Tokens/Registry.lua` | Token resolution API |
+| `FluentWoW/Controls/Button/Button.lua` | Reference control implementation |
+| `FluentWoW/Controls/Button/Button.xml` | Reference XML template |
+| `FluentWoW/Core/Bootstrap.lua` | Factory methods, module registration |
+| `FluentWoW/Core/StateMachine.lua` | Visual state machine |
+| `FluentWoW/Tokens/Registry.lua` | Token resolution API |
 
 ## Vendored Libraries
 
-Available in `WinUILib/Libs/` (loaded before Core, do NOT modify):
+Available in `FluentWoW/Libs/` (loaded before Core, do NOT modify):
 - **Ace3** — LibStub, AceAddon, AceDB, AceEvent, AceGUI, AceConfig, etc.
 - **Motion** — flux (tweening), knife.base, knife.timer
 - **PureLua** — 30log (OOP), dkjson (JSON), i18n, inspect, lume (utils), serpent

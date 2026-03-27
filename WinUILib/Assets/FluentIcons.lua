@@ -1,16 +1,16 @@
---- WinUILib – Assets/FluentIcons.lua
+--- FluentWoW – Assets/FluentIcons.lua
 -- Complete glyph map for the Segoe Fluent Icons font.
 -- Source: https://learn.microsoft.com/windows/apps/design/iconography/segoe-fluent-icons-font
 --
 -- Usage:
---   local Icons = WinUILib.Icons
+--   local Icons = FluentWoW.Icons
 --   fontString:SetText(Icons.Settings)   -- renders the Settings glyph
 --
 -- The font object path for SetFont():
---   "Interface\\AddOns\\WinUILib\\Assets\\Fonts\\Segoe Fluent Icons.ttf"
+--   "Interface\\AddOns\\FluentWoW\\Assets\\Fonts\\Segoe Fluent Icons.ttf"
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 -------------------------------------------------------------------------------
 -- UTF-8 encoder (BMP only – all Segoe Fluent Icons live in U+E700..U+F8CC)
@@ -42,7 +42,7 @@ end
 -- Font path constant
 -------------------------------------------------------------------------------
 
-lib.FLUENT_ICON_FONT = "Interface\\AddOns\\WinUILib\\Assets\\Fonts\\Segoe Fluent Icons.ttf"
+lib.FLUENT_ICON_FONT = "Interface\\AddOns\\FluentWoW\\Assets\\Fonts\\Segoe Fluent Icons.ttf"
 
 -------------------------------------------------------------------------------
 -- Raw codepoint table  (name → hex codepoint)

@@ -1,5 +1,5 @@
 ---
-applyTo: "WinUILib/Tokens/**"
+applyTo: "FluentWoW/Tokens/**"
 ---
 
 # Token System Rules

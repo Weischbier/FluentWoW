@@ -1,9 +1,9 @@
 ## Interface: 120005, 120001
-## Title: WinUILib Gallery
-## Notes: Interactive showcase of all WinUILib controls.
+## Title: FluentWoW Gallery
+## Notes: Interactive showcase of all FluentWoW controls.
 ## Version: 1.0.0
 ## Author: Weischbier
-## Dependencies: WinUILib
+## Dependencies: FluentWoW
 ## DefaultState: enabled
 
 Gallery.lua

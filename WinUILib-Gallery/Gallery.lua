@@ -1,9 +1,9 @@
---- WinUILib-Gallery – Gallery.lua
+--- FluentWoW-Gallery – Gallery.lua
 -- Main gallery frame with sidebar navigation and content pages.
 -- /wuil  command opens/closes the gallery.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T = lib.Tokens
 
 -------------------------------------------------------------------------------
@@ -128,9 +128,9 @@ local mainFrame
 local function EnsureFrame()
     if mainFrame then return mainFrame end
 
-    mainFrame = lib:CreateMainFrame("WUILGalleryFrame", "WinUILib Gallery")
+    mainFrame = lib:CreateMainFrame("WUILGalleryFrame", "FluentWoW Gallery")
     mainFrame:SetSize(1000, 700)
-    mainFrame:SetStatusText("WinUILib v" .. tostring(lib.version))
+    mainFrame:SetStatusText("FluentWoW v" .. tostring(lib.version))
     mainFrame:ClearAllPoints()
     mainFrame:SetPoint("CENTER")
 
@@ -223,7 +223,7 @@ local function EnsureFrame()
                 page.builder(page.frame)
             end
             page.frame:Show()
-            mainFrame:SetStatusText(page.title .. "  |  WinUILib v" .. tostring(lib.version))
+            mainFrame:SetStatusText(page.title .. "  |  FluentWoW v" .. tostring(lib.version))
         end
     end
 
@@ -302,4 +302,4 @@ end
 -- Export for pages
 -------------------------------------------------------------------------------
 
-WinUILib._gallery = Gallery
+FluentWoW._gallery = Gallery

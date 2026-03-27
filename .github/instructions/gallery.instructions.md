@@ -1,12 +1,12 @@
 ---
-applyTo: "WinUILib-Gallery/**"
+applyTo: "FluentWoW-Gallery/**"
 ---
 
 # Gallery Addon Rules
 
 ## Purpose
 
-WinUILib-Gallery is an interactive showcase addon for developers. It is NOT production-critical and is never distributed to end-users.
+FluentWoW-Gallery is an interactive showcase addon for developers. It is NOT production-critical and is never distributed to end-users.
 
 ## Page Structure
 
@@ -24,10 +24,10 @@ Each Gallery page corresponds to one control family and demonstrates:
 
 ## Adding a New Page
 
-1. Create `WinUILib-Gallery/Pages/<Name>Page.lua`
+1. Create `FluentWoW-Gallery/Pages/<Name>Page.lua`
 2. Follow the existing page pattern (see `ButtonPage.lua`)
 3. Register the page in `Gallery.lua` sidebar navigation
-4. Add the page to `WinUILib-Gallery/WinUILib-Gallery.toc`
+4. Add the page to `FluentWoW-Gallery/FluentWoW-Gallery.toc`
 
 ## Reference Sources
 
@@ -37,7 +37,7 @@ Each Gallery page corresponds to one control family and demonstrates:
 
 ## Style Guidelines
 
-- Use `WinUILib:Create*()` factory methods — never raw `CreateFrame()`
+- Use `FluentWoW:Create*()` factory methods — never raw `CreateFrame()`
 - Use StackLayout for page content arrangement
 - Include section headers and descriptions using TextBlock
 - Show both enabled and disabled states for each control

@@ -1,11 +1,11 @@
---- WinUILib – Controls/TextBox/TextBox.lua
+--- FluentWoW – Controls/TextBox/TextBox.lua
 -- Single-line text input with placeholder, clear button, and focus styling.
 -- Also includes SearchBox variant with search icon.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/text-box
 -- States: Normal | Hover | Focused | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 
 local Icons    = lib.Icons

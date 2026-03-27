@@ -1,10 +1,10 @@
---- WinUILib – Controls/ProgressBar/ProgressBar.lua
+--- FluentWoW – Controls/ProgressBar/ProgressBar.lua
 -- Determinate + indeterminate progress bar, and progress ring spinner.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/progress-controls
 -- States: Normal | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 
 -------------------------------------------------------------------------------

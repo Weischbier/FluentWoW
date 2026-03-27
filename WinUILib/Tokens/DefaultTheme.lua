@@ -1,8 +1,8 @@
---- WinUILib – Tokens/DefaultTheme.lua
+--- FluentWoW – Tokens/DefaultTheme.lua
 -- Default dark theme token table. All color values are {r, g, b, a} in 0-1.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 local function c(r, g, b, a) return { r, g, b, a or 1 } end
 

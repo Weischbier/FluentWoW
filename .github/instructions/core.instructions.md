@@ -1,5 +1,5 @@
 ---
-applyTo: "WinUILib/Core/**"
+applyTo: "FluentWoW/Core/**"
 ---
 
 # Core Runtime Module Rules
@@ -8,9 +8,9 @@ applyTo: "WinUILib/Core/**"
 
 ### Bootstrap.lua
 - **Version negotiation is untouchable** without explicit maintainer review
-- The guard `if WinUILib and (WinUILib.version or 0) >= MINOR then return end` ensures multi-embed safety
+- The guard `if FluentWoW and (FluentWoW.version or 0) >= MINOR then return end` ensures multi-embed safety
 - Never change the version encoding scheme (`MAJOR*10000 + MINOR*100 + PATCH`)
-- `WinUILib:RegisterModule(name, tbl)` is the only way sub-modules attach themselves
+- `FluentWoW:RegisterModule(name, tbl)` is the only way sub-modules attach themselves
 
 ### Utils.lua
 - All helper functions are pure and combat-safe
@@ -34,7 +34,7 @@ applyTo: "WinUILib/Core/**"
 
 ## Vendored Libraries
 
-- Vendored libs (`WinUILib/Libs/`) load BEFORE Core in the TOC
+- Vendored libs (`FluentWoW/Libs/`) load BEFORE Core in the TOC
 - Core modules must NOT depend on vendored libs directly (Core is the lowest layer)
 - Other modules (Controls, Motion, Settings) may use vendored libs freely
 - Vendored lib files must NOT be modified — use as-is

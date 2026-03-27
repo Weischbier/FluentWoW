@@ -56,7 +56,7 @@ Count controls in each surface and verify they match:
 - TOC file entries (count XML/Lua pairs in Controls section)
 - MasterPlan §4 Implemented table rows
 - ARCHITECTURE.md §5 catalog rows
-- Filesystem: count directories under `WinUILib/Controls/`
+- Filesystem: count directories under `FluentWoW/Controls/`
 
 Also verify pixel-fidelity:
 - Check `.docs/DesignSpecs.md` has measurements for the control (if applicable)

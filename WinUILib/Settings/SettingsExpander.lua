@@ -1,11 +1,11 @@
---- WinUILib – Settings/SettingsExpander.lua
+--- FluentWoW – Settings/SettingsExpander.lua
 -- Expandable settings group — header card with chevron + child card container.
 -- Mirrors WCT SettingsExpander.
 --
 -- States: Normal | Hover | Expanded | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

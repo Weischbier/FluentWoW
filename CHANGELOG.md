@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to WinUILib will be documented in this file.
+All notable changes to FluentWoW will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -21,4 +21,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Layout: StackLayout (VStack / HStack)
 - Motion: FadeIn, FadeOut, SlideIn, ScalePress
 - Settings: SettingsCard, SettingsExpander
-- WinUILib-Gallery: 5-page interactive showcase addon
+- FluentWoW-Gallery: 5-page interactive showcase addon

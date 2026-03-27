@@ -1,10 +1,10 @@
---- WinUILib – Controls/RadioButton/RadioButton.lua
+--- FluentWoW – Controls/RadioButton/RadioButton.lua
 -- Mutually exclusive selection within a group.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/radio-button
 -- States: Normal | Hover | Pressed | Disabled | Selected
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 
 -------------------------------------------------------------------------------

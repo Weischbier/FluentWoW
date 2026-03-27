@@ -1,8 +1,8 @@
---- WinUILib – Core/EventBus.lua
+--- FluentWoW – Core/EventBus.lua
 -- Lightweight publish/subscribe event bus for internal framework use.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 local EventBus = {}
 lib:RegisterModule("EventBus", EventBus)

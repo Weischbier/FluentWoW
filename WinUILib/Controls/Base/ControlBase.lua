@@ -1,9 +1,9 @@
---- WinUILib – Controls/Base/ControlBase.lua
--- Base mixin applied to all WinUILib controls.
+--- FluentWoW – Controls/Base/ControlBase.lua
+-- Base mixin applied to all FluentWoW controls.
 -- Provides: state machine, token access, tooltip, enable/disable, lifecycle.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 ---@class WUILControlBase
 local ControlBase = {}

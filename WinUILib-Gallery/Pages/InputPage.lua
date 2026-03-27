@@ -1,9 +1,9 @@
---- WinUILib-Gallery – Pages/InputPage.lua
+--- FluentWoW-Gallery – Pages/InputPage.lua
 -- Showcases: CheckBox, RadioButton, ToggleSwitch, TextBox, SearchBox,
 --            Slider, ComboBox.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T = lib.Tokens
 local Gallery = lib._gallery
 

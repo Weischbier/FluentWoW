@@ -1,4 +1,4 @@
---- WinUILib – Settings/SettingsCard.lua
+--- FluentWoW – Settings/SettingsCard.lua
 -- Settings card control — mirrors WCT SettingsCard.
 -- Icon + title + description + trailing action control slot.
 --
@@ -9,7 +9,7 @@
 -- States: Normal | Hover | Pressed | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 
 -------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ function CardMixin:SetIconTexture(path)
     updateLayout(self)
 end
 
----@param control Frame  any WinUILib control (ToggleSwitch, ComboBox, Button, etc.)
+---@param control Frame  any FluentWoW control (ToggleSwitch, ComboBox, Button, etc.)
 function CardMixin:SetActionControl(control)
     if self._actionControl then
         self._actionControl:ClearAllPoints()

@@ -1,8 +1,8 @@
---- WinUILib-Gallery – Pages/SettingsPage.lua
+--- FluentWoW-Gallery – Pages/SettingsPage.lua
 -- Showcases: SettingsCard, SettingsExpander.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local Gallery = lib._gallery
 
 local function createCardTitle(parent, text)

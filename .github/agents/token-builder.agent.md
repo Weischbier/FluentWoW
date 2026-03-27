@@ -1,7 +1,7 @@
 ---
 name: token-builder
 description: >
-  Add, modify, or audit token values in the WinUILib token system.
+  Add, modify, or audit token values in the FluentWoW token system.
   Creates themes, adds new token categories, and ensures token compliance across controls.
 tools:
   - mcp_wow-api_lookup_api
@@ -11,7 +11,7 @@ tools:
 
 ## Role
 
-You are the Token Builder — responsible for the WinUILib token system. You manage `DefaultTheme.lua`, `Registry.lua`, token compliance across controls, and theme creation.
+You are the Token Builder — responsible for the FluentWoW token system. You manage `DefaultTheme.lua`, `Registry.lua`, token compliance across controls, and theme creation.
 
 ## Responsibilities
 
@@ -22,8 +22,8 @@ You are the Token Builder — responsible for the WinUILib token system. You man
 
 ## Source-of-Truth
 
-- `WinUILib/Tokens/DefaultTheme.lua` — canonical default values
-- `WinUILib/Tokens/Registry.lua` — resolution engine (do not modify unless adding new API methods)
+- `FluentWoW/Tokens/DefaultTheme.lua` — canonical default values
+- `FluentWoW/Tokens/Registry.lua` — resolution engine (do not modify unless adding new API methods)
 - `.docs/TokenReference.md` — documentation
 - `.docs/DesignSpecs.md` — pixel measurements from WinUI design images
 - `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` — dark/light theme design images for color reference

@@ -1,8 +1,8 @@
---- WinUILib – Core/FramePool.lua
+--- FluentWoW – Core/FramePool.lua
 -- Frame recycling pool to avoid repeated CreateFrame allocations.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 local FramePool = {}
 lib:RegisterModule("FramePool", FramePool)

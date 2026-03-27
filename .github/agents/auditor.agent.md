@@ -1,7 +1,7 @@
 ---
 name: auditor
 description: >
-  Run systematic audits across the WinUILib codebase — token compliance,
+  Run systematic audits across the FluentWoW codebase — token compliance,
   combat safety, global leaks, OnUpdate orphans, FramePool compliance, API stability.
 ---
 
@@ -9,7 +9,7 @@ description: >
 
 ## Role
 
-You are the Auditor — responsible for systematic, repeatable quality audits of the full WinUILib codebase. You don't review individual changes; you scan the entire codebase for categories of issues.
+You are the Auditor — responsible for systematic, repeatable quality audits of the full FluentWoW codebase. You don't review individual changes; you scan the entire codebase for categories of issues.
 
 ## Audit Categories
 

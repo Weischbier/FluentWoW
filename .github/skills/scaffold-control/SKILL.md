@@ -1,7 +1,7 @@
 ---
 name: scaffold-control
 description: >
-  Scaffold the full file set for a new WinUILib control — XML template, Lua behavior,
+  Scaffold the full file set for a new FluentWoW control — XML template, Lua behavior,
   TOC entry, factory method, Gallery page, and documentation updates.
   This is the primary code-generating skill for the control-builder agent.
 ---
@@ -11,7 +11,7 @@ description: >
 ## When to Use
 
 - Porting a new WinUI control to WoW
-- Creating a new original control that follows the WinUILib pattern
+- Creating a new original control that follows the FluentWoW pattern
 - The control-builder agent should invoke this skill as its primary workflow
 
 ## Prerequisites
@@ -49,7 +49,7 @@ Use the wow-api MCP tools to confirm the chosen `baseWidget` and its methods:
 
 ### 2. Create XML Template
 
-Create `WinUILib/Controls/{controlName}/{controlName}.xml`:
+Create `FluentWoW/Controls/{controlName}/{controlName}.xml`:
 - Template name: `WUIL{controlName}Template`, `virtual="true"`
 - Inherit from appropriate base: `BackdropTemplate` for Frame-based, widget itself for Button/Slider
 - Script: `<OnLoad function="WUIL{controlName}_OnLoad"/>`
@@ -58,14 +58,14 @@ Create `WinUILib/Controls/{controlName}/{controlName}.xml`:
 
 ### 3. Create Lua Behavior
 
-Create `WinUILib/Controls/{controlName}/{controlName}.lua`:
+Create `FluentWoW/Controls/{controlName}/{controlName}.lua`:
 
 ```lua
---- WinUILib – Controls/{controlName}/{controlName}.lua
+--- FluentWoW – Controls/{controlName}/{controlName}.lua
 -- {Description}
 -- Design reference: https://learn.microsoft.com/windows/apps/design/controls/{lowercase-name}
 -- States: {states}
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 
@@ -91,7 +91,7 @@ end
 
 ### 4. Register in TOC
 
-Add to `WinUILib/WinUILib.toc` (XML before Lua, in Controls section):
+Add to `FluentWoW/FluentWoW.toc` (XML before Lua, in Controls section):
 ```
 Controls/{controlName}/{controlName}.xml
 Controls/{controlName}/{controlName}.lua
@@ -99,9 +99,9 @@ Controls/{controlName}/{controlName}.lua
 
 ### 5. Add Factory Method
 
-Add to `WinUILib/Core/Bootstrap.lua` factory section:
+Add to `FluentWoW/Core/Bootstrap.lua` factory section:
 ```lua
-function WinUILib:Create{controlName}(parent, name, ...)
+function FluentWoW:Create{controlName}(parent, name, ...)
     local f = CreateFrame("{baseWidget}", name, parent, "WUIL{controlName}Template")
     return f
 end
@@ -109,7 +109,7 @@ end
 
 ### 6. Create Gallery Page
 
-Create or update the appropriate `WinUILib-Gallery/Pages/{Family}Page.lua`:
+Create or update the appropriate `FluentWoW-Gallery/Pages/{Family}Page.lua`:
 - Demonstrate all variants and states
 - Use StackLayout for arrangement
 - Include both enabled and disabled examples
@@ -128,7 +128,7 @@ Verify pixel-fidelity: all spacing, padding, gap values match `.docs/DesignSpecs
 
 ## Vendored Libraries
 
-Available in `WinUILib/Libs/` (loaded before Core, do NOT modify):
+Available in `FluentWoW/Libs/` (loaded before Core, do NOT modify):
 - **Ace3** — LibStub, AceAddon, AceDB, AceEvent, AceGUI, AceConfig, etc.
 - **Motion** — flux (tweening), knife.base, knife.timer
 - **PureLua** — 30log (OOP), dkjson (JSON), i18n, inspect, lume (utils), serpent
@@ -137,11 +137,11 @@ Available in `WinUILib/Libs/` (loaded before Core, do NOT modify):
 
 | Output | Path |
 |---|---|
-| XML template | `WinUILib/Controls/{controlName}/{controlName}.xml` |
-| Lua behavior | `WinUILib/Controls/{controlName}/{controlName}.lua` |
-| TOC entry | `WinUILib/WinUILib.toc` (modified) |
-| Factory method | `WinUILib/Core/Bootstrap.lua` (modified) |
-| Gallery page | `WinUILib-Gallery/Pages/{Family}Page.lua` (created or modified) |
+| XML template | `FluentWoW/Controls/{controlName}/{controlName}.xml` |
+| Lua behavior | `FluentWoW/Controls/{controlName}/{controlName}.lua` |
+| TOC entry | `FluentWoW/FluentWoW.toc` (modified) |
+| Factory method | `FluentWoW/Core/Bootstrap.lua` (modified) |
+| Gallery page | `FluentWoW-Gallery/Pages/{Family}Page.lua` (created or modified) |
 | Docs updates | ARCHITECTURE.md, MasterPlan.md, PortabilityMatrix.md, CHANGELOG.md (modified) |
 
 ## Failure Modes

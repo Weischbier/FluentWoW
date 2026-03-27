@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in WinUILib
+description: Report a bug in FluentWoW
 title: "[Bug]: "
 labels: ["bug"]
 body:
@@ -18,10 +18,10 @@ body:
       required: true
 
   - type: input
-    id: winuilib-version
+    id: FluentWoW-version
     attributes:
-      label: WinUILib Version
-      description: What version of WinUILib? (check TOC or /run print(WinUILib.version))
+      label: FluentWoW Version
+      description: What version of FluentWoW? (check TOC or /run print(FluentWoW.version))
       placeholder: "1.0.0"
     validations:
       required: true

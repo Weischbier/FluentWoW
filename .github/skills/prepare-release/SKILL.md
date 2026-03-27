@@ -1,7 +1,7 @@
 ---
 name: prepare-release
 description: >
-  Prepare a WinUILib release by bumping versions, updating changelogs,
+  Prepare a FluentWoW release by bumping versions, updating changelogs,
   verifying all checks, and preparing packaging metadata.
 ---
 
@@ -29,9 +29,9 @@ description: >
 ### 1. Bump Versions
 
 Update the MINOR version in all locations:
-- `WinUILib/Core/Bootstrap.lua` — `local MINOR = {newMinor}`
-- `WinUILib/WinUILib.toc` — `## Version: {dotted}`
-- `WinUILib-Gallery/WinUILib-Gallery.toc` — `## Version: {dotted}`
+- `FluentWoW/Core/Bootstrap.lua` — `local MINOR = {newMinor}`
+- `FluentWoW/FluentWoW.toc` — `## Version: {dotted}`
+- `FluentWoW-Gallery/FluentWoW-Gallery.toc` — `## Version: {dotted}`
 - `ARCHITECTURE.md` header version
 
 ### 2. Update CHANGELOG.md
@@ -42,7 +42,7 @@ Update the MINOR version in all locations:
 ### 3. Run Lint
 
 ```
-luacheck WinUILib/ WinUILib-Gallery/ --config .luacheckrc
+luacheck FluentWoW/ FluentWoW-Gallery/ --config .luacheckrc
 ```
 
 ### 4. Verify Packaging
@@ -62,8 +62,8 @@ Check `.pkgmeta` excludes are correct — `.help/`, `.docs/`, `.github/` should 
 | Output | Path |
 |---|---|
 | Bootstrap.lua | Modified — MINOR bumped |
-| WinUILib.toc | Modified — Version bumped |
-| WinUILib-Gallery.toc | Modified — Version bumped |
+| FluentWoW.toc | Modified — Version bumped |
+| FluentWoW-Gallery.toc | Modified — Version bumped |
 | ARCHITECTURE.md | Modified — header version |
 | CHANGELOG.md | Modified — release section added |
 

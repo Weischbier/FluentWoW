@@ -1,10 +1,10 @@
---- WinUILib – Controls/TabView/TabView.lua
+--- FluentWoW – Controls/TabView/TabView.lua
 -- Tabbed navigation container with dynamic tab strip.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/tab-view
 -- States: Normal | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

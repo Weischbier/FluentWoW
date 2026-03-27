@@ -1,10 +1,10 @@
---- WinUILib – Controls/ScrollFrame/ScrollFrame.lua
+--- FluentWoW – Controls/ScrollFrame/ScrollFrame.lua
 -- Scrollable container with thin scrollbar thumb.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/scroll-controls
 -- States: Normal | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 
 local function SCROLL_STEP()

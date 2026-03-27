@@ -1,8 +1,8 @@
---- WinUILib – Tokens/Registry.lua
+--- FluentWoW – Tokens/Registry.lua
 -- Design-token registry with resolution: override > active theme > default.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 
 local Registry = {}
 lib:RegisterModule("Tokens", Registry)

@@ -17,7 +17,7 @@
 - [ ] **Rule 5** — StateMachine for all visual-state controls
 - [ ] **Rule 6** — No OnUpdate orphans (nil handler when done)
 - [ ] **Rule 7** — FramePool for dynamic child frames
-- [ ] **Rule 8** — Global namespace via WinUILib table only
+- [ ] **Rule 8** — Global namespace via FluentWoW table only
 - [ ] **Rule 9** — Version negotiation untouched (or explicitly reviewed)
 - [ ] **Rule 10** — Public API stability (no breaking changes without deprecation)
 

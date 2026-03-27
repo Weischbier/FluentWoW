@@ -1,4 +1,4 @@
-# WinUILib – Architecture Reference
+# FluentWoW – Architecture Reference
 
 > WinUI-inspired UI framework for World of Warcraft addon developers.  
 > Version 1.0.0 · MIT License
@@ -7,7 +7,7 @@
 
 ## 1. Executive Summary
 
-WinUILib ports the **spirit, quality bar, and design language** of WinUI 3 +
+FluentWoW ports the **spirit, quality bar, and design language** of WinUI 3 +
 WinUI Gallery + Windows Community Toolkit into the World of Warcraft addon
 ecosystem.  It is a **library-first, Lua/XML platform** that addon developers
 can embed or depend on to build modern, consistent, high-fidelity interfaces
@@ -21,7 +21,7 @@ maps them onto WoW-native frame constraints.
 
 ## 2. Framework Name
 
-**WinUILib** — production-grade, library-namespaced, WoW-ecosystem friendly.
+**FluentWoW** — production-grade, library-namespaced, WoW-ecosystem friendly.
 
 Other candidates considered:
 - **FluentWoW** — evokes Fluent Design System directly
@@ -35,7 +35,7 @@ Other candidates considered:
 
 | WinUI / Fluent Concept | Portability | WoW Strategy | Caveats |
 |---|---|---|---|
-| **Design tokens** | ✅ Direct | Lua token registry (`WinUILib.Tokens`) | Runtime-switched; no CSS variables |
+| **Design tokens** | ✅ Direct | Lua token registry (`FluentWoW.Tokens`) | Runtime-switched; no CSS variables |
 | **Spacing scale** | ✅ Direct | `Tokens.Spacing.*` (XS=2…XXXL=32) | Integer pixels; WoW rounds sub-pixel |
 | **Type ramp** | ✅ Adapted | `Tokens.Typography.*` → `SetFont()` | Limited to bundled WoW fonts |
 | **Corner radii** | ⚠️ Adapted | 9-slice textures or backdrop insets | No native rounded-rect primitives |
@@ -58,8 +58,8 @@ Other candidates considered:
 ## 4. Architecture Blueprint
 
 ```
-WinUILib/
-├── WinUILib.toc                 TOC load-order manifest
+FluentWoW/
+├── FluentWoW.toc                 TOC load-order manifest
 ├── Core/
 │   ├── Bootstrap.lua            Global namespace, version negotiation, OnLoad
 │   ├── Utils.lua                Table, string, colour, frame helpers
@@ -93,8 +93,8 @@ WinUILib/
     ├── SettingsCard.xml/.lua    CommunityToolkit SettingsCard equivalent
     └── SettingsExpander.xml/.lua CommunityToolkit SettingsExpander equivalent
 
-WinUILib-Gallery/
-├── WinUILib-Gallery.toc
+FluentWoW-Gallery/
+├── FluentWoW-Gallery.toc
 ├── Gallery.lua                  Window shell + sidebar navigation
 └── Pages/
     ├── ButtonPage.lua
@@ -183,22 +183,22 @@ WinUILib-Gallery/
 
 ```lua
 -- Retrieve a colour token
-local r, g, b, a = WinUILib.Tokens:GetColor("Color.Accent.Primary")
+local r, g, b, a = FluentWoW.Tokens:GetColor("Color.Accent.Primary")
 
 -- Retrieve a spacing value
-local gap = WinUILib.Tokens:GetSpacing("MD")   -- → 8
+local gap = FluentWoW.Tokens:GetSpacing("MD")   -- → 8
 
 -- Retrieve a font
-local font, size, flags = WinUILib.Tokens:GetFont("Body")
+local font, size, flags = FluentWoW.Tokens:GetFont("Body")
 
 -- Override a token at runtime (highest priority)
-WinUILib.Tokens:Override({
+FluentWoW.Tokens:Override({
     ["Color.Accent.Primary"] = { 0.80, 0.20, 0.80, 1 },
 })
 
 -- Switch to a custom theme
-WinUILib.Tokens:RegisterTheme("MyTheme", { ... })
-WinUILib.Tokens:SetTheme("MyTheme")
+FluentWoW.Tokens:RegisterTheme("MyTheme", { ... })
+FluentWoW.Tokens:SetTheme("MyTheme")
 ```
 
 ### Token categories
@@ -227,22 +227,22 @@ Controls are styled through a **three-layer system**:
 
 1. **XML template** — visual structure (textures, font strings, sizing)
 2. **Token resolution** — colours, fonts, and spacing resolved from
-   `WinUILib.Tokens` at runtime so themes work
+   `FluentWoW.Tokens` at runtime so themes work
 3. **VSM callbacks** — `OnStateChanged(newState, prevState)` mutates textures
    when the control state transitions (hover, press, disabled, etc.)
 
 ```lua
 -- Custom variant: override accent colour on a single button
-local btn = WinUILib:CreateButton(parent, nil, "Accent")
+local btn = FluentWoW:CreateButton(parent, nil, "Accent")
 btn:SetAccentColor(0.80, 0.20, 0.80)
 ```
 
 To create a full custom theme:
 ```lua
-WinUILib.Tokens:RegisterTheme("Christmas", {
+FluentWoW.Tokens:RegisterTheme("Christmas", {
     Color = { Accent = { Primary = { 1, 0.1, 0.1, 1 } } }
 })
-WinUILib.Tokens:SetTheme("Christmas")
+FluentWoW.Tokens:SetTheme("Christmas")
 -- All controls automatically use the new accent colour on next state update.
 ```
 
@@ -250,20 +250,20 @@ WinUILib.Tokens:SetTheme("Christmas")
 
 ## 8. Layout Model
 
-**WinUILib does not use absolute positioning internally.**
+**FluentWoW does not use absolute positioning internally.**
 All controls use `SetPoint` relative anchors, and layout containers
 (`StackLayout`) manage child anchors programmatically.
 
 ```lua
-local stack = WinUILib:CreateStackLayout(parent, nil, "VERTICAL")
+local stack = FluentWoW:CreateStackLayout(parent, nil, "VERTICAL")
 stack:SetPoint("TOPLEFT", parent, "TOPLEFT", 16, -16)
 stack:SetWidth(400)
 stack:SetGap(8)
 stack:SetPadding(16, 16, 16, 16)  -- top, right, bottom, left
 
-local btn1 = WinUILib:CreateButton(stack, nil, "Accent")
+local btn1 = FluentWoW:CreateButton(stack, nil, "Accent")
 btn1:SetText("Action 1")
-local btn2 = WinUILib:CreateButton(stack, nil, "Subtle")
+local btn2 = FluentWoW:CreateButton(stack, nil, "Subtle")
 btn2:SetText("Action 2")
 stack:AddChild(btn1)
 stack:AddChild(btn2)
@@ -274,7 +274,7 @@ stack:AddChild(btn2)
 
 ## 9. Motion Model
 
-All animations respect `WinUILib.Motion.reducedMotion = true` (skip motion).
+All animations respect `FluentWoW.Motion.reducedMotion = true` (skip motion).
 
 | Preset | Duration token | Use case |
 |---|---|---|
@@ -291,13 +291,13 @@ All animations respect `WinUILib.Motion.reducedMotion = true` (skip motion).
 
 ```lua
 -- Build a settings page using SettingsCard + SettingsExpander
-local ts = WinUILib:CreateToggleSwitch(parent)
+local ts = FluentWoW:CreateToggleSwitch(parent)
 ts:SetIsOn(MyAddon_DB.enabled)
 ts:SetOnToggled(function(self, isOn)
     MyAddon_DB.enabled = isOn
 end)
 
-local card = WinUILib:CreateSettingsCard(parent)
+local card = FluentWoW:CreateSettingsCard(parent)
 card:SetTitle("Enable MyAddon")
 card:SetDescription("Turn the addon on or off without disabling it.")
 card:SetActionControl(ts)
@@ -309,7 +309,7 @@ card:SetWidth(500)
 
 ```lua
 -- Per-addon accent colour without forking the whole framework
-WinUILib.Tokens:Override({
+FluentWoW.Tokens:Override({
     ["Color.Accent.Primary"] = { 0.9, 0.6, 0.1, 1 },  -- gold
 })
 ```
@@ -318,8 +318,8 @@ WinUILib.Tokens:Override({
 
 ```lua
 -- Addons consuming the framework should guard on version:
-assert(WinUILib and WinUILib.version >= 10000,
-    "MyAddon requires WinUILib 1.0.0 or later")
+assert(FluentWoW and FluentWoW.version >= 10000,
+    "MyAddon requires FluentWoW 1.0.0 or later")
 ```
 
 ---
@@ -367,7 +367,7 @@ Pages:
 
 ## 13. Adoption Strategy
 
-WinUILib is designed for incremental adoption:
+FluentWoW is designed for incremental adoption:
 
 1. **Zero controls** — just use the token system for consistent colours/spacing
 2. **One control** — embed a single `Button` or `ToggleSwitch` without the rest
@@ -375,10 +375,10 @@ WinUILib is designed for incremental adoption:
 4. **Full framework** — build entire addon UIs with layout + controls + motion
 
 ### Embedding (standalone distribution)
-Addons can list `WinUILib` as a `Dependencies:` entry in their TOC.
+Addons can list `FluentWoW` as a `Dependencies:` entry in their TOC.
 
 ### Library load-order negotiation
-`Bootstrap.lua` guards on version: if WinUILib is already loaded with a higher
+`Bootstrap.lua` guards on version: if FluentWoW is already loaded with a higher
 version, the embed exits cleanly.  The richest feature set present in the
 session is always used.
 
@@ -399,7 +399,7 @@ session is always used.
 ### Non-Goals
 - Direct XAML port (WoW has no layout engine)
 - Replacing Ace3 configuration DB (`AceDB` should still be used for saved vars)
-- Providing a "look like Blizzard UI" theme (WinUILib has its own design language)
+- Providing a "look like Blizzard UI" theme (FluentWoW has its own design language)
 - Pixel-perfect shadow/blur effects
 - Touch input support
 - Widescreen-specific layouts
@@ -477,7 +477,7 @@ session is always used.
 4. Always gate destructive operations with `InCombatLockdown()`
 5. Always use `FramePool` for repeated frame creation
 6. Always stop `OnUpdate` scripts when the animation completes
-7. Never add new Lua globals — everything lives under `WinUILib.*`
+7. Never add new Lua globals — everything lives under `FluentWoW.*`
 8. Always expose `OnStateChanged` so theming can react to state
 9. Never remove or rename a public API without a deprecation cycle
 10. Always test at UIParent scale 0.64 and 1.5 to catch pixel snapping
@@ -486,9 +486,9 @@ session is always used.
 
 ## 17. Final Verdict
 
-WinUILib is **viable** under the following discipline constraints:
+FluentWoW is **viable** under the following discipline constraints:
 
-- **Library-first**: Never ship WinUILib as a standalone visible addon.
+- **Library-first**: Never ship FluentWoW as a standalone visible addon.
 - **Token-driven**: Resist the urge to hardcode any visual value.
 - **Combat-aware**: Every popup/dialog must guard `InCombatLockdown()`.
 - **Performance budget**: `OnUpdate` handlers must terminate; frame pools are
@@ -498,4 +498,4 @@ WinUILib is **viable** under the following discipline constraints:
 
 The framework fills a genuine gap in the WoW addon ecosystem and can realistically
 achieve Ace3-like adoption if it ships with a polished gallery, clear docs,
-and a zero-friction `Dependencies: WinUILib` onboarding path.
+and a zero-friction `Dependencies: FluentWoW` onboarding path.

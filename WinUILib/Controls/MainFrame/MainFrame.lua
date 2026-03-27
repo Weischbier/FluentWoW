@@ -1,4 +1,4 @@
---- WinUILib – Controls/MainFrame/MainFrame.lua
+--- FluentWoW – Controls/MainFrame/MainFrame.lua
 -- Top-level application window — the primary frame consumer addons create.
 -- Equivalent to Ace3's AceGUI "Frame" container but with WinUI design language.
 --
@@ -10,7 +10,7 @@
 -- States: Normal, Hover (close btn only)
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

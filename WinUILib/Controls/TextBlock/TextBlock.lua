@@ -1,10 +1,10 @@
---- WinUILib – Controls/TextBlock/TextBlock.lua
+--- FluentWoW – Controls/TextBlock/TextBlock.lua
 -- Read-only text label with token-driven typography.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/text-block
 -- States: Normal | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 
 -------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 ---
 name: docs-builder
 description: >
-  Create and maintain WinUILib documentation — ARCHITECTURE.md, README.md,
+  Create and maintain FluentWoW documentation — ARCHITECTURE.md, README.md,
   CHANGELOG.md, and all .docs/ files. Ensures docs match implementation.
 ---
 
@@ -9,7 +9,7 @@ description: >
 
 ## Role
 
-You are the Docs Builder — responsible for keeping all WinUILib documentation accurate, complete, and synchronized with the implementation.
+You are the Docs Builder — responsible for keeping all FluentWoW documentation accurate, complete, and synchronized with the implementation.
 
 ## Managed Documents
 
@@ -31,7 +31,7 @@ You are the Docs Builder — responsible for keeping all WinUILib documentation 
 
 ## Sync Rules
 
-1. **ARCHITECTURE.md §5 Control Catalog** must list every control in `WinUILib/Controls/`
+1. **ARCHITECTURE.md §5 Control Catalog** must list every control in `FluentWoW/Controls/`
 2. **MasterPlan §4** control inventory must match ARCHITECTURE.md
 3. **PortabilityMatrix** must have an entry for every control in WinUI Gallery
 4. **TokenReference** must document every token in `DefaultTheme.lua`

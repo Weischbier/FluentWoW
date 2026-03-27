@@ -1,10 +1,10 @@
---- WinUILib – Controls/CheckBox/CheckBox.lua
+--- FluentWoW – Controls/CheckBox/CheckBox.lua
 -- Three-state checkbox: unchecked, checked, indeterminate.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/checkbox
 -- States: Normal | Hover | Pressed | Disabled | Checked
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

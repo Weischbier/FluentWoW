@@ -1,10 +1,10 @@
---- WinUILib – Controls/ToggleSwitch/ToggleSwitch.lua
+--- FluentWoW – Controls/ToggleSwitch/ToggleSwitch.lua
 -- On/off toggle switch with sliding thumb animation.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/toggleswitch
 -- States: Normal | Hover | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 

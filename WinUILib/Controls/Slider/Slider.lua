@@ -1,10 +1,10 @@
---- WinUILib – Controls/Slider/Slider.lua
+--- FluentWoW – Controls/Slider/Slider.lua
 -- Range slider with accent fill, thumb, and optional header/value labels.
 -- WinUI reference: https://learn.microsoft.com/windows/apps/design/controls/slider
 -- States: Normal | Hover | Pressed | Disabled
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local T   = lib.Tokens
 
 -------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 ## Interface: 120005, 120001
-## Title: WinUILib
+## Title: FluentWoW
 ## Notes: WinUI-inspired, token-driven UI framework for World of Warcraft addon developers.
 ## Version: 1.0.0
 ## Author: Danny Patten

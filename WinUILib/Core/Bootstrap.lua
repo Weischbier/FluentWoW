@@ -1,27 +1,27 @@
---- WinUILib – Core/Bootstrap.lua
+--- FluentWoW – Core/Bootstrap.lua
 -- Global namespace, version negotiation, module registration.
 -- Uses LibStub when available (Ace3-style hand-off); falls back to direct global.
 -------------------------------------------------------------------------------
 
-local MAJOR, MINOR = "WinUILib-1.0", 10000  -- 1.00.00 encoded
+local MAJOR, MINOR = "FluentWoW-1.0", 10000  -- 1.00.00 encoded
 
 -------------------------------------------------------------------------------
 -- LibStub registration (same pattern Ace3 uses to hand off the lib)
 -------------------------------------------------------------------------------
 
----@class WinUILib
+---@class FluentWoW
 local lib, oldMinor
 if LibStub then
     lib, oldMinor = LibStub:NewLibrary(MAJOR, MINOR)
     if not lib then return end          -- a newer copy is already loaded
 else
     -- Fallback: direct global version guard (no LibStub available)
-    if WinUILib and (WinUILib.version or 0) >= MINOR then return end
-    lib = WinUILib or {}
+    if FluentWoW and (FluentWoW.version or 0) >= MINOR then return end
+    lib = FluentWoW or {}
 end
 
--- Always expose as a global so `local lib = WinUILib` keeps working
-WinUILib = lib
+-- Always expose as a global so `local lib = FluentWoW` keeps working
+FluentWoW = lib
 
 lib.version    = MINOR
 lib.name       = MAJOR
@@ -38,7 +38,7 @@ lib._callbacks = lib._callbacks or {}
 ---@param msg string
 ---@param level? integer
 function lib:Error(msg, level)
-    error(("[WinUILib] %s"):format(msg), (level or 1) + 1)
+    error(("[FluentWoW] %s"):format(msg), (level or 1) + 1)
 end
 
 ---@param cond any
@@ -47,7 +47,7 @@ end
 function lib:Assert(cond, msg)
     if not cond then
         if DEFAULT_CHAT_FRAME then
-            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF4444[WinUILib] ASSERT: " .. tostring(msg) .. "|r")
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFF4444[FluentWoW] ASSERT: " .. tostring(msg) .. "|r")
         end
         return false
     end
@@ -57,7 +57,7 @@ end
 ---@param msg string
 function lib:Debug(msg)
     if self.debug and DEFAULT_CHAT_FRAME then
-        DEFAULT_CHAT_FRAME:AddMessage("|cFF88CCFF[WinUILib] " .. tostring(msg) .. "|r")
+        DEFAULT_CHAT_FRAME:AddMessage("|cFF88CCFF[FluentWoW] " .. tostring(msg) .. "|r")
     end
 end
 

@@ -1,8 +1,8 @@
---- WinUILib-Gallery – Pages/FeedbackPage.lua
+--- FluentWoW-Gallery – Pages/FeedbackPage.lua
 -- Showcases: ProgressBar, ProgressRing, InfoBar, ContentDialog, Expander.
 -------------------------------------------------------------------------------
 
-local lib = WinUILib
+local lib = FluentWoW
 local Gallery = lib._gallery
 
 local function createCardTitle(parent, text)
