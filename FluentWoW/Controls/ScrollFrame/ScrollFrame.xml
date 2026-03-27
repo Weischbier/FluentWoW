@@ -1,0 +1,62 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWScrollFrameTemplate — Scrollable container with scrollbar
+         Size: 300×200  |  Parts: ScrollFrame, Child, ScrollBar (Track, Thumb)
+         ================================================================ -->
+    <Frame name="FWoWScrollFrameTemplate" virtual="true">
+        <Size x="300" y="200"/>
+        <Frames>
+            <ScrollFrame name="$parent_ScrollFrame" parentKey="ScrollFrame">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="BOTTOMRIGHT" x="-12" y="0"/>
+                </Anchors>
+                <Frames>
+                    <Frame name="$parent_Child" parentKey="Child">
+                        <Size x="288" y="1"/>
+                    </Frame>
+                </Frames>
+                <Scripts>
+                    <OnLoad function="FWoWScrollFrame_OnScrollLoad"/>
+                    <OnScrollRangeChanged function="FWoWScrollFrame_OnRangeChanged"/>
+                    <OnVerticalScroll function="FWoWScrollFrame_OnVerticalScroll"/>
+                    <OnMouseWheel function="FWoWScrollFrame_OnMouseWheel"/>
+                </Scripts>
+            </ScrollFrame>
+            <Frame name="$parent_ScrollBar" parentKey="ScrollBar">
+                <Size x="6" y="0"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="0" y="-2"/>
+                    <Anchor point="BOTTOMRIGHT" x="0" y="2"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Track" parentKey="Track" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Frame name="$parent_Thumb" parentKey="Thumb" enableMouse="true">
+                        <Size x="6" y="40"/>
+                        <Anchors>
+                            <Anchor point="TOP"/>
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                            </Layer>
+                        </Layers>
+                        <Scripts>
+                            <OnMouseDown function="FWoWScrollFrame_Thumb_OnMouseDown"/>
+                            <OnMouseUp function="FWoWScrollFrame_Thumb_OnMouseUp"/>
+                        </Scripts>
+                    </Frame>
+                </Frames>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad function="FWoWScrollFrame_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

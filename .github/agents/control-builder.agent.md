@@ -38,7 +38,7 @@ Always follow the `scaffold-control` skill (`.github/skills/scaffold-control/SKI
 1. Read the WinUI Gallery XAML for the target control
 2. Read the WinUI spec if available
 3. Read `.docs/DesignSpecs.md` for pixel measurements from design images
-4. View design images in `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for visual reference
+4. View design images in `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/` for visual reference
 5. Use MCP tools to verify the chosen WoW widget type supports needed methods
 6. Check `.docs/PortabilityMatrix.md` — if not yet assessed, assess first
 7. Read `FluentWoW/Controls/Button/Button.lua` and `Button.xml` as the reference implementation
@@ -48,14 +48,14 @@ Always follow the `scaffold-control` skill (`.github/skills/scaffold-control/SKI
 - **Pixel-fidelity** — every spacing, padding, margin, gap must match `.docs/DesignSpecs.md` exactly
 - **Token-driven styling** — never hardcode colors, spacing, font sizes, or durations
 - **StateMachine** — every control gets a VSM via `lib.StateMachine:New()`
-- **ControlBase mixin** — every control calls `Mixin(self, lib._controls.ControlBase)` + `self:WUILInit()`
-- **Global handlers** — all XML script handlers are global: `WUIL{Name}_OnLoad`, `WUIL{Name}_OnEnter`, etc.
+- **ControlBase mixin** — every control calls `Mixin(self, lib._controls.ControlBase)` + `self:FWoWInit()`
+- **Global handlers** — all XML script handlers are global: `FWoW{Name}_OnLoad`, `FWoW{Name}_OnEnter`, etc.
 - **Combat safety** — if the control shows/hides frames, guard with `if InCombatLockdown() then return end`
 - **Frame pooling** — dynamic child frames use `lib.FramePool`
 - **Motion** — use `lib.Motion` presets, never raw AnimationGroup
 - **No OnUpdate orphans** — nil the handler when work is done
 - **Relative anchoring** — use `SetPoint()`, never absolute pixel positions
-- **No raw globals** — only `WUIL`-prefixed handler functions may be global
+- **No raw globals** — only `FWoW`-prefixed handler functions may be global
 
 ### After Code Generation
 
@@ -94,5 +94,5 @@ A control is not complete until:
 - Combat safety verified (if applicable)
 - Gallery page demonstrates all variants
 - All doc surfaces updated
-- No new globals beyond WUIL-prefixed handlers
+- No new globals beyond FWoW-prefixed handlers
 - Works at UIParent scale 0.64 and 1.5

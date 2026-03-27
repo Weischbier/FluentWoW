@@ -30,6 +30,6 @@ applyTo: "FluentWoW/Layout/**"
 
 When implementing Grid, RelativePanel, or other layout containers:
 - Follow the same XML + Lua pattern as StackLayout
-- Use `WUIL<Name>Template` naming
+- Use `FWoW<Name>Template` naming
 - Compute layout in Lua, not XML
 - All dimensions from tokens where applicable

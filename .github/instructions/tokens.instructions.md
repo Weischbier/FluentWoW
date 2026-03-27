@@ -34,7 +34,7 @@ See `.docs/TokenReference.md` for the complete catalog.
 
 - Pixel measurements: `.docs/DesignSpecs.md`
 - WinUI specs: `.help/.sources/microsoft-ui-xaml-main/specs/`
-- WinUI design images: `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/`
+- WinUI design images: `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/`
 - When adding spacing tokens, verify the pixel value against the design spec
 - When adding color tokens, cross-reference the WinUI dark/light theme images
 

@@ -16,7 +16,7 @@ description: >
 1. Read `.docs/TokenReference.md` for the complete token catalog
 2. Read `FluentWoW/Tokens/DefaultTheme.lua` for the canonical structure
 3. Read `FluentWoW/Tokens/Registry.lua` for the registration API
-4. View design images in `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for dark/light theme color references
+4. View design images in `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/` for dark/light theme color references
 5. Read `.docs/DesignSpecs.md` for extracted design measurements and color notes
 
 ## Inputs

@@ -1,0 +1,56 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWProgressBarTemplate — Determinate / indeterminate progress bar
+         Size: 200×4 (bar) + header area
+         Parts: Track, Fill, HeaderLabel
+         ================================================================ -->
+    <Frame name="FWoWProgressBarTemplate" virtual="true">
+        <Size x="200" y="24"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_HeaderLabel" parentKey="HeaderLabel"
+                    inherits="GameFontNormalSmall" justifyH="LEFT" hidden="true">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <StatusBar name="$parent_Bar" parentKey="Bar" minValue="0" maxValue="100">
+                <Size x="0" y="4"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="0" y="0"/>
+                    <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Track" parentKey="Track" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+                <BarTexture name="$parent_Fill" parentKey="Fill"/>
+            </StatusBar>
+        </Frames>
+        <Scripts>
+            <OnLoad function="FWoWProgressBar_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+    <!-- ================================================================
+         FWoWProgressRingTemplate — Circular indeterminate spinner
+         Size: 32×32  |  Parts: Ring (spinning texture)
+         ================================================================ -->
+    <Frame name="FWoWProgressRingTemplate" virtual="true">
+        <Size x="32" y="32"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_Ring" parentKey="Ring" setAllPoints="true"/>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="FWoWProgressRing_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

@@ -4,7 +4,7 @@
 
 FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https://github.com/microsoft/microsoft-ui-xaml) + [WinUI Gallery](https://github.com/microsoft/WinUI-Gallery) + [Windows Community Toolkit](https://github.com/CommunityToolkit/Windows) into the World of Warcraft addon ecosystem — providing reusable controls, a design-token system, layout primitives, motion helpers, and a live gallery addon.
 
-> Open the gallery in-game with `/wuil`
+> Open the gallery in-game with `/fwow`
 
 ---
 
@@ -75,7 +75,7 @@ FluentWoW/              Main library (add as dependency)
   Motion/              FadeIn, FadeOut, SlideIn, ScalePress
   Settings/            SettingsCard, SettingsExpander
 
-FluentWoW-Gallery/      Interactive showcase addon (/wuil)
+FluentWoW-Gallery/      Interactive showcase addon (/fwow)
   Pages/               ButtonPage, InputPage, FeedbackPage, LayoutPage, SettingsPage
 ```
 

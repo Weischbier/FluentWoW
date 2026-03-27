@@ -31,8 +31,8 @@ Each Gallery page corresponds to one control family and demonstrates:
 
 ## Reference Sources
 
-- WinUI Gallery XAML source: `.help/.sources/WinUI-Gallery-main/WinUIGallery/Samples/ControlPages/`
-- WinUI design images: `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/`
+- WinUI Gallery XAML source: `.help/.sources/WinUI-Gallery-main/fwow/Samples/ControlPages/`
+- WinUI design images: `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/`
 - Match the WinUI Gallery page structure and demo patterns as closely as possible
 
 ## Style Guidelines

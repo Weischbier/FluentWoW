@@ -1,0 +1,15 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWStackLayoutTemplate — Vertical / horizontal stack container
+         Size: 200×1 (auto-grows)  |  Parts: (children managed in Lua)
+         ================================================================ -->
+    <Frame name="FWoWStackLayoutTemplate" virtual="true">
+        <Size x="200" y="1"/>
+        <Scripts>
+            <OnLoad function="FWoWStackLayout_OnLoad"/>
+            <OnSizeChanged function="FWoWStackLayout_OnSizeChanged"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

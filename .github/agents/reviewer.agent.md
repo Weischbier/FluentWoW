@@ -31,7 +31,7 @@ Follow `.docs/ReviewMaster.md` for the complete review framework.
 3. **Pixel-Fidelity** — spacing/sizing matches `.docs/DesignSpecs.md` exactly
 4. **Combat Safety** — InCombatLockdown guards where needed
 5. **State Machine** — proper VSM usage
-6. **Naming** — WUIL prefix, correct patterns
+6. **Naming** — FWoW prefix, correct patterns
 7. **Documentation** — all doc surfaces updated
 8. **Gallery** — demo page exists and shows all variants
 

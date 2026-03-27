@@ -128,42 +128,42 @@ FluentWoW-Gallery/
 ### Foundational
 | Control | Template | Status |
 |---|---|---|
-| Button (Accent / Subtle / Destructive) | `WUILButtonTemplate` | ✅ MVP |
-| IconButton | `WUILIconButtonTemplate` | ✅ MVP |
-| ToggleButton | `WUILToggleButtonTemplate` | ✅ MVP |
-| TextBlock (Display/Title/Body/Caption) | `WUILTextBlockTemplate` | ✅ MVP |
+| Button (Accent / Subtle / Destructive) | `FWoWButtonTemplate` | ✅ MVP |
+| IconButton | `FWoWIconButtonTemplate` | ✅ MVP |
+| ToggleButton | `FWoWToggleButtonTemplate` | ✅ MVP |
+| TextBlock (Display/Title/Body/Caption) | `FWoWTextBlockTemplate` | ✅ MVP |
 
 ### Data Entry
 | Control | Template | Status |
 |---|---|---|
-| CheckBox | `WUILCheckBoxTemplate` | ✅ MVP |
-| RadioButton | `WUILRadioButtonTemplate` | ✅ MVP |
-| ToggleSwitch | `WUILToggleSwitchTemplate` | ✅ MVP |
-| TextBox + SearchBox | `WUILTextBoxTemplate` | ✅ MVP |
-| Slider | `WUILSliderTemplate` | ✅ MVP |
-| ComboBox | `WUILComboBoxTemplate` | ✅ MVP |
+| CheckBox | `FWoWCheckBoxTemplate` | ✅ MVP |
+| RadioButton | `FWoWRadioButtonTemplate` | ✅ MVP |
+| ToggleSwitch | `FWoWToggleSwitchTemplate` | ✅ MVP |
+| TextBox + SearchBox | `FWoWTextBoxTemplate` | ✅ MVP |
+| Slider | `FWoWSliderTemplate` | ✅ MVP |
+| ComboBox | `FWoWComboBoxTemplate` | ✅ MVP |
 
 ### Feedback / Status
 | Control | Template | Status |
 |---|---|---|
-| ProgressBar (det. + indet.) | `WUILProgressBarTemplate` | ✅ MVP |
-| ProgressRing | `WUILProgressRingTemplate` | ✅ MVP |
-| InfoBar (4 severities) | `WUILInfoBarTemplate` | ✅ MVP |
-| ContentDialog | `WUILContentDialogTemplate` | ✅ MVP |
+| ProgressBar (det. + indet.) | `FWoWProgressBarTemplate` | ✅ MVP |
+| ProgressRing | `FWoWProgressRingTemplate` | ✅ MVP |
+| InfoBar (4 severities) | `FWoWInfoBarTemplate` | ✅ MVP |
+| ContentDialog | `FWoWContentDialogTemplate` | ✅ MVP |
 
 ### Navigation / Layout
 | Control | Template | Status |
 |---|---|---|
-| TabView | `WUILTabViewTemplate` | ✅ MVP |
-| Expander | `WUILExpanderTemplate` | ✅ MVP |
-| ScrollFrame | `WUILScrollFrameTemplate` | ✅ MVP |
-| VStack / HStack | `WUILStackLayoutTemplate` | ✅ MVP |
+| TabView | `FWoWTabViewTemplate` | ✅ MVP |
+| Expander | `FWoWExpanderTemplate` | ✅ MVP |
+| ScrollFrame | `FWoWScrollFrameTemplate` | ✅ MVP |
+| VStack / HStack | `FWoWStackLayoutTemplate` | ✅ MVP |
 
 ### Settings
 | Control | Template | Status |
 |---|---|---|
-| SettingsCard | `WUILSettingsCardTemplate` | ✅ MVP |
-| SettingsExpander | `WUILSettingsExpanderTemplate` | ✅ MVP |
+| SettingsCard | `FWoWSettingsCardTemplate` | ✅ MVP |
+| SettingsExpander | `FWoWSettingsExpanderTemplate` | ✅ MVP |
 
 ### Planned (Phase 2+)
 - NavigationView sidebar  
@@ -326,7 +326,7 @@ assert(FluentWoW and FluentWoW.version >= 10000,
 
 ## 11. Gallery Addon
 
-Open with: `/wuil` or `/winuigallery`
+Open with: `/fwow` or `/fwow`
 
 Pages:
 - **Buttons** — Button variants, ToggleButton, state demo

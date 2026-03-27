@@ -37,7 +37,7 @@ Read `FluentWoW-Gallery/Pages/ButtonPage.lua` for the canonical page pattern:
 - StackLayout arrangement
 
 Also reference the WinUI Gallery XAML source for the equivalent page:
-- `.help/.sources/WinUI-Gallery-main/WinUIGallery/Samples/ControlPages/{controlName}Page.xaml`
+- `.help/.sources/WinUI-Gallery-main/fwow/Samples/ControlPages/{controlName}Page.xaml`
 - Match demo structure and variants as closely as possible
 
 ### 2. Create Page File

@@ -44,15 +44,15 @@ Use the wow-api MCP tools to confirm the chosen `baseWidget` and its methods:
 
 - Read `.docs/DesignSpecs.md` for pixel measurements from WinUI design images
 - If `specRef` is provided, read the WinUI spec for control-specific measurements
-- Read design images in `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for visual reference
+- Read design images in `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/` for visual reference
 - Map pixel values to spacing tokens: 8px→`Spacing.MD`, 12px→`Spacing.LG`, 16px→`Spacing.XL`
 
 ### 2. Create XML Template
 
 Create `FluentWoW/Controls/{controlName}/{controlName}.xml`:
-- Template name: `WUIL{controlName}Template`, `virtual="true"`
+- Template name: `FWoW{controlName}Template`, `virtual="true"`
 - Inherit from appropriate base: `BackdropTemplate` for Frame-based, widget itself for Button/Slider
-- Script: `<OnLoad function="WUIL{controlName}_OnLoad"/>`
+- Script: `<OnLoad function="FWoW{controlName}_OnLoad"/>`
 - Child frames use `$parent_{PartName}` with `parentKey`
 - No inline Lua, no hardcoded colors
 
@@ -69,22 +69,22 @@ local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 
-function WUIL{controlName}_OnLoad(self)
+function FWoW{controlName}_OnLoad(self)
     Mixin(self, lib._controls.ControlBase)
-    self:WUILInit()
+    self:FWoWInit()
     -- Create state machine
     -- Apply initial token styling
 end
 
-function WUIL{controlName}_OnEnter(self)
+function FWoW{controlName}_OnEnter(self)
     if not self._disabled then self._vsm:SetState("Hover") end
 end
 
-function WUIL{controlName}_OnLeave(self)
+function FWoW{controlName}_OnLeave(self)
     if not self._disabled then self._vsm:SetState("Normal") end
 end
 
-function WUIL{controlName}:OnStateChanged(newState, prevState)
+function FWoW{controlName}:OnStateChanged(newState, prevState)
     -- Apply token-driven visual updates per state
 end
 ```
@@ -102,7 +102,7 @@ Controls/{controlName}/{controlName}.lua
 Add to `FluentWoW/Core/Bootstrap.lua` factory section:
 ```lua
 function FluentWoW:Create{controlName}(parent, name, ...)
-    local f = CreateFrame("{baseWidget}", name, parent, "WUIL{controlName}Template")
+    local f = CreateFrame("{baseWidget}", name, parent, "FWoW{controlName}Template")
     return f
 end
 ```
@@ -151,4 +151,4 @@ Available in `FluentWoW/Libs/` (loaded before Core, do NOT modify):
 | Base widget type doesn't support needed behavior | Check `mcp_wow-api_get_widget_methods` and consider a different base or manual implementation |
 | Control requires secure frames | Add combat lockdown guard; mark in Combat Safety Matrix |
 | No equivalent WoW feature | Document in PortabilityMatrix as ❌ and skip, or design an adapted alternative |
-| Naming collision with Blizzard UI | Check `.help/.helper/AddOns/Blizzard_*` for existing names; all WUIL-prefixed names are safe |
+| Naming collision with Blizzard UI | Check `.help/.helper/AddOns/Blizzard_*` for existing names; all FWoW-prefixed names are safe |

@@ -1,0 +1,137 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWTabViewTemplate — Tabbed container with tab strip + content area
+         Size: 400×300  |  Parts: TabStrip, ContentArea
+         ================================================================ -->
+    <Frame name="FWoWTabViewTemplate" virtual="true">
+        <Size x="400" y="300"/>
+        <Frames>
+            <Frame name="$parent_TabStrip" parentKey="TabStrip">
+                <Size x="0" y="36"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="TOPRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_StripBG" parentKey="StripBG" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Frame name="$parent_HeaderSlot" parentKey="HeaderSlot" hidden="true">
+                        <Size x="1" y="28"/>
+                        <Anchors>
+                            <Anchor point="LEFT" x="8" y="0"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame name="$parent_FooterSlot" parentKey="FooterSlot" hidden="true">
+                        <Size x="1" y="28"/>
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-40" y="0"/>
+                        </Anchors>
+                    </Frame>
+                    <Button name="$parent_AddButton" parentKey="AddButton" hidden="true">
+                        <Size x="28" y="28"/>
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-8" y="0"/>
+                        </Anchors>
+                        <Layers>
+                            <Layer level="BACKGROUND">
+                                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                            </Layer>
+                            <Layer level="ARTWORK">
+                                <FontString name="$parent_Label" parentKey="Label" inherits="GameFontNormal" text="+">
+                                    <Anchors>
+                                        <Anchor point="CENTER"/>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                        <Scripts>
+                            <OnClick function="FWoWTabView_AddButton_OnClick"/>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+            <Frame name="$parent_ContentArea" parentKey="ContentArea">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_TabStrip"
+                        relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_ContentBG" parentKey="ContentBG"
+                            setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad function="FWoWTabView_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+    <!-- Tab item template (used by FramePool) -->
+    <Button name="FWoWTabItemTemplate" virtual="true">
+        <Size x="100" y="32"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture name="$parent_Indicator" parentKey="Indicator">
+                    <Size x="0" y="2"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_Icon" parentKey="Icon" hidden="true">
+                    <Size x="14" y="14"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="12" y="0"/>
+                    </Anchors>
+                </Texture>
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="LEFT" x="12" y="0"/>
+                        <Anchor point="RIGHT" x="-12" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture name="$parent_Hover" parentKey="Hover"
+                    setAllPoints="true" alphaMode="ADD"/>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button name="$parent_CloseBtn" parentKey="CloseBtn" hidden="true">
+                <Size x="16" y="16"/>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-10" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Label" parentKey="Label" inherits="GameFontNormalSmall" text="×">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick function="FWoWTabItem_Close_OnClick"/>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnClick function="FWoWTabItem_OnClick"/>
+        </Scripts>
+    </Button>
+
+</Ui>

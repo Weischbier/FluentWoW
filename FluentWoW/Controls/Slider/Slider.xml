@@ -1,0 +1,90 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWSliderTemplate — Range slider with track, fill, thumb, and labels
+         Size: 200×20 (track) + labels
+         Parts: Track, Fill, Thumb, MinLabel, MaxLabel, ValueLabel, HeaderLabel
+         ================================================================ -->
+    <Frame name="FWoWSliderTemplate" virtual="true" enableMouse="true">
+        <Size x="200" y="44"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_HeaderLabel" parentKey="HeaderLabel"
+                    inherits="GameFontNormal" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Slider name="$parent_SliderFrame" parentKey="SliderFrame"
+                orientation="HORIZONTAL" minValue="0" maxValue="100" defaultValue="0"
+                valueStep="1" obeyStepOnDrag="true">
+                <Size x="0" y="20"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="0" y="0"/>
+                    <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Track" parentKey="Track">
+                            <Size x="0" y="4"/>
+                            <Anchors>
+                                <Anchor point="LEFT" x="0" y="0"/>
+                                <Anchor point="RIGHT" x="0" y="0"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture name="$parent_Fill" parentKey="Fill">
+                            <Size x="0" y="4"/>
+                            <Anchors>
+                                <Anchor point="LEFT" relativeTo="$parent_Track" relativePoint="LEFT"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <ThumbTexture name="$parent_Thumb" parentKey="Thumb">
+                    <Size x="16" y="16"/>
+                </ThumbTexture>
+                <Scripts>
+                    <OnValueChanged function="FWoWSlider_OnValueChanged"/>
+                    <OnEnter function="FWoWSlider_OnEnter"/>
+                    <OnLeave function="FWoWSlider_OnLeave"/>
+                    <OnMouseDown function="FWoWSlider_OnMouseDown"/>
+                    <OnMouseUp function="FWoWSlider_OnMouseUp"/>
+                </Scripts>
+            </Slider>
+            <Frame name="$parent_TickContainer" parentKey="TickContainer">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+            </Frame>
+        </Frames>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString name="$parent_ValueLabel" parentKey="ValueLabel"
+                    inherits="GameFontNormalSmall" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="FWoWSlider_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+    <Frame name="FWoWSliderTickTemplate" virtual="true">
+        <Size x="1" y="6"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_Line" parentKey="Line" setAllPoints="true"/>
+            </Layer>
+        </Layers>
+    </Frame>
+
+</Ui>

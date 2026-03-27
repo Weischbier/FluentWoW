@@ -1,0 +1,67 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWExpanderTemplate — Collapsible content container with header
+         Size: 400×auto  |  Parts: Header (BG, Label, Chevron), Content
+         ================================================================ -->
+    <Frame name="FWoWExpanderTemplate" virtual="true" enableMouse="true">
+        <Size x="400" y="40"/>
+        <Frames>
+            <Button name="$parent_Header" parentKey="Header">
+                <Size x="0" y="40"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="TOPRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Label" parentKey="Label"
+                            inherits="GameFontNormal" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="LEFT" x="16" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Chevron" parentKey="Chevron"
+                            inherits="GameFontNormal" justifyH="CENTER" text="▸">
+                            <Anchors>
+                                <Anchor point="RIGHT" x="-16" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                    <Layer level="HIGHLIGHT">
+                        <Texture name="$parent_Hover" parentKey="Hover"
+                            setAllPoints="true" alphaMode="ADD"/>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick function="FWoWExpander_OnHeaderClick"/>
+                    <OnEnter function="FWoWExpander_OnHeaderEnter"/>
+                    <OnLeave function="FWoWExpander_OnHeaderLeave"/>
+                </Scripts>
+            </Button>
+            <Frame name="$parent_Content" parentKey="Content" hidden="true">
+                <Size x="0" y="1"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_Header"
+                        relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="RIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_ContentBG" parentKey="ContentBG"
+                            setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad function="FWoWExpander_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

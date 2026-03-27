@@ -34,7 +34,7 @@ Scan for frame show/hide operations missing `InCombatLockdown()` guards:
 
 Scan for unintended globals:
 - Variables assigned without `local` keyword
-- Functions not prefixed with `WUIL`
+- Functions not prefixed with `FWoW`
 - Verify `.luacheckrc` includes all legitimate globals
 
 ### 4. OnUpdate Orphan Audit

@@ -1,0 +1,21 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWTextBlockTemplate — Styled text label (non-interactive)
+         Parts: Label
+         ================================================================ -->
+    <Frame name="FWoWTextBlockTemplate" virtual="true">
+        <Size x="200" y="16"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE"
+                    setAllPoints="true"/>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="FWoWTextBlock_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

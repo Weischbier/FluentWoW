@@ -26,7 +26,7 @@ You are the Token Builder — responsible for the FluentWoW token system. You ma
 - `FluentWoW/Tokens/Registry.lua` — resolution engine (do not modify unless adding new API methods)
 - `.docs/TokenReference.md` — documentation
 - `.docs/DesignSpecs.md` — pixel measurements from WinUI design images
-- `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` — dark/light theme design images for color reference
+- `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/` — dark/light theme design images for color reference
 
 ## Rules
 

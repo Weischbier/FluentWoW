@@ -27,7 +27,7 @@ Follow `.docs/DebugMaster.md` for detailed failure mode playbooks.
 
 1. Check the error message for the tainted function/frame
 2. Search for Show/Hide/SetParent calls without `InCombatLockdown()` guards
-3. Check if any WUIL frame inherits from secure templates
+3. Check if any FWoW frame inherits from secure templates
 4. Fix: Add combat guards, remove secure inheritance, or defer action to out-of-combat
 
 ### Playbook 2 — Visibility Bugs

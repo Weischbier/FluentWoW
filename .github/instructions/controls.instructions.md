@@ -9,7 +9,7 @@ applyTo: "FluentWoW/Controls/**"
 Every control MUST follow this structure:
 
 1. **XML template** (`Controls/<Name>/<Name>.xml`):
-   - Template named `WUIL<Name>Template` with `virtual="true"`
+   - Template named `FWoW<Name>Template` with `virtual="true"`
    - Inherits from appropriate WoW widget (`Frame`, `Button`, `EditBox`, `Slider`, `ScrollFrame`)
    - Child frames use `$parent_<PartName>` naming and `parentKey`
    - No inline Lua — all behavior in the Lua file
@@ -18,9 +18,9 @@ Every control MUST follow this structure:
 2. **Lua behavior** (`Controls/<Name>/<Name>.lua`):
    - Header comment with purpose, WinUI design reference URL, and states list
    - `local lib = FluentWoW`, `local T = lib.Tokens`, `local Mot = lib.Motion`
-   - `OnLoad` handler: `Mixin(self, lib._controls.ControlBase)`, `self:WUILInit()`
+   - `OnLoad` handler: `Mixin(self, lib._controls.ControlBase)`, `self:FWoWInit()`
    - VSM: `self._vsm = lib.StateMachine:New(self, "Normal")`
-   - Script handlers as global functions: `WUIL<Name>_OnLoad`, `WUIL<Name>_OnEnter`, etc.
+   - Script handlers as global functions: `FWoW<Name>_OnLoad`, `FWoW<Name>_OnEnter`, etc.
    - `OnStateChanged(self, newState, prevState)` for token-driven visual updates
    - Public API as methods on the mixin table
 
@@ -39,7 +39,7 @@ self.Label:SetTextColor(0.26, 0.56, 0.94, 1)  -- hardcoded!
 
 Controls that show/hide overlay frames (ComboBox dropdown, ContentDialog, Flyout) MUST:
 ```lua
-function WUILMyControl_OnClick(self)
+function FWoWMyControl_OnClick(self)
     if InCombatLockdown() then
         lib:Debug("Blocked: cannot show in combat")
         return
@@ -53,7 +53,7 @@ end
 Every control MUST match the WinUI pixel measurements exactly:
 - Read `.docs/DesignSpecs.md` for measurements extracted from design images
 - Read `.help/.sources/microsoft-ui-xaml-main/specs/` for control-specific specs
-- Read `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for annotated design images
+- Read `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/` for annotated design images
 - Map pixel values to spacing tokens: 8px→`Spacing.MD`, 12px→`Spacing.LG`, 16px→`Spacing.XL`, 24px→`Spacing.XXL`, 32px→`Spacing.XXXL`
 - Internal card padding: 12px top, 16px left/right/bottom
 - Icon-to-text gap: 12px, inter-element gap: 16px, action-icon-to-label: 8px
@@ -72,7 +72,7 @@ Vendored lib files must NOT be modified — use them as-is.
 
 Every control MUST implement `OnStateChanged`:
 ```lua
-function WUILMyControl:OnStateChanged(newState, prevState)
+function FWoWMyControl:OnStateChanged(newState, prevState)
     if newState == "Disabled" then
         self:SetAlpha(T:Get("Opacity.Disabled"))
     elseif newState == "Hover" then
@@ -83,7 +83,7 @@ end
 
 ## Global Functions
 
-- ONLY `WUIL<Name>_<Event>` global functions are allowed
+- ONLY `FWoW<Name>_<Event>` global functions are allowed
 - All other functions must be `local` or methods on the mixin table
 - The mixin table itself may be file-local if only used within that file
 
@@ -91,7 +91,7 @@ end
 
 Controls that create dynamic child frames (dropdown items, list rows) MUST use:
 ```lua
-local item = lib.FramePool:Acquire("WUIL<Name>ItemTemplate", self.Container)
+local item = lib.FramePool:Acquire("FWoW<Name>ItemTemplate", self.Container)
 -- ... configure item ...
 -- On cleanup:
 lib.FramePool:Release(item)

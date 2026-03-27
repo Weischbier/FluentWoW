@@ -1,0 +1,219 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWMainFrameTemplate — Top-level WinUI-styled application window.
+         Like Ace3's AceGUI "Frame" container: draggable, resizable,
+         title bar, close button, content area, status bar, ESC-to-close.
+         Size: 700×500 (default)  |  Strata: FULLSCREEN_DIALOG
+         Parts: TitleBar, TitleText, CloseBtn, ContentArea, StatusBar,
+                StatusText, Backdrop, SizerSE, SizerS, SizerE
+         ================================================================ -->
+    <Frame name="FWoWMainFrameTemplate" virtual="true"
+           parent="UIParent" frameStrata="FULLSCREEN_DIALOG"
+           movable="true" resizable="true" toplevel="true"
+           enableMouse="true" hidden="true">
+        <Size x="700" y="500"/>
+        <ResizeBounds>
+            <minResize x="400" y="300"/>
+        </ResizeBounds>
+        <Frames>
+            <!-- Backdrop (surface) -->
+            <Frame name="$parent_Backdrop" parentKey="Backdrop">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture name="$parent_EdgeTop" parentKey="EdgeTop">
+                            <Size y="1"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT"/>
+                                <Anchor point="TOPRIGHT"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture name="$parent_EdgeBottom" parentKey="EdgeBottom">
+                            <Size y="1"/>
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT"/>
+                                <Anchor point="BOTTOMRIGHT"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture name="$parent_EdgeLeft" parentKey="EdgeLeft">
+                            <Size x="1"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" y="-1"/>
+                                <Anchor point="BOTTOMLEFT" y="1"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture name="$parent_EdgeRight" parentKey="EdgeRight">
+                            <Size x="1"/>
+                            <Anchors>
+                                <Anchor point="TOPRIGHT" y="-1"/>
+                                <Anchor point="BOTTOMRIGHT" y="1"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <!-- Title bar (drag handle) -->
+            <Frame name="$parent_TitleBar" parentKey="TitleBar" enableMouse="true">
+                <Size y="40"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="TOPRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <!-- Optional app icon -->
+                        <Texture name="$parent_Icon" parentKey="Icon" hidden="true">
+                            <Size x="16" y="16"/>
+                            <Anchors>
+                                <Anchor point="LEFT" relativeKey="$parent.LeftSlot" relativePoint="RIGHT" x="12" y="0"/>
+                            </Anchors>
+                        </Texture>
+                        <FontString name="$parent_Title" parentKey="Title" inherits="GameFontNormal" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="LEFT" relativeKey="$parent.Icon" relativePoint="RIGHT" x="8"/>
+                                <Anchor point="RIGHT" relativeKey="$parent.RightSlot" relativePoint="LEFT" x="-12" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Frame name="$parent_LeftSlot" parentKey="LeftSlot" hidden="true">
+                        <Size x="1" y="32"/>
+                        <Anchors>
+                            <Anchor point="LEFT" x="12" y="0"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame name="$parent_RightSlot" parentKey="RightSlot" hidden="true">
+                        <Size x="1" y="32"/>
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-52" y="0"/>
+                        </Anchors>
+                    </Frame>
+                </Frames>
+                <Scripts>
+                    <OnMouseDown function="FWoWMainFrame_TitleBar_OnMouseDown"/>
+                    <OnMouseUp function="FWoWMainFrame_TitleBar_OnMouseUp"/>
+                </Scripts>
+            </Frame>
+
+            <!-- Close button (× in title bar) -->
+            <Button name="$parent_CloseBtn" parentKey="CloseBtn">
+                <Size x="46" y="32"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="0" y="-4"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Hover" parentKey="Hover" setAllPoints="true" hidden="true"/>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Label" parentKey="Label" inherits="GameFontNormal" text="×">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick function="FWoWMainFrame_CloseBtn_OnClick"/>
+                    <OnEnter function="FWoWMainFrame_CloseBtn_OnEnter"/>
+                    <OnLeave function="FWoWMainFrame_CloseBtn_OnLeave"/>
+                </Scripts>
+            </Button>
+
+            <!-- Content area -->
+            <Frame name="$parent_ContentArea" parentKey="ContentArea">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="16" y="-40"/>
+                    <Anchor point="BOTTOMRIGHT" x="-16" y="28"/>
+                </Anchors>
+            </Frame>
+
+            <!-- Status bar -->
+            <Frame name="$parent_StatusBar" parentKey="StatusBar">
+                <Size y="24"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture name="$parent_TopEdge" parentKey="TopEdge">
+                            <Size y="1"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT"/>
+                                <Anchor point="TOPRIGHT"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Text" parentKey="Text" inherits="GameFontNormal" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="LEFT" x="12" y="0"/>
+                                <Anchor point="RIGHT" x="-12" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <!-- Resize grippers -->
+            <Frame name="$parent_SizerSE" parentKey="SizerSE" enableMouse="true">
+                <Size x="16" y="16"/>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+                <Scripts>
+                    <OnMouseDown function="FWoWMainFrame_SizerSE_OnMouseDown"/>
+                    <OnMouseUp function="FWoWMainFrame_Sizer_OnMouseUp"/>
+                </Scripts>
+            </Frame>
+
+            <Frame name="$parent_SizerS" parentKey="SizerS" enableMouse="true">
+                <Size y="8"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT"/>
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.SizerSE" relativePoint="BOTTOMLEFT"/>
+                </Anchors>
+                <Scripts>
+                    <OnMouseDown function="FWoWMainFrame_SizerS_OnMouseDown"/>
+                    <OnMouseUp function="FWoWMainFrame_Sizer_OnMouseUp"/>
+                </Scripts>
+            </Frame>
+
+            <Frame name="$parent_SizerE" parentKey="SizerE" enableMouse="true">
+                <Size x="8"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT"/>
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.SizerSE" relativePoint="TOPRIGHT"/>
+                </Anchors>
+                <Scripts>
+                    <OnMouseDown function="FWoWMainFrame_SizerE_OnMouseDown"/>
+                    <OnMouseUp function="FWoWMainFrame_Sizer_OnMouseUp"/>
+                </Scripts>
+            </Frame>
+        </Frames>
+
+        <Scripts>
+            <OnLoad function="FWoWMainFrame_OnLoad"/>
+            <OnShow function="FWoWMainFrame_OnShow"/>
+            <OnHide function="FWoWMainFrame_OnHide"/>
+            <OnSizeChanged function="FWoWMainFrame_OnSizeChanged"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

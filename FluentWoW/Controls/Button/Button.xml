@@ -1,0 +1,176 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWButtonTemplate — Standard accent (primary) button
+         Size: 120×32  |  Parts: BG, TopEdge, Label, Overlay
+         ================================================================ -->
+    <Button name="FWoWButtonTemplate" virtual="true">
+        <Size x="120" y="32"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_Shadow" parentKey="Shadow">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="-1"/>
+                        <Anchor point="BOTTOMRIGHT" y="1"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture name="$parent_TopEdge" parentKey="TopEdge">
+                    <Size x="0" y="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="TOPRIGHT"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parent_BottomEdge" parentKey="BottomEdge">
+                    <Size x="0" y="1"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture name="$parent_Overlay" parentKey="Overlay" setAllPoints="true" alphaMode="ADD"/>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="FWoWButton_OnLoad"/>
+            <OnEnter function="FWoWButton_OnEnter"/>
+            <OnLeave function="FWoWButton_OnLeave"/>
+            <OnMouseDown function="FWoWButton_OnMouseDown"/>
+            <OnMouseUp function="FWoWButton_OnMouseUp"/>
+            <OnClick function="FWoWButton_OnClick"/>
+            <OnEnable function="FWoWButton_OnEnable"/>
+            <OnDisable function="FWoWButton_OnDisable"/>
+        </Scripts>
+    </Button>
+
+    <!-- ================================================================
+         FWoWButtonSubtleTemplate — Subtle (secondary) button
+         ================================================================ -->
+    <Button name="FWoWButtonSubtleTemplate" virtual="true" inherits="FWoWButtonTemplate">
+        <Scripts>
+            <OnLoad function="FWoWButtonSubtle_OnLoad"/>
+        </Scripts>
+    </Button>
+
+    <!-- ================================================================
+         FWoWButtonDestructiveTemplate — Destructive (danger) button
+         ================================================================ -->
+    <Button name="FWoWButtonDestructiveTemplate" virtual="true" inherits="FWoWButtonTemplate">
+        <Scripts>
+            <OnLoad function="FWoWButtonDestructive_OnLoad"/>
+        </Scripts>
+    </Button>
+
+    <!-- ================================================================
+         FWoWIconButtonTemplate — Icon-only button (32×32)
+         Parts: BG, Icon, Overlay
+         ================================================================ -->
+    <Button name="FWoWIconButtonTemplate" virtual="true">
+        <Size x="32" y="32"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_Shadow" parentKey="Shadow">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="-1"/>
+                        <Anchor point="BOTTOMRIGHT" y="1"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_Icon" parentKey="Icon">
+                    <Size x="16" y="16"/>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture name="$parent_Overlay" parentKey="Overlay" setAllPoints="true" alphaMode="ADD"/>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="FWoWIconButton_OnLoad"/>
+            <OnEnter function="FWoWButton_OnEnter"/>
+            <OnLeave function="FWoWButton_OnLeave"/>
+            <OnMouseDown function="FWoWButton_OnMouseDown"/>
+            <OnMouseUp function="FWoWButton_OnMouseUp"/>
+            <OnClick function="FWoWButton_OnClick"/>
+            <OnEnable function="FWoWButton_OnEnable"/>
+            <OnDisable function="FWoWButton_OnDisable"/>
+        </Scripts>
+    </Button>
+
+    <!-- ================================================================
+         FWoWToggleButtonTemplate — Toggle button with checked state
+         Parts: BG, Label, Indicator, Overlay
+         ================================================================ -->
+    <Button name="FWoWToggleButtonTemplate" virtual="true">
+        <Size x="120" y="32"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_Shadow" parentKey="Shadow">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="-1"/>
+                        <Anchor point="BOTTOMRIGHT" y="1"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture name="$parent_TopEdge" parentKey="TopEdge">
+                    <Size x="0" y="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="TOPRIGHT"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parent_BottomEdge" parentKey="BottomEdge">
+                    <Size x="0" y="1"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture name="$parent_Overlay" parentKey="Overlay" setAllPoints="true" alphaMode="ADD"/>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="FWoWToggleButton_OnLoad"/>
+            <OnEnter function="FWoWButton_OnEnter"/>
+            <OnLeave function="FWoWButton_OnLeave"/>
+            <OnMouseDown function="FWoWButton_OnMouseDown"/>
+            <OnMouseUp function="FWoWButton_OnMouseUp"/>
+            <OnClick function="FWoWToggleButton_OnClick"/>
+            <OnEnable function="FWoWButton_OnEnable"/>
+            <OnDisable function="FWoWButton_OnDisable"/>
+        </Scripts>
+    </Button>
+
+</Ui>

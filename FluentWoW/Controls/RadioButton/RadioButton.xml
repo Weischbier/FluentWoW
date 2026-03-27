@@ -1,0 +1,43 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWRadioButtonTemplate — Radio button with circle + dot + label
+         Size: 200×20  |  Parts: Circle, Dot, Label
+         ================================================================ -->
+    <Button name="FWoWRadioButtonTemplate" virtual="true">
+        <Size x="200" y="20"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_Circle" parentKey="Circle">
+                    <Size x="20" y="20"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_Dot" parentKey="Dot" hidden="true">
+                    <Size x="10" y="10"/>
+                    <Anchors>
+                        <Anchor point="CENTER" relativeTo="$parent_Circle"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeTo="$parent_Circle" relativePoint="RIGHT" x="8" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="FWoWRadioButton_OnLoad"/>
+            <OnClick function="FWoWRadioButton_OnClick"/>
+            <OnEnter function="FWoWRadioButton_OnEnter"/>
+            <OnLeave function="FWoWRadioButton_OnLeave"/>
+        </Scripts>
+    </Button>
+
+</Ui>

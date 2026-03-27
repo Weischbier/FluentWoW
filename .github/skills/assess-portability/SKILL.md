@@ -14,7 +14,7 @@ description: >
 
 ## Prerequisites
 
-1. Access to `.help/.sources/WinUI-Gallery-main/WinUIGallery/Samples/ControlPages/`
+1. Access to `.help/.sources/WinUI-Gallery-main/fwow/Samples/ControlPages/`
 2. Access to `.help/.sources/microsoft-ui-xaml-main/specs/` (when available)
 3. wow-api MCP server available for WoW API verification
 
@@ -28,10 +28,10 @@ description: >
 
 ### 1. Read WinUI Source
 
-- Open `.help/.sources/WinUI-Gallery-main/WinUIGallery/Samples/ControlPages/{controlName}Page.xaml`
+- Open `.help/.sources/WinUI-Gallery-main/fwow/Samples/ControlPages/{controlName}Page.xaml`
 - Open the `.xaml.cs` code-behind if it exists
 - Optionally read the spec: `.help/.sources/microsoft-ui-xaml-main/specs/{controlName}/`
-- View design images: `.help/.sources/WinUI-Gallery-main/WinUIGallery/Assets/Design/` for visual measurements
+- View design images: `.help/.sources/WinUI-Gallery-main/fwow/Assets/Design/` for visual measurements
 - Read `.docs/DesignSpecs.md` for already-extracted pixel measurements
 - Identify: visual states, properties, events, child elements, data binding, animations
 

@@ -6,7 +6,7 @@ applyTo: "**/*.xml"
 
 ## Naming
 
-- Template name: `WUIL<ControlName>Template`
+- Template name: `FWoW<ControlName>Template`
 - Always set `virtual="true"` on the template
 - Child frames: `$parent_<PartName>` (e.g., `$parent_Label`, `$parent_Overlay`, `$parent_Thumb`)
 - Always include `parentKey` attribute matching the part name
@@ -15,7 +15,7 @@ applyTo: "**/*.xml"
 
 ```xml
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Frame name="WUIL<Name>Template" virtual="true" inherits="BackdropTemplate">
+    <Frame name="FWoW<Name>Template" virtual="true" inherits="BackdropTemplate">
         <Size x="200" y="32"/>
         <Layers>
             <Layer level="ARTWORK">
@@ -28,7 +28,7 @@ applyTo: "**/*.xml"
             </Layer>
         </Layers>
         <Scripts>
-            <OnLoad function="WUIL<Name>_OnLoad"/>
+            <OnLoad function="FWoW<Name>_OnLoad"/>
         </Scripts>
     </Frame>
 </Ui>
