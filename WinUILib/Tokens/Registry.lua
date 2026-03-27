@@ -108,3 +108,12 @@ end
 function Registry:GetNumber(key)
     return tonumber(self:Get(key)) or 0
 end
+
+---@return table<string, boolean>  A set of registered theme names
+function Registry:GetAvailableThemes()
+    local out = {}
+    for name in pairs(_themes) do
+        out[name] = true
+    end
+    return out
+end

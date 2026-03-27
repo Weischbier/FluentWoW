@@ -20,12 +20,12 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture name="$parent_Icon" parentKey="Icon">
-                    <Size x="16" y="16"/>
+                <FontString name="$parent_Icon" parentKey="Icon"
+                    justifyH="CENTER" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="LEFT" x="16" y="0"/>
                     </Anchors>
-                </Texture>
+                </FontString>
             </Layer>
             <Layer level="ARTWORK">
                 <FontString name="$parent_Title" parentKey="Title"

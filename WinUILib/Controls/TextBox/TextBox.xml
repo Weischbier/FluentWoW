@@ -113,12 +113,12 @@
     <Frame name="WUILSearchBoxTemplate" virtual="true" inherits="WUILTextBoxTemplate">
         <Layers>
             <Layer level="ARTWORK">
-                <Texture name="$parent_SearchIcon" parentKey="SearchIcon">
-                    <Size x="14" y="14"/>
+                <FontString name="$parent_SearchIcon" parentKey="SearchIcon"
+                    justifyH="CENTER" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="LEFT" relativeTo="$parent_Field" relativePoint="LEFT" x="10" y="0"/>
                     </Anchors>
-                </Texture>
+                </FontString>
             </Layer>
         </Layers>
         <Scripts>

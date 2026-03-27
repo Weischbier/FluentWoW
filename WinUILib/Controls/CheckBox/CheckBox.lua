@@ -8,6 +8,9 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+local Icons    = lib.Icons
+local ICON_FONT = lib.FLUENT_ICON_FONT
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -40,12 +43,12 @@ function CheckBoxMixin:OnStateChanged(newState, prevState)
 
     if self._checked then
         self.Check:Show()
-        self.Check:SetSize(10, 10)
-        self.Check:SetVertexColor(T:GetColor("Color.Icon.OnAccent"))
+        self.Check:SetText(Icons.CheckMark)
+        self.Check:SetTextColor(T:GetColor("Color.Icon.OnAccent"))
     elseif self._indeterminate then
         self.Check:Show()
-        self.Check:SetSize(10, 2)
-        self.Check:SetVertexColor(T:GetColor("Color.Icon.OnAccent"))
+        self.Check:SetText(Icons.Remove)
+        self.Check:SetTextColor(T:GetColor("Color.Icon.OnAccent"))
     else
         self.Check:Hide()
     end
@@ -127,7 +130,7 @@ function WUILCheckBox_OnLoad(self)
     self._checked = false
     self._indeterminate = false
     self._threeState = false
-    self.Check:SetColorTexture(T:GetColor("Color.Base.White"))
+    self.Check:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self:OnStateChanged("Normal")
 end
 

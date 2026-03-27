@@ -9,6 +9,9 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+local Icons    = lib.Icons
+local ICON_FONT = lib.FLUENT_ICON_FONT
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -71,7 +74,7 @@ local function applyVisuals(self, state)
     end
 
     -- Chevron
-    hdr.Chevron:SetText(self._expanded and "\226\150\190" or "\226\150\184")  -- ▾ / ▸
+    hdr.Chevron:SetText(self._expanded and Icons.ChevronDown or Icons.ChevronRight)
     hdr.Chevron:SetTextColor(T:GetColor(state == "Disabled" and "Color.Text.Disabled" or "Color.Text.Secondary"))
 
     -- Icon tint
@@ -156,7 +159,7 @@ function ExpanderMixin:SetExpanded(expanded, instant)
     self._expanded = expanded
 
     local hdr = self.Header
-    hdr.Chevron:SetText(expanded and "\226\150\190" or "\226\150\184")
+    hdr.Chevron:SetText(expanded and Icons.ChevronDown or Icons.ChevronRight)
 
     local headerH = hdr:GetHeight()
     local contentH = self._contentHeight or 0
@@ -260,12 +263,8 @@ function WUILSettingsExpander_OnLoad(self)
     if descFont then
         self.Header.DescLabel:SetFont(descFont.font, descFont.size, descFont.flags)
     end
-    local chevFont = T:Get("Typography.Body")
-    if chevFont then
-        self.Header.Chevron:SetFont(chevFont.font, chevFont.size, chevFont.flags)
-    end
-
-    self.Header.Chevron:SetText("\226\150\184")  -- ▸
+    self.Header.Chevron:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+    self.Header.Chevron:SetText(Icons.ChevronRight)
     updateHeaderLayout(self)
 
     applyVisuals(self)

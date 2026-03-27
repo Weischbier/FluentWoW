@@ -8,6 +8,9 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+local Icons    = lib.Icons
+local ICON_FONT = lib.FLUENT_ICON_FONT
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -94,6 +97,8 @@ function TabViewMixin:_RefreshTabs()
             btn.CloseBtn:Show()
             btn.CloseBtn._tabIndex = i
             btn.CloseBtn._tabView = self
+            btn.CloseBtn.Label:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+            btn.CloseBtn.Label:SetText(Icons.ChromeClose)
             btn.Label:SetPoint("RIGHT", btn.CloseBtn, "LEFT", -8, 0)
         else
             btn.CloseBtn:Hide()
@@ -238,6 +243,8 @@ function WUILTabView_OnLoad(self)
     self._selectedIndex = nil
     self._addButtonVisible = false
     self._tabWidthMode = "SizeToContent"
+    self.TabStrip.AddButton.Label:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+    self.TabStrip.AddButton.Label:SetText(Icons.Add)
     self:_ApplyTokens()
 end
 

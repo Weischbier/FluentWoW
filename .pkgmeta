@@ -18,6 +18,7 @@ ignore:
   - WinUILib-Gallery
 
 externals:
+  WinUILib/Libs/LibStub: https://repos.curseforge.com/wow/libstub/trunk
   WinUILib/Libs/Ace3: https://repos.curseforge.com/wow/ace3/trunk
 
 move-folders:

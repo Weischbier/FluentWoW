@@ -8,6 +8,9 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+local Icons    = lib.Icons
+local ICON_FONT = lib.FLUENT_ICON_FONT
+
 -- Header height derived from tokens: XXXL(32) + MD(8) = 40
 local function HEADER_H()
     return T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")
@@ -40,9 +43,9 @@ function ExpanderMixin:OnStateChanged(newState, prevState)
     self.Content.ContentBG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
 
     if self._expanded then
-        self.Header.Chevron:SetText("▾")
+        self.Header.Chevron:SetText(Icons.ChevronDown)
     else
-        self.Header.Chevron:SetText("▸")
+        self.Header.Chevron:SetText(Icons.ChevronRight)
     end
 end
 
@@ -132,6 +135,7 @@ function WUILExpander_OnLoad(self)
     self:WUILInit()
     self._expanded = false
     self._contentHeight = 100
+    self.Header.Chevron:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self:OnStateChanged("Normal")
 end
 

@@ -8,6 +8,9 @@
 local lib = WinUILib
 local T   = lib.Tokens
 
+local Icons    = lib.Icons
+local ICON_FONT = lib.FLUENT_ICON_FONT
+
 local function applyLayout(self)
     local headerHeight = self._headerText ~= nil and self._headerText ~= "" and (T:GetNumber("Spacing.XL") + T:GetNumber("Spacing.SM")) or 0
     local fieldHeight = self._multiline and (self._multilineHeight or 96) or 32
@@ -113,7 +116,7 @@ function TextBoxMixin:OnStateChanged(newState, prevState)
             or state == "Hover" and "Color.Text.Primary"
             or state == "Disabled" and "Color.Text.Disabled"
             or "Color.Text.Secondary"
-        self.SearchIcon:SetVertexColor(T:GetColor(iconKey))
+        self.SearchIcon:SetTextColor(T:GetColor(iconKey))
     end
 
     self:_UpdatePlaceholder()
@@ -221,6 +224,8 @@ function WUILTextBox_OnLoad(self)
     self._readOnly = false
     self._multiline = false
     self._multilineHeight = nil
+    self.Field.ClearBtn.X:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+    self.Field.ClearBtn.X:SetText(Icons.Cancel)
     self.Field.ClearBtn.X:SetTextColor(T:GetColor("Color.Text.Secondary"))
     applyLayout(self)
     self:OnStateChanged("Normal")
@@ -230,7 +235,8 @@ function WUILSearchBox_OnLoad(self)
     WUILTextBox_OnLoad(self)
     self._isSearch = true
     if self.SearchIcon then
-        self.SearchIcon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+        self.SearchIcon:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+        self.SearchIcon:SetText(Icons.Search)
     end
     applyLayout(self)
     self:SetPlaceholder("Search")

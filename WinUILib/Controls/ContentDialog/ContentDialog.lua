@@ -11,6 +11,9 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+local Icons    = lib.Icons
+local ICON_FONT = lib.FLUENT_ICON_FONT
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -113,6 +116,8 @@ function WUILContentDialog_OnLoad(self)
     self:WUILInit()
     self._closable = true
     self._dismissOnOverlay = false
+    self.Card.CloseBtn.X:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+    self.Card.CloseBtn.X:SetText(Icons.ChromeClose)
     self:_ApplyTokens()
 end
 

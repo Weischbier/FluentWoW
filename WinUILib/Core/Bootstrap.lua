@@ -1,14 +1,26 @@
 --- WinUILib – Core/Bootstrap.lua
 -- Global namespace, version negotiation, module registration.
--- Last-writer-wins on major; minor bumped to highest seen.
+-- Uses LibStub when available (Ace3-style hand-off); falls back to direct global.
 -------------------------------------------------------------------------------
 
-local MAJOR, MINOR = "WinUILib", 10000  -- 1.0.0 encoded
+local MAJOR, MINOR = "WinUILib-1.0", 10000  -- 1.00.00 encoded
 
-if WinUILib and (WinUILib.version or 0) >= MINOR then return end
+-------------------------------------------------------------------------------
+-- LibStub registration (same pattern Ace3 uses to hand off the lib)
+-------------------------------------------------------------------------------
 
 ---@class WinUILib
-local lib = WinUILib or {}
+local lib, oldMinor
+if LibStub then
+    lib, oldMinor = LibStub:NewLibrary(MAJOR, MINOR)
+    if not lib then return end          -- a newer copy is already loaded
+else
+    -- Fallback: direct global version guard (no LibStub available)
+    if WinUILib and (WinUILib.version or 0) >= MINOR then return end
+    lib = WinUILib or {}
+end
+
+-- Always expose as a global so `local lib = WinUILib` keeps working
 WinUILib = lib
 
 lib.version    = MINOR

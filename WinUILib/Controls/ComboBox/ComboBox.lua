@@ -8,6 +8,9 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+local Icons    = lib.Icons
+local ICON_FONT = lib.FLUENT_ICON_FONT
+
 local function applyLayout(self)
     local headerHeight = self._headerText ~= nil and self._headerText ~= "" and (T:GetNumber("Spacing.XL") + T:GetNumber("Spacing.SM")) or 0
     local fieldHeight = 32
@@ -224,6 +227,8 @@ function WUILComboBox_OnLoad(self)
     if font then
         self.SelectedLabel:SetFont(font.font, font.size, font.flags)
     end
+    self.Field.Arrow:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+    self.Field.Arrow:SetText(Icons.ChevronDown)
     applyLayout(self)
     self:OnStateChanged("Normal")
 end

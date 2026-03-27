@@ -9,15 +9,18 @@ local lib = WinUILib
 local T   = lib.Tokens
 local Mot = lib.Motion
 
+local Icons    = lib.Icons
+local ICON_FONT = lib.FLUENT_ICON_FONT
+
 -------------------------------------------------------------------------------
 -- Severity token maps
 -------------------------------------------------------------------------------
 
 local SEVERITY = {
-    Info    = { edge = "Color.Accent.Primary",    icon = "Color.Accent.Primary",    iconColor = "Color.Icon.OnAccent" },
-    Success = { edge = "Color.Feedback.Success",  icon = "Color.Feedback.Success",  iconColor = "Color.Icon.OnAccent" },
-    Warning = { edge = "Color.Feedback.Warning",  icon = "Color.Feedback.Warning",  iconColor = "Color.Text.Primary"  },
-    Error   = { edge = "Color.Feedback.Error",    icon = "Color.Feedback.Error",    iconColor = "Color.Icon.OnAccent" },
+    Info    = { edge = "Color.Accent.Primary",    icon = "Color.Accent.Primary",    iconColor = "Color.Icon.OnAccent", glyph = "Info" },
+    Success = { edge = "Color.Feedback.Success",  icon = "Color.Feedback.Success",  iconColor = "Color.Icon.OnAccent", glyph = "StatusCircleCheckmark" },
+    Warning = { edge = "Color.Feedback.Warning",  icon = "Color.Feedback.Warning",  iconColor = "Color.Text.Primary",  glyph = "Warning" },
+    Error   = { edge = "Color.Feedback.Error",    icon = "Color.Feedback.Error",    iconColor = "Color.Icon.OnAccent", glyph = "ErrorBadge" },
 }
 
 -------------------------------------------------------------------------------
@@ -96,8 +99,8 @@ function InfoBarMixin:_ApplySeverity()
     local sev = SEVERITY[self._severity] or SEVERITY.Info
     self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
     self.LeftEdge:SetColorTexture(T:GetColor(sev.edge))
-    self.Icon:SetColorTexture(T:GetColor("Color.Base.White"))
-    self.Icon:SetVertexColor(T:GetColor(sev.icon))
+    self.Icon:SetText(Icons[sev.glyph])
+    self.Icon:SetTextColor(T:GetColor(sev.icon))
     self.Title:SetTextColor(T:GetColor("Color.Text.Primary"))
     self.Message:SetTextColor(T:GetColor("Color.Text.Secondary"))
     self.CloseBtn.X:SetTextColor(T:GetColor("Color.Text.Secondary"))
@@ -163,14 +166,10 @@ function InfoBarMixin:Close()
     end)
 end
 
----@param path string  atlas or file path
----@param isAtlas? boolean
-function InfoBarMixin:SetIcon(path, isAtlas)
-    if isAtlas then
-        self.Icon:SetAtlas(path)
-    else
-        self.Icon:SetTexture(path)
-    end
+---@param iconName string  Fluent icon name (key in WinUILib.Icons) or a raw UTF-8 glyph string
+function InfoBarMixin:SetIcon(iconName)
+    local glyph = Icons[iconName] or iconName
+    self.Icon:SetText(glyph)
 end
 
 -------------------------------------------------------------------------------
@@ -184,6 +183,9 @@ function WUILInfoBar_OnLoad(self)
     self._closable = true
     self._iconVisible = true
     self._actionControl = nil
+    self.Icon:SetFont(ICON_FONT, T:GetNumber("Icon.MD"), "")
+    self.CloseBtn.X:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+    self.CloseBtn.X:SetText(Icons.ChromeClose)
     self:_ApplySeverity()
 end
 

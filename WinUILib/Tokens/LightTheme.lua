@@ -1,5 +1,6 @@
---- WinUILib – Tokens/DefaultTheme.lua
--- Default dark theme token table. All color values are {r, g, b, a} in 0-1.
+--- WinUILib – Tokens/LightTheme.lua
+-- WinUI-inspired light theme token table. All color values are {r, g, b, a} in 0-1.
+-- Mirrors the structure of DefaultTheme.lua with light-mode color values.
 -------------------------------------------------------------------------------
 
 local lib = WinUILib
@@ -7,33 +8,38 @@ local lib = WinUILib
 local function c(r, g, b, a) return { r, g, b, a or 1 } end
 
 -------------------------------------------------------------------------------
--- Raw colour palette
+-- Raw colour palette (light mode)
 -------------------------------------------------------------------------------
 
 local RAW = {
-    Gray0   = c(0.03, 0.05, 0.08),
-    Gray1   = c(0.06, 0.09, 0.13),
-    Gray2   = c(0.09, 0.13, 0.19),
-    Gray3   = c(0.13, 0.18, 0.26),
-    Gray4   = c(0.20, 0.27, 0.38),
-    Gray5   = c(0.30, 0.39, 0.52),
-    Gray6   = c(0.43, 0.54, 0.68),
-    Gray7   = c(0.57, 0.67, 0.79),
-    Gray8   = c(0.74, 0.81, 0.90),
-    Gray9   = c(0.89, 0.93, 0.98),
-    Gray10  = c(0.96, 0.98, 1.00),
+    -- Surface / background grays — lightest to darkest
+    Gray0   = c(1.00, 1.00, 1.00),       -- pure white (base surface)
+    Gray1   = c(0.98, 0.98, 0.99),       -- near-white
+    Gray2   = c(0.95, 0.95, 0.97),       -- very light gray
+    Gray3   = c(0.91, 0.91, 0.93),       -- light gray
+    Gray4   = c(0.85, 0.85, 0.87),       -- medium-light gray
+    Gray5   = c(0.74, 0.74, 0.77),       -- medium gray
+    Gray6   = c(0.58, 0.58, 0.62),       -- medium-dark gray
+    Gray7   = c(0.42, 0.42, 0.46),       -- dark gray
+    Gray8   = c(0.26, 0.26, 0.30),       -- very dark gray
+    Gray9   = c(0.14, 0.14, 0.16),       -- near-black
+    Gray10  = c(0.08, 0.08, 0.10),       -- darkest text
+
     White   = c(1.00, 1.00, 1.00),
+    Black   = c(0.00, 0.00, 0.00),
 
-    Accent0 = c(0.00, 0.32, 0.68),
-    Accent1 = c(0.06, 0.49, 0.88),
-    Accent2 = c(0.23, 0.66, 1.00),
-    Accent3 = c(0.58, 0.80, 1.00),
+    -- Accent blues — slightly deeper for contrast on light backgrounds
+    Accent0 = c(0.00, 0.28, 0.60),
+    Accent1 = c(0.00, 0.38, 0.78),
+    Accent2 = c(0.06, 0.49, 0.88),
+    Accent3 = c(0.44, 0.72, 1.00),
 
-    Green   = c(0.16, 0.74, 0.47),
-    Yellow  = c(0.98, 0.74, 0.16),
-    Orange  = c(0.96, 0.53, 0.14),
-    Red     = c(0.89, 0.25, 0.27),
-    RedHov  = c(0.96, 0.36, 0.36),
+    -- Feedback colours — slightly muted for light surfaces
+    Green   = c(0.11, 0.60, 0.38),
+    Yellow  = c(0.80, 0.58, 0.00),
+    Orange  = c(0.78, 0.38, 0.00),
+    Red     = c(0.75, 0.16, 0.16),
+    RedHov  = c(0.84, 0.24, 0.24),
 }
 
 -------------------------------------------------------------------------------
@@ -44,25 +50,26 @@ local tokens = {
     Color = {
         Base = {
             White = RAW.White,
+            Black = RAW.Black,
         },
         Surface = {
-            Base     = RAW.Gray0,
-            Raised   = RAW.Gray1,
-            Overlay  = RAW.Gray2,
-            Elevated = RAW.Gray3,
-            Stroke   = RAW.Gray4,
+            Base     = RAW.Gray0,         -- white background
+            Raised   = RAW.Gray1,         -- cards on white
+            Overlay  = RAW.Gray2,         -- drop-downs, flyouts
+            Elevated = RAW.Gray3,         -- elevated elements
+            Stroke   = RAW.Gray4,         -- surface dividers
         },
         Border = {
             Default = RAW.Gray4,
             Subtle  = RAW.Gray3,
-            Focus   = RAW.Accent2,
+            Focus   = RAW.Accent1,
             Error   = RAW.Red,
         },
         Text = {
-            Primary   = RAW.Gray10,
-            Secondary = RAW.Gray8,
-            Disabled  = RAW.Gray6,
-            OnAccent  = RAW.White,
+            Primary   = RAW.Gray10,       -- near-black on white
+            Secondary = RAW.Gray7,
+            Disabled  = RAW.Gray5,
+            OnAccent  = RAW.White,        -- white text on accent fill
             Error     = RAW.Red,
             Warning   = RAW.Yellow,
             Success   = RAW.Green,
@@ -87,9 +94,9 @@ local tokens = {
             Info       = RAW.Accent1,
         },
         Overlay = {
-            Dialog = c(0, 0, 0, 0.72),
-            Hover  = c(1, 1, 1, 0.08),
-            Press  = c(1, 1, 1, 0.16),
+            Dialog = c(0, 0, 0, 0.40),   -- lighter scrim on light theme
+            Hover  = c(0, 0, 0, 0.04),   -- subtle dark overlay on light bg
+            Press  = c(0, 0, 0, 0.08),   -- press overlay
         },
     },
 
@@ -165,5 +172,4 @@ local tokens = {
     },
 }
 
-lib.Tokens:RegisterTheme("Default", tokens)
-lib.Tokens:RegisterTheme("Dark", tokens)
+lib.Tokens:RegisterTheme("Light", tokens)
