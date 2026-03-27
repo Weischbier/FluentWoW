@@ -6,6 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Mot = lib.Motion
 
 -------------------------------------------------------------------------------
 -- Skeleton Mixin

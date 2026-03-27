@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2026-03-27
 
 ### Added
+
 - Controls: NavigationView — sidebar navigation with collapsible pane and selection indicator
 - Controls: BreadcrumbBar — horizontal path breadcrumb trail with click navigation
 - Controls: NumberBox — validated numeric input with spin buttons, min/max/step
@@ -22,7 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2025-01-01
 
-### Added
+### Added (v1.0.0)
+
 - Core runtime: Bootstrap, Utils, EventBus, StateMachine, FramePool
 - Token registry with override → theme → default resolution
 - Dark theme with full color token table

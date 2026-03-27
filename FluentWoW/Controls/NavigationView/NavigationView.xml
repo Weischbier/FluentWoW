@@ -38,9 +38,9 @@
                             </Layer>
                         </Layers>
                         <Scripts>
-                            <OnClick function="FWoWNavigationView_ToggleBtn_OnClick"/>
-                            <OnEnter function="FWoWNavigationView_ToggleBtn_OnEnter"/>
-                            <OnLeave function="FWoWNavigationView_ToggleBtn_OnLeave"/>
+                            <OnClick function="FWoWNavToggleBtn_OnClick"/>
+                            <OnEnter function="FWoWNavToggleBtn_OnEnter"/>
+                            <OnLeave function="FWoWNavToggleBtn_OnLeave"/>
                         </Scripts>
                     </Button>
                     <Frame name="$parent_ItemContainer" parentKey="ItemContainer">

@@ -95,17 +95,20 @@ function NavViewMixin:IsPaneExpanded()
 end
 
 function NavViewMixin:_BuildItems()
-    -- Release existing items
-    for _, btn in ipairs(self._navButtons or {}) do
-        lib.FramePool:Release(btn)
+    if not self._navPool then
+        self._navPool = lib.FramePool:New("Button", self.Pane.ItemContainer, "FWoWNavItemTemplate", function(btn)
+            btn._navView = nil
+            btn._itemKey = nil
+        end)
     end
+    self._navPool:ReleaseAll()
     self._navButtons = {}
 
     local container = self.Pane.ItemContainer
     local yOff = 0
 
     for i, item in ipairs(self._itemData or {}) do
-        local btn = lib.FramePool:Acquire("FWoWNavItemTemplate", container)
+        local btn = self._navPool:Acquire()
         btn:ClearAllPoints()
         btn:SetPoint("TOPLEFT", container, "TOPLEFT", 4, -yOff)
         btn:SetPoint("RIGHT", container, "RIGHT", -4, 0)
@@ -214,17 +217,17 @@ function FWoWNavigationView_OnLoad(self)
     self:OnStateChanged("Normal")
 end
 
-function FWoWNavigationView_ToggleBtn_OnClick(self)
+function FWoWNavToggleBtn_OnClick(self)
     local nav = self:GetParent():GetParent()
     nav:SetPaneExpanded(not nav:IsPaneExpanded())
 end
 
-function FWoWNavigationView_ToggleBtn_OnEnter(self)
+function FWoWNavToggleBtn_OnEnter(self)
     self.BG:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
     self.BG:Show()
 end
 
-function FWoWNavigationView_ToggleBtn_OnLeave(self)
+function FWoWNavToggleBtn_OnLeave(self)
     self.BG:Hide()
 end
 

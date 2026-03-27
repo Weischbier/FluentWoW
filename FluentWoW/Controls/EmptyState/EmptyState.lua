@@ -6,6 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -33,7 +34,7 @@ end
 function EmptyStateMixin:SetIcon(icon)
     if icon and icon ~= "" then
         if ICON_FONT then
-            self.Icon:SetFont(ICON_FONT, 32, "")
+            self.Icon:SetFont(ICON_FONT, T:GetNumber("Icon.XL"), "")
         end
         self.Icon:SetText(icon)
         self.Icon:Show()

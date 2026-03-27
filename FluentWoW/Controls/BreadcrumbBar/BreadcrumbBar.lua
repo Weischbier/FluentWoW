@@ -6,6 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -43,10 +44,13 @@ function BreadcrumbMixin:SetOnItemClicked(fn)
 end
 
 function BreadcrumbMixin:_BuildCrumbs()
-    -- Release existing
-    for _, crumb in ipairs(self._crumbs or {}) do
-        lib.FramePool:Release(crumb)
+    if not self._crumbPool then
+        self._crumbPool = lib.FramePool:New("Button", self.Container, "FWoWBreadcrumbItemTemplate", function(btn)
+            btn._breadcrumb = nil
+            btn._index = nil
+        end)
     end
+    self._crumbPool:ReleaseAll()
     self._crumbs = {}
 
     local container = self.Container
@@ -54,7 +58,7 @@ function BreadcrumbMixin:_BuildCrumbs()
     local items = self._items or {}
 
     for i, label in ipairs(items) do
-        local crumb = lib.FramePool:Acquire("FWoWBreadcrumbItemTemplate", container)
+        local crumb = self._crumbPool:Acquire()
         crumb:ClearAllPoints()
         crumb:SetPoint("LEFT", container, "LEFT", xOff, 0)
         crumb._breadcrumb = self

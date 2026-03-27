@@ -68,9 +68,13 @@ function SegmentMixin:SetOnSelectionChanged(fn)
 end
 
 function SegmentMixin:_BuildSegments()
-    for _, btn in ipairs(self._segButtons or {}) do
-        lib.FramePool:Release(btn)
+    if not self._segPool then
+        self._segPool = lib.FramePool:New("Button", self.SegmentContainer, "FWoWSegmentItemTemplate", function(btn)
+            btn._segControl = nil
+            btn._segIndex = nil
+        end)
     end
+    self._segPool:ReleaseAll()
     self._segButtons = {}
 
     local items = self._items or {}
@@ -84,7 +88,7 @@ function SegmentMixin:_BuildSegments()
     self.Indicator:SetHeight(self:GetHeight() - 4)
 
     for i, label in ipairs(items) do
-        local btn = lib.FramePool:Acquire("FWoWSegmentItemTemplate", self.SegmentContainer)
+        local btn = self._segPool:Acquire()
         btn:ClearAllPoints()
         btn:SetPoint("LEFT", self, "LEFT", (i - 1) * segW, 0)
         btn:SetSize(segW, self:GetHeight())

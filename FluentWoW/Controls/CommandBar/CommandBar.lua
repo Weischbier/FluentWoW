@@ -6,6 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -43,10 +44,14 @@ function CommandBarMixin:GetCommands()
 end
 
 function CommandBarMixin:_BuildItems()
-    -- Release existing
-    for _, btn in ipairs(self._cmdButtons or {}) do
-        lib.FramePool:Release(btn)
+    if not self._cmdPool then
+        self._cmdPool = lib.FramePool:New("Button", self.PrimaryContainer, "FWoWCommandBarItemTemplate", function(btn)
+            btn._cmdBar = nil
+            btn._cmdKey = nil
+            btn._cmdData = nil
+        end)
     end
+    self._cmdPool:ReleaseAll()
     self._cmdButtons = {}
 
     local container = self.PrimaryContainer
@@ -54,7 +59,7 @@ function CommandBarMixin:_BuildItems()
     local gap = T:GetNumber("Spacing.XS")
 
     for i, cmd in ipairs(self._commands or {}) do
-        local btn = lib.FramePool:Acquire("FWoWCommandBarItemTemplate", container)
+        local btn = self._cmdPool:Acquire()
         btn:ClearAllPoints()
         btn:SetPoint("LEFT", container, "LEFT", xOff, 0)
         btn:SetSize(32, 32)
