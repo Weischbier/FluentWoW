@@ -212,3 +212,87 @@ scroll:SetContentHeight(50 * 20)
 - **Mouse wheel:** 40px per scroll step
 - **Thumb drag:** Click and drag the scroll thumb
 - **Auto-hide:** Thumb hides when content fits within the visible area
+
+---
+
+## NavigationView
+
+A sidebar navigation control with a collapsible pane, selection indicator, and content area. The pane can toggle between expanded (200px) and collapsed (48px icon-only) modes with smooth animation.
+
+**WinUI reference:** [NavigationView](https://learn.microsoft.com/windows/apps/design/controls/navigationview)
+
+### Creation
+
+```lua
+local nav = FluentWoW:CreateNavigationView(parent, "MyNav")
+nav:SetAllPoints(parent)
+
+-- Define navigation items
+nav:SetItems({
+    { key = "home",     icon = FluentWoW.Icons.Home,     text = "Home" },
+    { key = "settings", icon = FluentWoW.Icons.Settings, text = "Settings" },
+    { key = "about",    icon = FluentWoW.Icons.Info,     text = "About" },
+})
+
+-- React to selection changes
+nav:SetOnSelectionChanged(function(self, key, index)
+    print("Selected:", key)
+end)
+
+-- Embed content per page
+local contentArea = nav:GetContentArea()
+```
+
+### API
+
+| Method | Parameters | Returns | Description |
+|---|---|---|---|
+| `SetItems(items)` | `{key, icon?, text}[]` | — | Set navigation items |
+| `SelectItem(key)` | `string` | — | Select item by key |
+| `SetPaneExpanded(exp)` | `boolean` | — | Expand/collapse sidebar pane |
+| `SetItemContent(key, frame)` | `string, Frame` | — | Assign content frame for a nav key |
+| `GetContentArea()` | — | `Frame` | Content area frame |
+| `SetOnSelectionChanged(fn)` | `function(self, key, index)` | — | Selection change callback |
+
+### Visual Behaviour
+
+- **Collapsed pane:** 48px wide, shows only icons
+- **Expanded pane:** 200px wide, shows icon + text labels
+- **Selection indicator:** Animated highlight bar on selected item
+- **FramePool:** Nav items are recycled via `FramePool`
+- **States:** `Normal` | `Disabled`
+
+---
+
+## BreadcrumbBar
+
+A horizontal breadcrumb trail that displays a navigable path hierarchy. Click any crumb to navigate back to that level.
+
+**WinUI reference:** [BreadcrumbBar](https://learn.microsoft.com/windows/apps/design/controls/breadcrumbbar)
+
+### Creation
+
+```lua
+local crumbs = FluentWoW:CreateBreadcrumbBar(parent, "PathBar")
+crumbs:SetPoint("TOPLEFT", parent, "TOPLEFT", 16, -16)
+
+crumbs:SetItems({ "Home", "Documents", "Projects", "FluentWoW" })
+
+crumbs:SetOnItemClicked(function(self, index, text)
+    print("Navigate to:", text, "at level", index)
+end)
+```
+
+### API
+
+| Method | Parameters | Returns | Description |
+|---|---|---|---|
+| `SetItems(items)` | `string[]` | — | Set breadcrumb path levels |
+| `SetOnItemClicked(fn)` | `function(self, index, text)` | — | Crumb click callback |
+
+### Visual Behaviour
+
+- Items separated by chevron (`>`) icons
+- Last item rendered in bold (current location)
+- All items except the last are clickable
+- **FramePool:** Crumb items recycled via `FramePool`

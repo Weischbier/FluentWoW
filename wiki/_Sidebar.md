@@ -13,6 +13,7 @@
 * [Input Controls](Input-Controls)
 * [Feedback Controls](Feedback-Controls)
 * [Navigation Controls](Navigation-Controls)
+* [Advanced Controls](Advanced-Controls)
 * [Layout](Layout)
 * [Settings Controls](Settings-Controls)
 
