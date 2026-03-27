@@ -1,0 +1,128 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWNumberBoxTemplate — Validated numeric input with spin buttons
+         Size: 200×32  |  Parts: BG, Border, EditBox, SpinUp, SpinDown, HeaderLabel
+         ================================================================ -->
+    <Frame name="FWoWNumberBoxTemplate" virtual="true">
+        <Size x="200" y="32"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_HeaderLabel" parentKey="HeaderLabel"
+                    inherits="GameFontNormalSmall" justifyH="LEFT" hidden="true">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame name="$parent_Field" parentKey="Field">
+                <Size x="0" y="32"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_Shadow" parentKey="Shadow">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" y="-1"/>
+                                <Anchor point="BOTTOMRIGHT" y="1"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
+                        <Texture name="$parent_TopEdge" parentKey="TopEdge">
+                            <Size x="0" y="1"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT"/>
+                                <Anchor point="TOPRIGHT"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture name="$parent_BottomEdge" parentKey="BottomEdge">
+                            <Size x="0" y="1"/>
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT"/>
+                                <Anchor point="BOTTOMRIGHT"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <EditBox name="$parent_EditBox" parentKey="EditBox"
+                        autoFocus="false" numeric="true">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="12" y="-8"/>
+                            <Anchor point="BOTTOMRIGHT" x="-64" y="8"/>
+                        </Anchors>
+                        <FontString inherits="GameFontHighlight"/>
+                        <Scripts>
+                            <OnEditFocusGained function="FWoWNumberBox_OnFocusGained"/>
+                            <OnEditFocusLost function="FWoWNumberBox_OnFocusLost"/>
+                            <OnEnterPressed function="FWoWNumberBox_OnEnterPressed"/>
+                            <OnEscapePressed function="FWoWNumberBox_OnEscapePressed"/>
+                            <OnTextChanged function="FWoWNumberBox_OnTextChanged"/>
+                        </Scripts>
+                    </EditBox>
+                    <Button name="$parent_SpinUp" parentKey="SpinUp">
+                        <Size x="28" y="16"/>
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" x="0" y="0"/>
+                        </Anchors>
+                        <Layers>
+                            <Layer level="BACKGROUND">
+                                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true" hidden="true"/>
+                            </Layer>
+                            <Layer level="ARTWORK">
+                                <FontString name="$parent_Arrow" parentKey="Arrow"
+                                    inherits="GameFontNormalSmall" justifyH="CENTER">
+                                    <Anchors>
+                                        <Anchor point="CENTER"/>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                        <Scripts>
+                            <OnClick function="FWoWNumberBox_SpinUp_OnClick"/>
+                            <OnEnter function="FWoWNumberBox_Spin_OnEnter"/>
+                            <OnLeave function="FWoWNumberBox_Spin_OnLeave"/>
+                        </Scripts>
+                    </Button>
+                    <Button name="$parent_SpinDown" parentKey="SpinDown">
+                        <Size x="28" y="16"/>
+                        <Anchors>
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+                        </Anchors>
+                        <Layers>
+                            <Layer level="BACKGROUND">
+                                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true" hidden="true"/>
+                            </Layer>
+                            <Layer level="ARTWORK">
+                                <FontString name="$parent_Arrow" parentKey="Arrow"
+                                    inherits="GameFontNormalSmall" justifyH="CENTER">
+                                    <Anchors>
+                                        <Anchor point="CENTER"/>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                        <Scripts>
+                            <OnClick function="FWoWNumberBox_SpinDown_OnClick"/>
+                            <OnEnter function="FWoWNumberBox_Spin_OnEnter"/>
+                            <OnLeave function="FWoWNumberBox_Spin_OnLeave"/>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad function="FWoWNumberBox_OnLoad"/>
+            <OnEnter function="FWoWNumberBox_OnEnter"/>
+            <OnLeave function="FWoWNumberBox_OnLeave"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

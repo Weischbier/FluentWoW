@@ -1,0 +1,43 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWBreadcrumbBarTemplate — Path breadcrumb trail
+         Size: 400×24  |  Parts: Container (holds crumb items)
+         ================================================================ -->
+    <Frame name="FWoWBreadcrumbBarTemplate" virtual="true">
+        <Size x="400" y="24"/>
+        <Frames>
+            <Frame name="$parent_Container" parentKey="Container" setAllPoints="true"/>
+        </Frames>
+        <Scripts>
+            <OnLoad function="FWoWBreadcrumbBar_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+    <!-- Breadcrumb item template (used by FramePool) -->
+    <Button name="FWoWBreadcrumbItemTemplate" virtual="true">
+        <Size x="80" y="24"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="LEFT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parent_Separator" parentKey="Separator"
+                    inherits="GameFontNormal" justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeTo="$parent_Label" relativePoint="RIGHT" x="8" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnClick function="FWoWBreadcrumbItem_OnClick"/>
+            <OnEnter function="FWoWBreadcrumbItem_OnEnter"/>
+            <OnLeave function="FWoWBreadcrumbItem_OnLeave"/>
+        </Scripts>
+    </Button>
+
+</Ui>

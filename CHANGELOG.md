@@ -10,7 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Core runtime: Bootstrap, Utils, EventBus, StateMachine, FramePool
 - Token registry with override → theme → default resolution
-- Default dark theme with full token table
+- Dark theme with full color token table
+- Light theme with inverted color palette
+- Segoe Fluent Icons glyph map (Assets/FluentIcons)
+- Vendored libraries: LibStub, flux motion engine
+- Controls: MainFrame (application window shell with title bar, resize, drag)
 - Controls: Button (Accent/Subtle/Destructive), IconButton, ToggleButton
 - Controls: CheckBox, RadioButton, ToggleSwitch
 - Controls: TextBlock (Display/Title/Body/Caption), TextBox, SearchBox
@@ -19,6 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Controls: InfoBar (4 severities), ContentDialog
 - Controls: Expander, TabView, ScrollFrame
 - Layout: StackLayout (VStack / HStack)
-- Motion: FadeIn, FadeOut, SlideIn, ScalePress
+- Motion: Tween engine with 28 easing functions + timer API
 - Settings: SettingsCard, SettingsExpander
-- FluentWoW-Gallery: 5-page interactive showcase addon
+- FluentWoW-Gallery: 5-page interactive showcase addon (`/fwow`)

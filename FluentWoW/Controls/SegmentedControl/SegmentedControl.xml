@@ -1,0 +1,56 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWSegmentedControlTemplate — Segmented toggle selector
+         Size: 300×32  |  Parts: BG, Indicator, SegmentContainer
+         ================================================================ -->
+    <Frame name="FWoWSegmentedControlTemplate" virtual="true">
+        <Size x="300" y="32"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame name="$parent_Indicator" parentKey="Indicator">
+                <Size x="100" y="28"/>
+                <Anchors>
+                    <Anchor point="LEFT" x="2" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Frame name="$parent_SegmentContainer" parentKey="SegmentContainer" setAllPoints="true"/>
+        </Frames>
+        <Scripts>
+            <OnLoad function="FWoWSegmentedControl_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+    <!-- Segment item template (used by FramePool) -->
+    <Button name="FWoWSegmentItemTemplate" virtual="true">
+        <Size x="100" y="32"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Label" parentKey="Label"
+                    inherits="GameFontNormal" justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnClick function="FWoWSegmentItem_OnClick"/>
+            <OnEnter function="FWoWSegmentItem_OnEnter"/>
+            <OnLeave function="FWoWSegmentItem_OnLeave"/>
+        </Scripts>
+    </Button>
+
+</Ui>

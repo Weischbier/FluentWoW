@@ -60,6 +60,12 @@ Other candidates considered:
 ```
 FluentWoW/
 ├── FluentWoW.toc                 TOC load-order manifest
+├── Libs/
+│   ├── LibStub/LibStub.lua      Vendored Ace3 library stub (version negotiation)
+│   └── Motion/                  Vendored flux-derived tweening engine
+│       ├── base.lua
+│       ├── flux.lua
+│       └── timer.lua
 ├── Core/
 │   ├── Bootstrap.lua            Global namespace, version negotiation, OnLoad
 │   ├── Utils.lua                Table, string, colour, frame helpers
@@ -70,8 +76,12 @@ FluentWoW/
 │   ├── Registry.lua             Token resolution + hardcoded design constants
 │   ├── DarkTheme.lua            Dark-theme color table (colors only)
 │   └── LightTheme.lua           Light-theme color table (colors only)
+├── Assets/
+│   ├── FluentIcons.lua          Segoe Fluent Icons glyph map
+│   └── Fonts/                   Bundled font files
 ├── Controls/
 │   ├── Base/ControlBase.lua     Shared mixin: VSM, tooltip, enable/disable
+│   ├── MainFrame/               Application window shell (title bar, resize, drag)
 │   ├── Button/                  Button, IconButton, ToggleButton
 │   ├── CheckBox/
 │   ├── RadioButton/
@@ -85,11 +95,20 @@ FluentWoW/
 │   ├── ContentDialog/
 │   ├── Expander/
 │   ├── TabView/
-│   └── ScrollFrame/
+│   ├── ScrollFrame/
+│   ├── NavigationView/         Sidebar navigation with collapsible pane
+│   ├── BreadcrumbBar/           Hierarchical path breadcrumb trail
+│   ├── NumberBox/               Validated numeric input with spin buttons
+│   ├── TeachingTip/             Contextual teaching callout / coach mark
+│   ├── CommandBar/              Toolbar with primary + overflow commands
+│   ├── SegmentedControl/        Mutually exclusive segmented selector
+│   ├── Badge/                   Status pill / badge indicator
+│   ├── EmptyState/              Placeholder for empty content areas
+│   └── Skeleton/                Animated shimmer loading placeholder
 ├── Layout/
 │   ├── StackLayout.xml/.lua     VStack + HStack (StackPanel equivalent)
 ├── Motion/
-│   └── Motion.lua               FadeIn/Out, SlideIn, ScalePress, Stop
+│   └── Motion.lua               Tween-based animation engine (flux-derived)
 └── Settings/
     ├── SettingsCard.xml/.lua    CommunityToolkit SettingsCard equivalent
     └── SettingsExpander.xml/.lua CommunityToolkit SettingsExpander equivalent
@@ -115,7 +134,11 @@ FluentWoW-Gallery/
 | `Core/StateMachine` | Per-control state tracking | ✅ | No |
 | `Core/FramePool` | Frame recycling | ✅ | No |
 | `Tokens/Registry` | Token lookup + override | ✅ | No |
-| `Tokens/DefaultTheme` | Default token values | ✅ | No (swappable) |
+| `Tokens/DarkTheme` | Dark-theme color values | ✅ | No (swappable) |
+| `Tokens/LightTheme` | Light-theme color values | ✅ | Yes (swappable) |
+| `Assets/FluentIcons` | Icon glyph map | ✅ | Yes |
+| `Libs/LibStub` | Library version negotiation | ✅ | No |
+| `Libs/Motion` | Vendored flux tween engine | ✅ | No |
 | `Controls/*` | All UI controls | Mostly ✅ (see notes) | Yes, per-control |
 | `Layout/*` | Stack layout helpers | ✅ | Yes |
 | `Motion` | Animation presets | ✅ | Yes |
@@ -155,6 +178,7 @@ FluentWoW-Gallery/
 ### Navigation / Layout
 | Control | Template | Status |
 |---|---|---|
+| MainFrame | `FWoWMainFrameTemplate` | ✅ MVP |
 | TabView | `FWoWTabViewTemplate` | ✅ MVP |
 | Expander | `FWoWExpanderTemplate` | ✅ MVP |
 | ScrollFrame | `FWoWScrollFrameTemplate` | ✅ MVP |
@@ -166,17 +190,24 @@ FluentWoW-Gallery/
 | SettingsCard | `FWoWSettingsCardTemplate` | ✅ MVP |
 | SettingsExpander | `FWoWSettingsExpanderTemplate` | ✅ MVP |
 
-### Planned (Phase 2+)
-- NavigationView sidebar  
-- BreadcrumbBar  
-- NumberBox (validated numeric input)  
-- TeachingTip (coach marks)  
-- CommandBar / Toolbar  
-- SegmentedControl  
-- Badge / status pill  
-- EmptyState placeholder  
-- Skeleton loading state  
+### Navigation / Advanced
+| Control | Template | Status |
+|---|---|---|
+| NavigationView | `FWoWNavigationViewTemplate` | ✅ Phase 2 |
+| BreadcrumbBar | `FWoWBreadcrumbBarTemplate` | ✅ Phase 2 |
+| NumberBox | `FWoWNumberBoxTemplate` | ✅ Phase 2 |
+| TeachingTip | `FWoWTeachingTipTemplate` | ✅ Phase 2 |
+| CommandBar | `FWoWCommandBarTemplate` | ✅ Phase 2 |
+| SegmentedControl | `FWoWSegmentedControlTemplate` | ✅ Phase 2 |
+| Badge | `FWoWBadgeTemplate` | ✅ Phase 2 |
+| EmptyState | `FWoWEmptyStateTemplate` | ✅ Phase 2 |
+| Skeleton | `FWoWSkeletonTemplate` | ✅ Phase 2 |
+
+### Planned (Phase 3+)
 - Virtualized list (true row recycling)
+- Grid layout container
+- Responsive width classes
+- Connected animation helpers
 
 ---
 
@@ -327,13 +358,15 @@ assert(FluentWoW and FluentWoW.version >= 10000,
 
 ## 11. Gallery Addon
 
-Open with: `/fwow` or `/fwow`
+Open with: `/fwow`
 
 Pages:
 - **Buttons** — Button variants, ToggleButton, state demo
 - **Input Controls** — CheckBox, RadioButton, ToggleSwitch, TextBox, Slider, ComboBox
 - **Feedback & Dialogs** — ProgressBar, ProgressRing, InfoBar, ContentDialog, Expander
 - **Layout & Navigation** — VStack, HStack, TabView
+- **Navigation** — NavigationView, BreadcrumbBar
+- **Advanced Controls** — NumberBox, CommandBar, SegmentedControl, Badge, TeachingTip, EmptyState, Skeleton
 - **Settings Controls** — SettingsCard, SettingsExpander
 
 ---
@@ -415,31 +448,35 @@ session is always used.
 - Mapped WinUI concepts to WoW primitives
 - Defined token system and naming conventions
 
-### Phase 1 – Core runtime + tokens + MVP controls ✅ (this PR)
+### Phase 1 – Core runtime + tokens + MVP controls ✅
+- Vendored libraries: LibStub, flux motion engine
 - Bootstrap, Utils, EventBus, StateMachine, FramePool
-- Token registry + Default dark theme
-- Controls: Button, CheckBox, RadioButton, ToggleSwitch, TextBlock,
-  TextBox, Slider, ProgressBar, ComboBox, InfoBar, ContentDialog,
-  Expander, TabView, ScrollFrame
+- Token registry + Dark theme + Light theme
+- Assets: FluentIcons glyph map, bundled fonts
+- Controls: MainFrame, Button, CheckBox, RadioButton, ToggleSwitch,
+  TextBlock, TextBox, Slider, ProgressBar, ComboBox, InfoBar,
+  ContentDialog, Expander, TabView, ScrollFrame
 - Layout: StackLayout (VStack / HStack)
-- Motion: FadeIn/Out, SlideIn, ScalePress
+- Motion: Tween engine with 28 easing functions + timer API
 - Settings: SettingsCard, SettingsExpander
-- Gallery: 5-page showcase addon
+- Gallery: 5-page showcase addon (`/fwow`)
 
-### Phase 2 – Navigation + advanced layout
+### Phase 2 – Navigation + advanced controls ✅
 - `NavigationView` sidebar control
 - `BreadcrumbBar`
-- `NumberBox` (validated numeric TextBox)
-- `Grid` layout container
-- Responsive width classes
-
-### Phase 3 – Advanced controls + motion polish
+- `NumberBox` (validated numeric input)
 - `TeachingTip` (coach marks / contextual teaching)
 - `CommandBar` / Toolbar
 - `SegmentedControl`
 - `Badge` / status pill
+- `EmptyState` placeholder
+- `Skeleton` loading state
+- Gallery: Navigation page + Advanced Controls page
+
+### Phase 3 – Layout + motion polish
+- `Grid` layout container
+- Responsive width classes
 - Virtualized list rows (true FramePool recycling)
-- Skeleton loading state
 - Connected animation helpers
 
 ### Phase 4 – Gallery + docs expansion

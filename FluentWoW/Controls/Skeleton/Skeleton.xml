@@ -1,0 +1,28 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWSkeletonTemplate — Animated loading placeholder
+         Size: 200×16  |  Parts: BG, Shimmer
+         ================================================================ -->
+    <Frame name="FWoWSkeletonTemplate" virtual="true">
+        <Size x="200" y="16"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="$parent_Shimmer" parentKey="Shimmer" alphaMode="ADD">
+                    <Size x="80" y="0"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-80" y="0"/>
+                        <Anchor point="BOTTOMLEFT" x="-80" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="FWoWSkeleton_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>

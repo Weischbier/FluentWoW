@@ -15,7 +15,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 | **Buttons** | Button (Accent / Subtle / Destructive), IconButton, ToggleButton |
 | **Input** | CheckBox, RadioButton, ToggleSwitch, TextBox, SearchBox, Slider, ComboBox |
 | **Feedback** | ProgressBar, ProgressRing, InfoBar (4 severities), ContentDialog |
-| **Navigation** | TabView, Expander, ScrollFrame |
+| **Navigation** | MainFrame, TabView, Expander, ScrollFrame |
 | **Layout** | VStack, HStack (StackLayout) |
 | **Settings** | SettingsCard, SettingsExpander |
 
@@ -33,18 +33,20 @@ Dependencies: FluentWoW
 
 ```lua
 -- Button
-local btn = FluentWoW:CreateButton(parent, "Accent", "Save Settings")
-btn.OnActivated = function(self) MyAddon:Save() end
+local btn = FluentWoW:CreateButton(parent, nil, "Accent")
+btn:SetText("Save Settings")
+btn:SetOnClick(function(self) MyAddon:Save() end)
 
 -- ToggleSwitch
-local ts = FluentWoW:CreateToggleSwitch(parent, "On", "Off")
-ts:SetOn(MyAddon_DB.enabled)
-ts.OnToggled = function(self, isOn) MyAddon_DB.enabled = isOn end
+local ts = FluentWoW:CreateToggleSwitch(parent)
+ts:SetIsOn(MyAddon_DB.enabled)
+ts:SetOnToggled(function(self, isOn) MyAddon_DB.enabled = isOn end)
 
 -- SettingsCard
-local card = FluentWoW:CreateSettingsCard(parent,
-    "Enable MyAddon",
-    "Turn the addon on or off without /reload.", ts)
+local card = FluentWoW:CreateSettingsCard(parent)
+card:SetTitle("Enable MyAddon")
+card:SetDescription("Turn the addon on or off without /reload.")
+card:SetActionControl(ts)
 ```
 
 ### 3. Use tokens for consistent styling
@@ -68,11 +70,16 @@ FluentWoW.Tokens:Override({
 
 ```
 FluentWoW/              Main library (add as dependency)
+  Libs/                Vendored LibStub + flux motion engine
   Core/                Bootstrap, Utils, EventBus, StateMachine, FramePool
-  Tokens/              Token registry + Default dark theme
+  Tokens/              Token registry + Dark theme + Light theme
+  Assets/              FluentIcons glyph map, bundled fonts
   Controls/            All UI controls (XML templates + Lua behaviour)
+    MainFrame/         Application window shell
+    Button/            Button, IconButton, ToggleButton
+    ...
   Layout/              StackLayout (VStack / HStack)
-  Motion/              FadeIn, FadeOut, SlideIn, ScalePress
+  Motion/              Tween-based animation engine (28 easing functions)
   Settings/            SettingsCard, SettingsExpander
 
 FluentWoW-Gallery/      Interactive showcase addon (/fwow)
@@ -81,6 +88,9 @@ FluentWoW-Gallery/      Interactive showcase addon (/fwow)
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design reference, principle
 translation matrix, token system docs, roadmap, and adoption guide.
+
+See the **[Wiki](https://github.com/Weischbier/WinUILib/wiki)** for complete
+control documentation, API reference, theming guide, and tutorials.
 
 ---
 

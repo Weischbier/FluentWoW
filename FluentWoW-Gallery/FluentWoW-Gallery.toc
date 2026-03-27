@@ -12,3 +12,5 @@ Pages/InputPage.lua
 Pages/FeedbackPage.lua
 Pages/LayoutPage.lua
 Pages/SettingsPage.lua
+Pages/NavigationPage.lua
+Pages/AdvancedPage.lua

@@ -63,6 +63,24 @@ Controls/TabView/TabView.xml
 Controls/TabView/TabView.lua
 Controls/ScrollFrame/ScrollFrame.xml
 Controls/ScrollFrame/ScrollFrame.lua
+Controls/NavigationView/NavigationView.xml
+Controls/NavigationView/NavigationView.lua
+Controls/BreadcrumbBar/BreadcrumbBar.xml
+Controls/BreadcrumbBar/BreadcrumbBar.lua
+Controls/NumberBox/NumberBox.xml
+Controls/NumberBox/NumberBox.lua
+Controls/TeachingTip/TeachingTip.xml
+Controls/TeachingTip/TeachingTip.lua
+Controls/CommandBar/CommandBar.xml
+Controls/CommandBar/CommandBar.lua
+Controls/SegmentedControl/SegmentedControl.xml
+Controls/SegmentedControl/SegmentedControl.lua
+Controls/Badge/Badge.xml
+Controls/Badge/Badge.lua
+Controls/EmptyState/EmptyState.xml
+Controls/EmptyState/EmptyState.lua
+Controls/Skeleton/Skeleton.xml
+Controls/Skeleton/Skeleton.lua
 
 # ── Layout primitives ─────────────────────────────────────────
 Layout/StackLayout.xml

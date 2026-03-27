@@ -1,0 +1,50 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+    <!-- ================================================================
+         FWoWEmptyStateTemplate — Placeholder for empty content areas
+         Size: 300×200  |  Parts: Icon, TitleLabel, DescLabel, ActionSlot
+         ================================================================ -->
+    <Frame name="FWoWEmptyStateTemplate" virtual="true">
+        <Size x="300" y="200"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parent_Icon" parentKey="Icon"
+                    inherits="GameFontNormalHuge" justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="-24"/>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parent_TitleLabel" parentKey="TitleLabel"
+                    inherits="GameFontNormalLarge" justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="TOP" relativeTo="$parent_Icon" relativePoint="BOTTOM" x="0" y="-16"/>
+                        <Anchor point="LEFT" x="24"/>
+                        <Anchor point="RIGHT" x="-24"/>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parent_DescLabel" parentKey="DescLabel"
+                    inherits="GameFontHighlight" justifyH="CENTER" justifyV="TOP">
+                    <Anchors>
+                        <Anchor point="TOP" relativeTo="$parent_TitleLabel" relativePoint="BOTTOM" x="0" y="-8"/>
+                        <Anchor point="LEFT" x="24"/>
+                        <Anchor point="RIGHT" x="-24"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame name="$parent_ActionSlot" parentKey="ActionSlot" hidden="true">
+                <Size x="0" y="32"/>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parent_DescLabel" relativePoint="BOTTOM" x="0" y="-16"/>
+                    <Anchor point="LEFT" x="24"/>
+                    <Anchor point="RIGHT" x="-24"/>
+                </Anchors>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad function="FWoWEmptyState_OnLoad"/>
+        </Scripts>
+    </Frame>
+
+</Ui>
