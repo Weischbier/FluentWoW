@@ -114,6 +114,7 @@ end
 
 function FWoWContentDialog_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, DialogMixin)
+    self._FWoWControlType = "FWoWContentDialog"
     self:FWoWInit()
     self._closable = true
     self._dismissOnOverlay = false

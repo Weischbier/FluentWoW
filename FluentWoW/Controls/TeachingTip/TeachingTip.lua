@@ -156,6 +156,7 @@ end
 
 function FWoWTeachingTip_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, TeachingTipMixin)
+    self._FWoWControlType = "FWoWTeachingTip"
     self:FWoWInit()
     self._placement = "BOTTOM"
     self:OnStateChanged("Normal")

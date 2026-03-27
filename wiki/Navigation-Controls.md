@@ -6,6 +6,10 @@ Controls that provide structure, containment, and navigation for your addon's UI
 
 ## MainFrame
 
+> **MainFrame is required.** All FluentWoW controls must be descendants of a
+> MainFrame. Controls created outside a MainFrame hierarchy will produce a debug
+> warning. The only exceptions are ContentDialog and TeachingTip (fullscreen overlays).
+
 The top-level application window — equivalent to Ace3's AceGUI "Frame" container but with WinUI design language. Features a title bar, close button, resize grippers, status bar, ESC-to-close, and customisable title-bar slots.
 
 ### Creation

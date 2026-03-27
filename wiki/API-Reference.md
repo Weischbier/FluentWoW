@@ -2,6 +2,10 @@
 
 Quick-reference table of every FluentWoW factory method. All methods are called on the `FluentWoW` global (or `LibStub("FluentWoW-1.0")`).
 
+> **MainFrame is required.** The `parent` parameter for all controls (except
+> ContentDialog and TeachingTip) must be a MainFrame or a descendant of one.
+> See [Design Principles — Rule 1](Design-Principles).
+
 ---
 
 ## Factory Methods
@@ -77,7 +81,7 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 
 | Parameter | Type | Description |
 | --- | --- | --- |
-| `parent` | `Frame` | WoW frame to parent the new control to |
+| `parent` | `Frame` | A MainFrame or descendant of one (see [Design Principles](Design-Principles)) |
 | `name` | `string?` | Optional global name for the frame |
 | `style` | `string?` | Button style variant |
 | `orientation` | `string?` | Stack direction |

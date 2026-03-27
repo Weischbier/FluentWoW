@@ -261,6 +261,8 @@ end
 
 function FWoWMainFrame_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, MainFrameMixin)
+    self._FWoWControlType = "FWoWMainFrame"
+    self._FWoWMainFrame   = true
     self:FWoWInit()
 
     self._localStatus = {}

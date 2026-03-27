@@ -77,13 +77,14 @@ The type ramp is faithfully adapted but cannot match WinUI's Segoe UI family exa
 
 ## Design Rules Summary
 
-1. **Token everything** — no hard-coded colours, sizes, or fonts in control code
-2. **State machine drives visuals** — all visual changes flow through `OnStateChanged`
-3. **Combat-safe by default** — defer protected operations to post-combat
-4. **One control, one file pair** — XML template + Lua behaviour in a named folder
-5. **Factory pattern** — consumers create controls via `FluentWoW:Create*()`, never `CreateFrame` directly
-6. **Theme-reactive** — all controls listen for `"ThemeChanged"` and re-style automatically
-7. **Pool recyclable frames** — ComboBox items, tab headers, list rows use `FramePool`
-8. **Pixel-snap** — use `Utils.SnapToPixel()` for crisp alignment
-9. **Accessible by default** — tooltips, disabled states, and clear visual feedback
-10. **Motion with purpose** — animations serve UX (feedback, orientation, delight), never just decoration
+1. **MainFrame is the root** — all FluentWoW controls must be descendants of a `CreateMainFrame()` window
+2. **Token everything** — no hard-coded colours, sizes, or fonts in control code
+3. **State machine drives visuals** — all visual changes flow through `OnStateChanged`
+4. **Combat-safe by default** — defer protected operations to post-combat
+5. **One control, one file pair** — XML template + Lua behaviour in a named folder
+6. **Factory pattern** — consumers create controls via `FluentWoW:Create*()`, never `CreateFrame` directly
+7. **Theme-reactive** — all controls listen for `"ThemeChanged"` and re-style automatically
+8. **Pool recyclable frames** — ComboBox items, tab headers, list rows use `FramePool`
+9. **Pixel-snap** — use `Utils.SnapToPixel()` for crisp alignment
+10. **Accessible by default** — tooltips, disabled states, and clear visual feedback
+11. **Motion with purpose** — animations serve UX (feedback, orientation, delight), never just decoration

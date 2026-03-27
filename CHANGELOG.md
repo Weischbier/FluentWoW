@@ -5,6 +5,23 @@ All notable changes to FluentWoW will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-03-27
+
+### Added
+
+- **MainFrame enforcement**: All FluentWoW controls must now be descendants of a `CreateMainFrame()` window. Controls created outside a MainFrame hierarchy emit a debug warning. ContentDialog and TeachingTip are exempt (fullscreen overlays)
+- **ControlBase**: `hasMainFrameAncestor()` parent-chain walk validates frame ancestry at init time
+- **ControlBase**: `ANCESTOR_EXEMPT` table for MainFrame, ContentDialog, TeachingTip
+- **MainFrame**: `_FWoWMainFrame` and `_FWoWControlType` tags set in OnLoad
+- **ContentDialog/TeachingTip**: `_FWoWControlType` tags set in OnLoad for exemption lookup
+- **Workflow instructions**: `.github/instructions/workflow.instructions.md` codifies the 6-step task workflow (implement → audit → changelog → wiki → commit message → push)
+
+### Changed
+
+- **Design rules**: Expanded from 10 to 11 rules — new Rule #1 "MainFrame is the root" (all other rules shifted +1)
+- **ARCHITECTURE.md**: Executive summary, adoption strategy, ControlBase description, and design rules updated for MainFrame requirement
+- **Wiki**: Getting-Started, Design-Principles, FAQ, Navigation-Controls, API-Reference updated with MainFrame requirement documentation
+
 ## [1.1.1] - 2026-03-27
 
 ### Fixed

@@ -68,6 +68,41 @@ Both methods return the same singleton table.
 
 ---
 
+## MainFrame — The Required Root
+
+> **Every FluentWoW control must live inside a MainFrame.**
+>
+> `CreateMainFrame()` is the entry point for all FluentWoW UIs. It provides the
+> application window shell (title bar, resize handles, status bar, ESC-to-close,
+> combat-safe show/hide, theme propagation, and position persistence). Controls
+> created outside a MainFrame hierarchy will produce a debug warning.
+>
+> The only exceptions are **ContentDialog** and **TeachingTip**, which are
+> fullscreen overlays that attach to UIParent by design.
+
+```lua
+local lib = FluentWoW
+
+-- Step 1: Always create a MainFrame first
+local frame = lib:CreateMainFrame("MyAddonFrame", "My Addon")
+
+-- Step 2: Get its content area — this is where your controls go
+local content = frame:GetContentArea()
+
+-- Step 3: Create controls inside the MainFrame hierarchy
+local btn = lib:CreateButton(content, nil, "Accent")
+btn:SetText("Click Me")
+btn:SetPoint("CENTER")
+btn:SetOnClick(function(self, mouseButton)
+    print("Button clicked!")
+end)
+
+-- Step 4: Open the window
+frame:Open()
+```
+
+---
+
 ## Your First Control
 
 ### A Simple Button
@@ -75,28 +110,31 @@ Both methods return the same singleton table.
 ```lua
 local lib = FluentWoW
 
--- Create a parent frame (or use an existing one)
-local parent = CreateFrame("Frame", nil, UIParent)
-parent:SetSize(400, 300)
-parent:SetPoint("CENTER")
+-- Create the MainFrame (required root for all controls)
+local frame = lib:CreateMainFrame("MyAddonFrame", "My Addon")
+local content = frame:GetContentArea()
 
--- Create an accent button
-local btn = lib:CreateButton(parent, nil, "Accent")
+-- Create an accent button inside the MainFrame
+local btn = lib:CreateButton(content, nil, "Accent")
 btn:SetText("Click Me")
 btn:SetPoint("CENTER")
 btn:SetOnClick(function(self, mouseButton)
     print("Button clicked!")
 end)
+
+frame:Open()
 ```
 
 ### A Toggle Switch with Header
 
 ```lua
-local toggle = lib:CreateToggleSwitch(parent)
+local content = frame:GetContentArea()
+
+local toggle = lib:CreateToggleSwitch(content)
 toggle:SetHeader("Enable Feature")
 toggle:SetOnContent("Enabled")
 toggle:SetOffContent("Disabled")
-toggle:SetPoint("CENTER", parent, "CENTER", 0, -40)
+toggle:SetPoint("CENTER", content, "CENTER", 0, -40)
 toggle:SetOnToggled(function(self, isOn)
     print("Toggle is now:", isOn)
 end)
@@ -105,17 +143,19 @@ end)
 ### A Settings Card
 
 ```lua
+local content = frame:GetContentArea()
+
 -- Create a toggle switch as the action control
-local ts = lib:CreateToggleSwitch(parent)
+local ts = lib:CreateToggleSwitch(content)
 ts:SetOnContent("On")
 ts:SetOffContent("Off")
 
 -- Create a settings card with the toggle embedded
-local card = lib:CreateSettingsCard(parent)
+local card = lib:CreateSettingsCard(content)
 card:SetTitle("Enable Notifications")
 card:SetDescription("Show popup notifications for important events.")
 card:SetActionControl(ts)
-card:SetPoint("TOP", parent, "TOP", 0, -20)
+card:SetPoint("TOP", content, "TOP", 0, -20)
 card:SetSize(360, 0)  -- height auto-adjusts
 ```
 

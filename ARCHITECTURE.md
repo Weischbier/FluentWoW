@@ -13,6 +13,12 @@ ecosystem.  It is a **library-first, Lua/XML platform** that addon developers
 can embed or depend on to build modern, consistent, high-fidelity interfaces
 without re-inventing styling, state management, layout, or motion.
 
+**All FluentWoW controls must live inside a `MainFrame`.**  `MainFrame` is the
+required root container — every control's parent chain must eventually reach a
+`MainFrame` instance.  The only exceptions are `ContentDialog` and
+`TeachingTip`, which are fullscreen overlays parented to `UIParent`.  Controls
+created outside a `MainFrame` hierarchy emit a debug warning.
+
 It is **not** a skin pack, not a one-off addon UI, and not a literal XAML
 clone.  It extracts the transferable principles from Windows Fluent Design and
 maps them onto WoW-native frame constraints.
@@ -81,7 +87,7 @@ FluentWoW/
 │   ├── FluentIcons.lua          Segoe Fluent Icons glyph map
 │   └── Fonts/                   Bundled font files
 ├── Controls/
-│   ├── Base/ControlBase.lua     Shared mixin: VSM, tooltip, enable/disable, theme-change listener
+│   ├── Base/ControlBase.lua     Shared mixin: VSM, tooltip, enable/disable, theme-change listener, MainFrame ancestor enforcement
 │   ├── MainFrame/               Application window shell (title bar, resize, drag)
 │   ├── Button/                  Button, IconButton, ToggleButton
 │   ├── CheckBox/
@@ -419,9 +425,14 @@ Pages:
 FluentWoW is designed for incremental adoption:
 
 1. **Zero controls** — just use the token system for consistent colours/spacing
-2. **One control** — embed a single `Button` or `ToggleSwitch` without the rest
-3. **Settings panel** — replace bespoke settings UIs with `SettingsCard` groups
-4. **Full framework** — build entire addon UIs with layout + controls + motion
+2. **MainFrame shell** — create a `MainFrame` as your addon's root window
+3. **One control** — add a `Button` or `ToggleSwitch` inside the MainFrame
+4. **Settings panel** — replace bespoke settings UIs with `SettingsCard` groups inside a MainFrame
+5. **Full framework** — build entire addon UIs with layout + controls + motion
+
+> **Important:** All controls must be descendants of a `MainFrame`.  Start every
+> addon by calling `FluentWoW:CreateMainFrame()`, then parent all other controls
+> to the MainFrame's content area via `frame:GetContentArea()`.
 
 ### Embedding (standalone distribution)
 
@@ -534,18 +545,19 @@ session is always used.
 9. ContentDialog
 10. SettingsCard + SettingsExpander
 
-**Top 10 design rules that must never be violated**:
+**Top 11 design rules that must never be violated**:
 
-1. Never hardcode colour values — always use `Tokens:GetColor()` (spacing, font sizes, radii, motion, and opacity ARE intentionally hardcoded design constants and must not be moved to themes)
-2. Never call `Show()` on a protected frame in combat
-3. Never use absolute pixel positions — anchor relative to parent
-4. Always gate destructive operations with `InCombatLockdown()`
-5. Always use `FramePool` for repeated frame creation
-6. Always stop `OnUpdate` scripts when the animation completes
-7. Never add new Lua globals — everything lives under `FluentWoW.*`
-8. Always expose `OnStateChanged` so theming can react to state
-9. Never remove or rename a public API without a deprecation cycle
-10. Always test at UIParent scale 0.64 and 1.5 to catch pixel snapping
+1. All controls must live inside a `MainFrame` — `ContentDialog` and `TeachingTip` are the only exceptions (fullscreen overlays)
+2. Never hardcode colour values — always use `Tokens:GetColor()` (spacing, font sizes, radii, motion, and opacity ARE intentionally hardcoded design constants and must not be moved to themes)
+3. Never call `Show()` on a protected frame in combat
+4. Never use absolute pixel positions — anchor relative to parent
+5. Always gate destructive operations with `InCombatLockdown()`
+6. Always use `FramePool` for repeated frame creation
+7. Always stop `OnUpdate` scripts when the animation completes
+8. Never add new Lua globals — everything lives under `FluentWoW.*`
+9. Always expose `OnStateChanged` so theming can react to state
+10. Never remove or rename a public API without a deprecation cycle
+11. Always test at UIParent scale 0.64 and 1.5 to catch pixel snapping
 
 ---
 

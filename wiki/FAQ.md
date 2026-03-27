@@ -120,6 +120,23 @@ end)
 
 ## Controls
 
+### "WARNING: Control created outside a FWoWMainFrame"
+
+All FluentWoW controls **must** be descendants of a `MainFrame` created via `CreateMainFrame()`. If you see this debug warning, your control's parent chain doesn't include a MainFrame.
+
+**Fix:** Create a MainFrame first and parent your controls inside it:
+
+```lua
+local lib = FluentWoW
+local frame = lib:CreateMainFrame("MyAddonFrame", "My Addon")
+local content = frame:GetContentArea()
+
+-- Create controls parented to the MainFrame's content area
+local btn = lib:CreateButton(content, nil, "Accent")
+```
+
+The only controls exempt from this rule are **ContentDialog** and **TeachingTip**, which are fullscreen overlays that attach to UIParent.
+
 ### Control doesn't appear / is invisible
 
 1. Check that the control has a **parent** frame that is visible

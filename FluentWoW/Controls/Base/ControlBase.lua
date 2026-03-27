@@ -9,6 +9,25 @@ local lib = FluentWoW
 local ControlBase = {}
 lib._controls.ControlBase = ControlBase
 
+--- Walk the parent chain looking for a FWoWMainFrame ancestor.
+---@param frame Frame
+---@return boolean
+local function hasMainFrameAncestor(frame)
+    local parent = frame:GetParent()
+    while parent do
+        if parent._FWoWMainFrame then return true end
+        parent = parent:GetParent()
+    end
+    return false
+end
+
+--- Controls that are exempt from the MainFrame ancestor requirement.
+local ANCESTOR_EXEMPT = {
+    FWoWMainFrame     = true,  -- IS the root
+    FWoWContentDialog = true,  -- fullscreen overlay attached to UIParent
+    FWoWTeachingTip   = true,  -- contextual callout anchored to any target
+}
+
 ---@param opts? table
 function ControlBase:FWoWInit(opts)
     self._FWoW        = true
@@ -17,6 +36,15 @@ function ControlBase:FWoWInit(opts)
     self._vsm         = lib.StateMachine:New(self)
     self._tooltipText = nil
     self._tooltipTitle = nil
+
+    -- Enforce MainFrame as required root container
+    if not (opts and opts._ancestorExempt) and not ANCESTOR_EXEMPT[self._FWoWControlType] then
+        if not hasMainFrameAncestor(self) then
+            lib:Debug("WARNING: " .. tostring(self._FWoWControlType or "Control")
+                .. " created outside a FWoWMainFrame. All FluentWoW controls must"
+                .. " be descendants of a MainFrame created via CreateMainFrame().")
+        end
+    end
 
     self._themeListener = function()
         if self.OnStateChanged then
