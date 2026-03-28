@@ -19,21 +19,21 @@ local STYLES = {
         bgHover  = "Color.Accent.Hover",
         bgPress  = "Color.Accent.Pressed",
         label    = "Color.Text.OnAccent",
-        topEdge  = "Color.Accent.Light",
+        border   = "Color.Accent.Light",
     },
     Subtle = {
         bg       = "Color.Surface.Elevated",
         bgHover  = "Color.Overlay.Hover",
         bgPress  = "Color.Overlay.Press",
         label    = "Color.Text.Primary",
-        topEdge  = "Color.Border.Subtle",
+        border   = "Color.Border.Subtle",
     },
     Destructive = {
         bg       = "Color.Feedback.Error",
         bgHover  = "Color.Feedback.ErrorHover",
         bgPress  = "Color.Feedback.Error",
         label    = "Color.Text.OnAccent",
-        topEdge  = "Color.Feedback.Error",
+        border   = "Color.Feedback.Error",
     },
 }
 
@@ -45,31 +45,30 @@ local function applyVisuals(self)
     local style = self._style or STYLES.Accent
     local state = self._vsm:GetState()
 
-    local bgKey, labelKey, bottomKey, overlayKey
+    local bgKey, labelKey, borderKey, overlayKey
     if state == "Disabled" then
-        bgKey    = style.bg
-        labelKey = "Color.Text.Disabled"
-        bottomKey = "Color.Border.Default"
+        bgKey     = style.bg
+        labelKey  = "Color.Text.Disabled"
+        borderKey = "Color.Border.Default"
     elseif state == "Pressed" then
-        bgKey    = style.bgPress
-        labelKey = style.label
-        bottomKey = style.bgPress
+        bgKey     = style.bgPress
+        labelKey  = style.label
+        borderKey = style.bgPress
         overlayKey = "Color.Overlay.Press"
     elseif state == "Hover" then
-        bgKey    = style.bgHover
-        labelKey = style.label
-        bottomKey = style.bg
+        bgKey     = style.bgHover
+        labelKey  = style.label
+        borderKey = style.border
         overlayKey = "Color.Overlay.Hover"
     else
-        bgKey    = style.bg
-        labelKey = style.label
-        bottomKey = style.bgPress
+        bgKey     = style.bg
+        labelKey  = style.label
+        borderKey = style.border
     end
 
     self.BG:SetVertexColor(T:GetColor(bgKey))
     self.Label:SetTextColor(T:GetColor(labelKey))
-    self.TopEdge:SetColorTexture(T:GetColor(style.topEdge))
-    self.BottomEdge:SetColorTexture(T:GetColor(bottomKey))
+    self.Border:SetVertexColor(T:GetColor(borderKey))
 
     if self.Shadow then
         local sr, sg, sb = T:GetColor("Color.Surface.Base")
@@ -98,12 +97,11 @@ local function applyToggleVisuals(self)
     local state = self._vsm:GetState()
     local checked = self._checked
 
-    local bgKey, labelKey, topKey, bottomKey, overlayKey
+    local bgKey, labelKey, borderKey, overlayKey
     if state == "Disabled" then
-        bgKey    = "Color.Surface.Elevated"
-        labelKey = "Color.Text.Disabled"
-        topKey   = "Color.Border.Subtle"
-        bottomKey = "Color.Border.Default"
+        bgKey     = "Color.Surface.Elevated"
+        labelKey  = "Color.Text.Disabled"
+        borderKey = "Color.Border.Default"
     elseif checked then
         if state == "Pressed" then
             bgKey = "Color.Accent.Pressed"
@@ -114,9 +112,8 @@ local function applyToggleVisuals(self)
         else
             bgKey = "Color.Accent.Primary"
         end
-        labelKey = "Color.Text.OnAccent"
-        topKey   = "Color.Accent.Light"
-        bottomKey = "Color.Accent.Pressed"
+        labelKey  = "Color.Text.OnAccent"
+        borderKey = "Color.Accent.Light"
     else
         if state == "Pressed" then
             bgKey = "Color.Overlay.Press"
@@ -127,15 +124,13 @@ local function applyToggleVisuals(self)
         else
             bgKey = "Color.Surface.Elevated"
         end
-        labelKey = "Color.Text.Primary"
-        topKey   = "Color.Border.Subtle"
-        bottomKey = "Color.Border.Default"
+        labelKey  = "Color.Text.Primary"
+        borderKey = "Color.Border.Subtle"
     end
 
     self.BG:SetVertexColor(T:GetColor(bgKey))
     self.Label:SetTextColor(T:GetColor(labelKey))
-    self.TopEdge:SetColorTexture(T:GetColor(topKey))
-    self.BottomEdge:SetColorTexture(T:GetColor(bottomKey))
+    self.Border:SetVertexColor(T:GetColor(borderKey))
 
     if self.Shadow then
         local sr, sg, sb = T:GetColor("Color.Surface.Base")
@@ -303,6 +298,7 @@ function FWoWButton_OnLoad(self)
     self._style = STYLES.Accent
     self._isToggle = false
     lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Border, Tex.RR4_Border, 4)
     lib.SetupTexture(self.Overlay, Tex.RR4, 4)
     if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
     local font = T:Get("Typography.BodyBold")
@@ -318,6 +314,7 @@ function FWoWButtonSubtle_OnLoad(self)
     self._style = STYLES.Subtle
     self._isToggle = false
     lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Border, Tex.RR4_Border, 4)
     lib.SetupTexture(self.Overlay, Tex.RR4, 4)
     if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
     local font = T:Get("Typography.BodyBold")
@@ -333,6 +330,7 @@ function FWoWButtonDestructive_OnLoad(self)
     self._style = STYLES.Destructive
     self._isToggle = false
     lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Border, Tex.RR4_Border, 4)
     lib.SetupTexture(self.Overlay, Tex.RR4, 4)
     if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
     local font = T:Get("Typography.BodyBold")
@@ -359,6 +357,7 @@ function FWoWToggleButton_OnLoad(self)
     self._isToggle = true
     self._checked  = false
     lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Border, Tex.RR4_Border, 4)
     lib.SetupTexture(self.Overlay, Tex.RR4, 4)
     if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
     local font = T:Get("Typography.BodyBold")

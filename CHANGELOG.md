@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Button**: Replaced flat 1px `TopEdge`/`BottomEdge` `SetColorTexture` strips with a proper `RR4_Border` 9-slice rounded border texture — buttons now display correct rounded corners matching all other controls (Accent, Subtle, Destructive, and Toggle variants)
+- **ComboBox**: Fixed nil error on `self.SelectedLabel` → `self.Field.SelectedLabel` (3 call sites: `updateText`, `OnStateChanged` Disabled branch, `OnLoad` font setup)
+- **Slider**: Added early-return guard in `FWoWSlider_OnValueChanged` — WoW fires `OnValueChanged` during `CreateFrame` before `OnLoad` applies the mixin, causing a nil `_UpdateFill` call
+- **TextBox**: Fixed parent chain in 5 script handlers — `EditBox → Field → TextBox` requires double `GetParent()` to reach the mixin; `ClearBtn → Field` requires single `GetParent()`
+- **ToggleSwitch**: Moved `StateLabel` anchor from XML to Lua `OnLoad` — XML `<Layers>` parse before `<Frames>`, so `$parent_Track` doesn't exist when the FontString tries to anchor to it
+- **RadioButtonPage (Gallery)**: Changed `SetOnChanged` → `SetOnSelected` to match RadioButton's actual public API
+- **SettingsCard.xml**: Wrapped the `Action` child `<Frame>` inside `<Frames>` — bare `<Frame>` inside a template `<Frame>` without the wrapper caused WoW to ignore the element
+
 ### Added
 
 - **Custom TGA texture integration** — all 25 custom textures in `FluentWoW/Assets/Textures/` are now used across the entire control library
@@ -22,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Track controls (Slider, ProgressBar) use `PillTrack` / `PillFill` with 2px 9-slice
   - Fixed-size controls (CheckBox, RadioButton) swap between `RoundSquare`/`RoundSquareFill` and `CircleRing`/`CircleDot`
   - Indicator textures (NavigationView, TabView, SegmentedControl, ScrollFrame) use dedicated assets
-- 1px edge lines (`TopEdge`, `BottomEdge`, separators) and full-screen overlays intentionally kept as `SetColorTexture`
+- 1px edge lines (`TopEdge`, `BottomEdge`, separators) in input controls (TextBox, ComboBox, NumberBox) and full-screen overlays intentionally kept as `SetColorTexture`
 
 - **Architecture wiki page** — rewrote the old ARCHITECTURE.md as [wiki/Architecture.md](wiki/Architecture.md) covering directory layout, module map, three-layer styling model, token resolution, control lifecycle, embed protocol, and adoption strategy
 

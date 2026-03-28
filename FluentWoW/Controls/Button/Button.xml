@@ -2,7 +2,7 @@
 
     <!-- ================================================================
          FWoWButtonTemplate — Standard accent (primary) button
-         Size: 120×32  |  Parts: BG, TopEdge, Label, Overlay
+         Size: 120×32  |  Parts: BG, Border, Label, Overlay
          ================================================================ -->
     <Button name="FWoWButtonTemplate" virtual="true">
         <Size x="120" y="32"/>
@@ -17,20 +17,7 @@
                 <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
             </Layer>
             <Layer level="BORDER">
-                <Texture name="$parent_TopEdge" parentKey="TopEdge">
-                    <Size x="0" y="1"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT"/>
-                        <Anchor point="TOPRIGHT"/>
-                    </Anchors>
-                </Texture>
-                <Texture name="$parent_BottomEdge" parentKey="BottomEdge">
-                    <Size x="0" y="1"/>
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT"/>
-                        <Anchor point="BOTTOMRIGHT"/>
-                    </Anchors>
-                </Texture>
+                <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
             </Layer>
             <Layer level="ARTWORK">
                 <FontString name="$parent_Label" parentKey="Label"
@@ -134,20 +121,7 @@
                 <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
             </Layer>
             <Layer level="BORDER">
-                <Texture name="$parent_TopEdge" parentKey="TopEdge">
-                    <Size x="0" y="1"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT"/>
-                        <Anchor point="TOPRIGHT"/>
-                    </Anchors>
-                </Texture>
-                <Texture name="$parent_BottomEdge" parentKey="BottomEdge">
-                    <Size x="0" y="1"/>
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT"/>
-                        <Anchor point="BOTTOMRIGHT"/>
-                    </Anchors>
-                </Texture>
+                <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
             </Layer>
             <Layer level="ARTWORK">
                 <FontString name="$parent_Label" parentKey="Label"
