@@ -9,6 +9,7 @@
          ================================================================ -->
     <Frame name="FWoWSettingsExpanderTemplate" virtual="true">
         <Size x="400" y="48"/>
+        <Frames>
 
         <!-- Header (clickable) -->
         <Button name="$parent_Header" parentKey="Header" enableMouse="true">
@@ -84,6 +85,7 @@
             </Layers>
         </Frame>
 
+        </Frames>
         <Scripts>
             <OnLoad function="FWoWSettingsExpander_OnLoad"/>
         </Scripts>
