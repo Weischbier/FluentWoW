@@ -10,6 +10,7 @@ local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- TeachingTip Mixin
@@ -20,12 +21,12 @@ local TeachingTipMixin = {}
 
 function TeachingTipMixin:OnStateChanged(newState, prevState)
     local card = self.Card
-    card.BG:SetColorTexture(T:GetColor("Color.Surface.Elevated"))
-    card.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+    card.BG:SetVertexColor(T:GetColor("Color.Surface.Elevated"))
+    card.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
     card.TitleLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
     card.BodyLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
     card.CloseBtn.X:SetTextColor(T:GetColor("Color.Text.Secondary"))
-    self.Arrow.Tex:SetColorTexture(T:GetColor("Color.Surface.Elevated"))
+    self.Arrow.Tex:SetVertexColor(T:GetColor("Color.Surface.Elevated"))
 
     if newState == "Disabled" then
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -159,6 +160,9 @@ function FWoWTeachingTip_OnLoad(self)
     self._FWoWControlType = "FWoWTeachingTip"
     self:FWoWInit()
     self._placement = "BOTTOM"
+    lib.SetupTexture(self.Card.BG, Tex.RR8, 8)
+    lib.SetupTexture(self.Card.Border, Tex.RR8_Border, 8)
+    self.Arrow.Tex:SetTexture(Tex.ArrowUp)
     self:OnStateChanged("Normal")
 end
 

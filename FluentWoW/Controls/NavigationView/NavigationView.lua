@@ -7,6 +7,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -143,9 +144,11 @@ function NavViewMixin:_RefreshItems()
     for _, btn in ipairs(self._navButtons or {}) do
         local selected = btn._itemKey == self._selectedKey
         if selected then
-            btn.BG:SetColorTexture(T:GetColor("Color.Surface.Elevated"))
+            lib.SetupTexture(btn.BG, Tex.RR4, 4)
+            btn.BG:SetVertexColor(T:GetColor("Color.Surface.Elevated"))
             btn.BG:Show()
-            btn.Indicator:SetColorTexture(T:GetColor("Color.Accent.Primary"))
+            btn.Indicator:SetTexture(Tex.NavIndicator)
+            btn.Indicator:SetVertexColor(T:GetColor("Color.Accent.Primary"))
             btn.Indicator:Show()
             btn.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
             btn.Icon:SetTextColor(T:GetColor("Color.Accent.Primary"))
@@ -223,7 +226,8 @@ function FWoWNavToggleBtn_OnClick(self)
 end
 
 function FWoWNavToggleBtn_OnEnter(self)
-    self.BG:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
+    self.BG:SetVertexColor(T:GetColor("Color.Overlay.Hover"))
     self.BG:Show()
 end
 
@@ -240,7 +244,8 @@ end
 
 function FWoWNavItem_OnEnter(self)
     if self._itemKey ~= self._navView._selectedKey then
-        self.BG:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+        lib.SetupTexture(self.BG, Tex.RR4, 4)
+        self.BG:SetVertexColor(T:GetColor("Color.Overlay.Hover"))
         self.BG:Show()
     end
 end

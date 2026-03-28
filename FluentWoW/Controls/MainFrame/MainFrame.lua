@@ -13,6 +13,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -30,7 +31,7 @@ local function applyVisuals(self)
     -- Backdrop
     local bg = self.Backdrop
     local r, g, b, a = T:GetColor("Color.Surface.Base")
-    bg.BG:SetColorTexture(r, g, b, a)
+    bg.BG:SetVertexColor(r, g, b, a)
     local br, bg2, bb, ba = T:GetColor("Color.Border.Subtle")
     bg.EdgeTop:SetColorTexture(br, bg2, bb, ba)
     bg.EdgeBottom:SetColorTexture(br, bg2, bb, ba)
@@ -40,7 +41,7 @@ local function applyVisuals(self)
     -- Title bar
     local tb = self.TitleBar
     local tr, tg2, tb2, ta = T:GetColor("Color.Surface.Raised")
-    tb.BG:SetColorTexture(tr, tg2, tb2, ta)
+    tb.BG:SetVertexColor(tr, tg2, tb2, ta)
 
     -- Title text
     local font = T:Get("Typography.Title")
@@ -56,12 +57,12 @@ local function applyVisuals(self)
         self.CloseBtn.Label:SetFont(cbFont.font, cbFont.size, cbFont.flags)
     end
     self.CloseBtn.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
-    self.CloseBtn.Hover:SetColorTexture(T:GetColor("Color.Feedback.Error"))
+    self.CloseBtn.Hover:SetVertexColor(T:GetColor("Color.Feedback.Error"))
 
     -- Status bar
     local sb = self.StatusBar
     local sr, sg, sbb, sa = T:GetColor("Color.Surface.Raised")
-    sb.BG:SetColorTexture(sr, sg, sbb, sa)
+    sb.BG:SetVertexColor(sr, sg, sbb, sa)
     sb.TopEdge:SetColorTexture(br, bg2, bb, ba)
     local capFont = T:Get("Typography.Caption")
     if capFont then
@@ -276,6 +277,11 @@ function FWoWMainFrame_OnLoad(self)
     if self:GetName() then
         tinsert(UISpecialFrames, self:GetName())
     end
+
+    lib.SetupTexture(self.Backdrop.BG, Tex.RR8, 8)
+    lib.SetupTexture(self.TitleBar.BG, Tex.RR8, 8)
+    lib.SetupTexture(self.StatusBar.BG, Tex.RR8, 8)
+    lib.SetupTexture(self.CloseBtn.Hover, Tex.RR4, 4)
 
     applyVisuals(self)
     self._themeListener = function() applyVisuals(self) end

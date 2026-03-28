@@ -7,6 +7,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- SegmentedControl Mixin
@@ -16,9 +17,9 @@ local Mot = lib.Motion
 local SegmentMixin = {}
 
 function SegmentMixin:OnStateChanged(newState, prevState)
-    self.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-    self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
-    self.Indicator.BG:SetColorTexture(T:GetColor("Color.Surface.Elevated"))
+    self.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+    self.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
+    self.Indicator.BG:SetVertexColor(T:GetColor("Color.Surface.Elevated"))
 
     if newState == "Disabled" then
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -159,6 +160,9 @@ function FWoWSegmentedControl_OnLoad(self)
     self._items = {}
     self._segButtons = {}
     self._selectedIndex = 1
+    lib.SetupTexture(self.BG, Tex.Pill, 10)
+    lib.SetupTexture(self.Border, Tex.PillBorder, 10)
+    lib.SetupTexture(self.Indicator.BG, Tex.RR4, 4)
     self:OnStateChanged("Normal")
 end
 

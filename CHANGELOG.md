@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Custom TGA texture integration** — all 25 custom textures in `FluentWoW/Assets/Textures/` are now used across the entire control library
+- **`lib.Textures` registry** — centralized texture path table in ControlBase.lua with keys for every asset (RR4, RR8, Pill, Circle, Badge, Nav/Tab indicators, etc.)
+- **`lib.SetupTexture()` helper** — one-call 9-slice texture setup (`SetTexture` + `SetTextureSliceMode` + `SetTextureSliceMargins`)
+
+### Changed
+
+- **24 control files migrated** from `SetColorTexture` to shaped textures with `SetVertexColor`:
+  - Rounded-rect controls (Button, TextBox, NumberBox, ComboBox, InfoBar, Expander, CommandBar, Skeleton, SettingsCard, SettingsExpander) use `RR4` / `RR4_Border` / `RR4_Shadow` with 4px 9-slice
+  - Dialog/frame controls (ContentDialog, TeachingTip, MainFrame) use `RR8` / `RR8_Border` with 8px 9-slice
+  - Pill controls (ToggleSwitch, Badge, SegmentedControl) use `Pill` / `PillBorder` / `BadgePill` with 10px 9-slice
+  - Track controls (Slider, ProgressBar) use `PillTrack` / `PillFill` with 2px 9-slice
+  - Fixed-size controls (CheckBox, RadioButton) swap between `RoundSquare`/`RoundSquareFill` and `CircleRing`/`CircleDot`
+  - Indicator textures (NavigationView, TabView, SegmentedControl, ScrollFrame) use dedicated assets
+- 1px edge lines (`TopEdge`, `BottomEdge`, separators) and full-screen overlays intentionally kept as `SetColorTexture`
+
 - **Architecture wiki page** — rewrote the old ARCHITECTURE.md as [wiki/Architecture.md](wiki/Architecture.md) covering directory layout, module map, three-layer styling model, token resolution, control lifecycle, embed protocol, and adoption strategy
 
 ### Changed

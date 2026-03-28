@@ -7,6 +7,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 local function thumbInset()
     return T:GetNumber("Spacing.XS") + 1
@@ -29,9 +30,9 @@ function ToggleSwitchMixin:OnStateChanged(newState, prevState)
 
     local sr, sg, sb = T:GetColor("Color.Surface.Base")
     if state == "Disabled" then
-        self.Track.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-        self.Thumb.Dot:SetColorTexture(T:GetColor("Color.Icon.Disabled"))
-        self.Thumb.Shadow:SetColorTexture(sr, sg, sb, 0.7)
+        self.Track.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+        self.Thumb.Dot:SetVertexColor(T:GetColor("Color.Icon.Disabled"))
+        self.Thumb.Shadow:SetVertexColor(sr, sg, sb, 0.7)
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self.StateLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -40,16 +41,16 @@ function ToggleSwitchMixin:OnStateChanged(newState, prevState)
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
         if isOn then
             local trackKey = (state == "Hover") and "Color.Accent.Hover" or "Color.Accent.Primary"
-            self.Track.BG:SetColorTexture(T:GetColor(trackKey))
-            self.Thumb.Dot:SetColorTexture(T:GetColor("Color.Icon.OnAccent"))
+            self.Track.BG:SetVertexColor(T:GetColor(trackKey))
+            self.Thumb.Dot:SetVertexColor(T:GetColor("Color.Icon.OnAccent"))
             self.StateLabel:SetTextColor(T:GetColor("Color.Accent.Primary"))
         else
             local trackKey = (state == "Hover") and "Color.Border.Focus" or "Color.Border.Default"
-            self.Track.BG:SetColorTexture(T:GetColor(trackKey))
-            self.Thumb.Dot:SetColorTexture(T:GetColor("Color.Icon.Default"))
+            self.Track.BG:SetVertexColor(T:GetColor(trackKey))
+            self.Thumb.Dot:SetVertexColor(T:GetColor("Color.Icon.Default"))
             self.StateLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
         end
-        self.Thumb.Shadow:SetColorTexture(sr, sg, sb, 0.7)
+        self.Thumb.Shadow:SetVertexColor(sr, sg, sb, 0.7)
     end
 
     self:_UpdateContentLabel()
@@ -135,6 +136,9 @@ function FWoWToggleSwitch_OnLoad(self)
     self._onContent = "On"
     self._offContent = "Off"
     self._thumbOffset = thumbInset()
+    lib.SetupTexture(self.Track.BG, Tex.Pill, 10)
+    self.Thumb.Dot:SetTexture(Tex.Circle14)
+    self.Thumb.Shadow:SetTexture(Tex.CircleShadow)
     self:OnStateChanged("Normal")
 end
 

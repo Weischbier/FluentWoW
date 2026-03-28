@@ -13,6 +13,7 @@ local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -27,7 +28,7 @@ end
 
 function DialogMixin:_ApplyTokens()
     self.Overlay:SetColorTexture(T:GetColor("Color.Overlay.Dialog"))
-    self.Card.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
+    self.Card.BG:SetVertexColor(T:GetColor("Color.Surface.Overlay"))
     self.Card.TitleLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
     self.Card.BodyLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
     self.Card.CloseBtn.X:SetTextColor(T:GetColor("Color.Text.Secondary"))
@@ -118,6 +119,7 @@ function FWoWContentDialog_OnLoad(self)
     self:FWoWInit()
     self._closable = true
     self._dismissOnOverlay = false
+    lib.SetupTexture(self.Card.BG, Tex.RR8, 8)
     self.Card.CloseBtn.X:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self.Card.CloseBtn.X:SetText(Icons.ChromeClose)
     self:_ApplyTokens()

@@ -10,6 +10,7 @@ local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
+local Tex = lib.Textures
 
 local function applyLayout(self)
     local headerHeight = self._headerText ~= nil and self._headerText ~= "" and (T:GetNumber("Spacing.XL") + T:GetNumber("Spacing.SM")) or 0
@@ -59,13 +60,13 @@ function ComboMixin:OnStateChanged(newState, prevState)
     local state = newState
     local shadowR, shadowG, shadowB = T:GetColor("Color.Surface.Base")
 
-    self.Field.Shadow:SetColorTexture(shadowR, shadowG, shadowB, 0.85)
-    self.Dropdown.DropBG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-    self.Dropdown.DropBorder:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+    self.Field.Shadow:SetVertexColor(shadowR, shadowG, shadowB, 0.85)
+    self.Dropdown.DropBG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
+    self.Dropdown.DropBorder:SetVertexColor(T:GetColor("Color.Border.Subtle"))
 
     if state == "Disabled" then
-        self.Field.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-        self.Field.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Field.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+        self.Field.Border:SetVertexColor(T:GetColor("Color.Border.Default"))
         self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
         self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
@@ -74,24 +75,24 @@ function ComboMixin:OnStateChanged(newState, prevState)
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
     elseif state == "Expanded" then
         self:SetAlpha(1)
-        self.Field.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        self.Field.Border:SetColorTexture(T:GetColor("Color.Border.Focus"))
+        self.Field.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
+        self.Field.Border:SetVertexColor(T:GetColor("Color.Border.Focus"))
         self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Accent.Light"))
         self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Accent.Primary"))
         self.Field.Arrow:SetTextColor(T:GetColor("Color.Accent.Primary"))
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
     elseif state == "Hover" then
         self:SetAlpha(1)
-        self.Field.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
-        self.Field.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Field.BG:SetVertexColor(T:GetColor("Color.Surface.Overlay"))
+        self.Field.Border:SetVertexColor(T:GetColor("Color.Border.Default"))
         self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Focus"))
         self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.Field.Arrow:SetTextColor(T:GetColor("Color.Text.Primary"))
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
     else
         self:SetAlpha(1)
-        self.Field.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        self.Field.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.Field.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
+        self.Field.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
         self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         self.Field.Arrow:SetTextColor(T:GetColor("Color.Text.Secondary"))
@@ -162,7 +163,7 @@ function ComboMixin:_Open()
     end
     _activeCombo = self
     self:_BuildDropdown()
-    self.Dropdown.DropBG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
+    self.Dropdown.DropBG:SetVertexColor(T:GetColor("Color.Surface.Overlay"))
     Mot:FadeIn(self.Dropdown)
     self._vsm:SetState("Expanded")
 end
@@ -223,6 +224,12 @@ function FWoWComboBox_OnLoad(self)
     self._placeholderText = ""
     self.Dropdown.Scroll:SetScrollChild(self.Dropdown.Scroll.Child)
     self.Dropdown.Scroll:EnableMouseWheel(true)
+    local field = self.Field
+    lib.SetupTexture(field.BG, Tex.RR4, 4)
+    lib.SetupTexture(field.Border, Tex.RR4_Border, 4)
+    lib.SetupTexture(field.Shadow, Tex.RR4_Shadow, 4)
+    lib.SetupTexture(self.Dropdown.DropBG, Tex.RR4, 4)
+    lib.SetupTexture(self.Dropdown.DropBorder, Tex.RR4_Border, 4)
     local font = T:Get("Typography.BodyBold")
     if font then
         self.SelectedLabel:SetFont(font.font, font.size, font.flags)

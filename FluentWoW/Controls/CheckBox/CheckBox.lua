@@ -7,6 +7,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -38,7 +39,12 @@ function CheckBoxMixin:OnStateChanged(newState, prevState)
         end
     end
 
-    self.Box:SetColorTexture(T:GetColor(boxKey))
+    if self._checked or self._indeterminate then
+        self.Box:SetTexture(Tex.RoundSquareFill)
+    else
+        self.Box:SetTexture(Tex.RoundSquare)
+    end
+    self.Box:SetVertexColor(T:GetColor(boxKey))
     self.Label:SetTextColor(T:GetColor(labelKey))
 
     if self._checked then
@@ -130,6 +136,7 @@ function FWoWCheckBox_OnLoad(self)
     self._checked = false
     self._indeterminate = false
     self._threeState = false
+    self.Box:SetTexture(Tex.RoundSquare)
     self.Check:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self:OnStateChanged("Normal")
 end

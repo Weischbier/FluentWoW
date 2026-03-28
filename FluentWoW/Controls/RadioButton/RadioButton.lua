@@ -6,6 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- Group tracking
@@ -55,7 +56,7 @@ function RadioMixin:OnStateChanged(newState, prevState)
     local state = newState
 
     if state == "Disabled" then
-        self.Circle:SetColorTexture(T:GetColor("Color.Border.Default"))
+        self.Circle:SetVertexColor(T:GetColor("Color.Border.Default"))
         self.Label:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
     else
@@ -63,12 +64,12 @@ function RadioMixin:OnStateChanged(newState, prevState)
         self.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
         if self._selected then
             local cKey = (state == "Hover") and "Color.Accent.Hover" or "Color.Accent.Primary"
-            self.Circle:SetColorTexture(T:GetColor(cKey))
+            self.Circle:SetVertexColor(T:GetColor(cKey))
             self.Dot:Show()
-            self.Dot:SetColorTexture(T:GetColor("Color.Icon.OnAccent"))
+            self.Dot:SetVertexColor(T:GetColor("Color.Icon.OnAccent"))
         else
             local cKey = (state == "Hover") and "Color.Border.Focus" or "Color.Border.Default"
-            self.Circle:SetColorTexture(T:GetColor(cKey))
+            self.Circle:SetVertexColor(T:GetColor(cKey))
             self.Dot:Hide()
         end
     end
@@ -127,6 +128,8 @@ function FWoWRadioButton_OnLoad(self)
     self:FWoWInit()
     self._selected = false
     self._group = "default"
+    self.Circle:SetTexture(Tex.CircleRing)
+    self.Dot:SetTexture(Tex.CircleDot)
     registerInGroup(self, "default")
     self:HookScript("OnHide", function(frame)
         if frame._group then

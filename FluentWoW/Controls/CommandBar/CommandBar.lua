@@ -10,6 +10,7 @@ local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- CommandBar Mixin
@@ -19,7 +20,7 @@ local ICON_FONT = lib.FLUENT_ICON_FONT
 local CommandBarMixin = {}
 
 function CommandBarMixin:OnStateChanged(newState, prevState)
-    self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+    self.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
     self.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
     self.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
 
@@ -125,6 +126,7 @@ function FWoWCommandBar_OnLoad(self)
     self:FWoWInit()
     self._commands = {}
     self._cmdButtons = {}
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
     self:OnStateChanged("Normal")
 end
 
@@ -136,7 +138,7 @@ function FWoWCommandBarItem_OnClick(self)
 end
 
 function FWoWCommandBarItem_OnEnter(self)
-    self.BG:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+    self.BG:SetVertexColor(T:GetColor("Color.Overlay.Hover"))
     self.BG:Show()
     if self._cmdData and self._cmdData.tooltip then
         GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
@@ -158,7 +160,7 @@ function FWoWCommandBar_Overflow_OnClick(self)
 end
 
 function FWoWCommandBar_Overflow_OnEnter(self)
-    self.BG:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+    self.BG:SetVertexColor(T:GetColor("Color.Overlay.Hover"))
     self.BG:Show()
 end
 

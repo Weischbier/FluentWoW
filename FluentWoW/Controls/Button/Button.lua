@@ -7,6 +7,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- Style definitions (token key maps)
@@ -65,18 +66,18 @@ local function applyVisuals(self)
         bottomKey = style.bgPress
     end
 
-    self.BG:SetColorTexture(T:GetColor(bgKey))
+    self.BG:SetVertexColor(T:GetColor(bgKey))
     self.Label:SetTextColor(T:GetColor(labelKey))
     self.TopEdge:SetColorTexture(T:GetColor(style.topEdge))
     self.BottomEdge:SetColorTexture(T:GetColor(bottomKey))
 
     if self.Shadow then
         local sr, sg, sb = T:GetColor("Color.Surface.Base")
-        self.Shadow:SetColorTexture(sr, sg, sb, 0.85)
+        self.Shadow:SetVertexColor(sr, sg, sb, 0.85)
     end
 
     if overlayKey then
-        self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+        self.Overlay:SetVertexColor(T:GetColor(overlayKey))
         self.Overlay:Show()
     else
         self.Overlay:Hide()
@@ -131,18 +132,18 @@ local function applyToggleVisuals(self)
         bottomKey = "Color.Border.Default"
     end
 
-    self.BG:SetColorTexture(T:GetColor(bgKey))
+    self.BG:SetVertexColor(T:GetColor(bgKey))
     self.Label:SetTextColor(T:GetColor(labelKey))
     self.TopEdge:SetColorTexture(T:GetColor(topKey))
     self.BottomEdge:SetColorTexture(T:GetColor(bottomKey))
 
     if self.Shadow then
         local sr, sg, sb = T:GetColor("Color.Surface.Base")
-        self.Shadow:SetColorTexture(sr, sg, sb, 0.85)
+        self.Shadow:SetVertexColor(sr, sg, sb, 0.85)
     end
 
     if overlayKey then
-        self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+        self.Overlay:SetVertexColor(T:GetColor(overlayKey))
         self.Overlay:Show()
     else
         self.Overlay:Hide()
@@ -220,16 +221,16 @@ function IconMixin:OnStateChanged(newState, prevState)
         borderKey = "Color.Border.Subtle"
         self:SetAlpha(1)
     end
-    self.BG:SetColorTexture(T:GetColor(bgKey))
-    self.Border:SetColorTexture(T:GetColor(borderKey))
+    self.BG:SetVertexColor(T:GetColor(bgKey))
+    self.Border:SetVertexColor(T:GetColor(borderKey))
 
     if self.Shadow then
         local sr, sg, sb = T:GetColor("Color.Surface.Base")
-        self.Shadow:SetColorTexture(sr, sg, sb, 0.85)
+        self.Shadow:SetVertexColor(sr, sg, sb, 0.85)
     end
 
     if overlayKey then
-        self.Overlay:SetColorTexture(T:GetColor(overlayKey))
+        self.Overlay:SetVertexColor(T:GetColor(overlayKey))
         self.Overlay:Show()
     else
         self.Overlay:Hide()
@@ -301,6 +302,9 @@ function FWoWButton_OnLoad(self)
     self:FWoWInit()
     self._style = STYLES.Accent
     self._isToggle = false
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Overlay, Tex.RR4, 4)
+    if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
     local font = T:Get("Typography.BodyBold")
     if font then
         self.Label:SetFont(font.font, font.size, font.flags)
@@ -313,6 +317,9 @@ function FWoWButtonSubtle_OnLoad(self)
     self:FWoWInit()
     self._style = STYLES.Subtle
     self._isToggle = false
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Overlay, Tex.RR4, 4)
+    if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
     local font = T:Get("Typography.BodyBold")
     if font then
         self.Label:SetFont(font.font, font.size, font.flags)
@@ -325,6 +332,9 @@ function FWoWButtonDestructive_OnLoad(self)
     self:FWoWInit()
     self._style = STYLES.Destructive
     self._isToggle = false
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Overlay, Tex.RR4, 4)
+    if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
     local font = T:Get("Typography.BodyBold")
     if font then
         self.Label:SetFont(font.font, font.size, font.flags)
@@ -335,7 +345,11 @@ end
 function FWoWIconButton_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, IconMixin)
     self:FWoWInit()
-    self.BG:SetColorTexture(T:GetColor("Color.Surface.Elevated"))
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Border, Tex.RR4_Border, 4)
+    lib.SetupTexture(self.Overlay, Tex.RR4, 4)
+    if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
+    self.BG:SetVertexColor(T:GetColor("Color.Surface.Elevated"))
     self.Icon:SetVertexColor(T:GetColor("Color.Icon.Default"))
 end
 
@@ -344,6 +358,9 @@ function FWoWToggleButton_OnLoad(self)
     self:FWoWInit()
     self._isToggle = true
     self._checked  = false
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Overlay, Tex.RR4, 4)
+    if self.Shadow then lib.SetupTexture(self.Shadow, Tex.RR4_Shadow, 4) end
     local font = T:Get("Typography.BodyBold")
     if font then
         self.Label:SetFont(font.font, font.size, font.flags)

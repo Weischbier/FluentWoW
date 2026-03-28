@@ -6,6 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -59,23 +60,23 @@ function SliderMixin:OnStateChanged(newState, prevState)
     local state = newState
 
     if state == "Disabled" then
-        self.SliderFrame.Track:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-        self.SliderFrame.Fill:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-        self.SliderFrame.Thumb:SetColorTexture(T:GetColor("Color.Icon.Disabled"))
+        self.SliderFrame.Track:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+        self.SliderFrame.Fill:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+        self.SliderFrame.Thumb:SetVertexColor(T:GetColor("Color.Icon.Disabled"))
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self.ValueLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
     else
         self:SetAlpha(1)
-        self.SliderFrame.Track:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        self.SliderFrame.Track:SetVertexColor(T:GetColor("Color.Border.Subtle"))
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
         self.ValueLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
 
         local fillKey = (state == "Hover") and "Color.Accent.Hover" or "Color.Accent.Primary"
-        self.SliderFrame.Fill:SetColorTexture(T:GetColor(fillKey))
+        self.SliderFrame.Fill:SetVertexColor(T:GetColor(fillKey))
 
         local thumbKey = (state == "Pressed") and "Color.Accent.Pressed" or "Color.Accent.Primary"
-        self.SliderFrame.Thumb:SetColorTexture(T:GetColor(thumbKey))
+        self.SliderFrame.Thumb:SetVertexColor(T:GetColor(thumbKey))
     end
 end
 
@@ -222,6 +223,9 @@ function FWoWSlider_OnLoad(self)
     self._orientation = "HORIZONTAL"
     self._tickFrequency = nil
     self._snapToTicks = false
+    lib.SetupTexture(self.SliderFrame.Track, Tex.PillTrack, 2)
+    lib.SetupTexture(self.SliderFrame.Fill, Tex.PillFill, 2)
+    self.SliderFrame.Thumb:SetTexture(Tex.Circle20)
     self.HeaderLabel:Hide()
     updateSliderLayout(self)
     self:OnStateChanged("Normal")

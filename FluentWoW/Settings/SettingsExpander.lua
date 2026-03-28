@@ -8,6 +8,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -54,12 +55,12 @@ local function applyVisuals(self, state)
     if state == "Hover"    then bgKey = "Color.Surface.Raised" end
     if state == "Disabled" then bgKey = "Color.Surface.Raised" end
 
-    hdr.BG:SetColorTexture(T:GetColor(bgKey))
-    hdr.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+    hdr.BG:SetVertexColor(T:GetColor(bgKey))
+    hdr.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
 
     -- Hover
     if state == "Hover" then
-        hdr.Hover:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+        hdr.Hover:SetVertexColor(T:GetColor("Color.Overlay.Hover"))
         hdr.Hover:Show()
     else
         hdr.Hover:Hide()
@@ -84,7 +85,7 @@ local function applyVisuals(self, state)
     end
 
     -- Content area
-    self.Content.ContentBG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
+    self.Content.ContentBG:SetVertexColor(T:GetColor("Color.Surface.Overlay"))
     self.Content.Separator:SetColorTexture(T:GetColor("Color.Border.Subtle"))
 
     -- Opacity
@@ -262,6 +263,10 @@ function FWoWSettingsExpander_OnLoad(self)
     end
     self.Header.Chevron:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self.Header.Chevron:SetText(Icons.ChevronRight)
+    lib.SetupTexture(self.Header.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Header.Border, Tex.RR4_Border, 4)
+    lib.SetupTexture(self.Header.Hover, Tex.RR4, 4)
+    lib.SetupTexture(self.Content.ContentBG, Tex.RR4, 4)
     updateHeaderLayout(self)
 
     applyVisuals(self)

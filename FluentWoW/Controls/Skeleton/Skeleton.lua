@@ -7,6 +7,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- Skeleton Mixin
@@ -16,7 +17,7 @@ local Mot = lib.Motion
 local SkeletonMixin = {}
 
 function SkeletonMixin:OnStateChanged(newState, prevState)
-    self.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
+    self.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
 
     local sr, sg, sb = T:GetColor("Color.Surface.Elevated")
     self.Shimmer:SetColorTexture(sr, sg, sb, 0.40)
@@ -100,7 +101,7 @@ function FWoWSkeleton_OnLoad(self)
     self._shimmerRunning = false
     self._shimmerPhase = 0
     self._shape = "rect"
-
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
     self:SetClipsChildren(true)
     self:OnStateChanged("Normal")
     self:_StartShimmer()

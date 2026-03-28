@@ -7,6 +7,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Tex = lib.Textures
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -52,11 +53,11 @@ function TextBoxMixin:OnStateChanged(newState, prevState)
     local field = self.Field
 
     local shadowR, shadowG, shadowB = T:GetColor("Color.Surface.Base")
-    field.Shadow:SetColorTexture(shadowR, shadowG, shadowB, 0.85)
+    field.Shadow:SetVertexColor(shadowR, shadowG, shadowB, 0.85)
 
     if state == "Disabled" then
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Default"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.EditBox:SetTextColor(T:GetColor("Color.Text.Disabled"))
@@ -67,8 +68,8 @@ function TextBoxMixin:OnStateChanged(newState, prevState)
         field.EditBox:EnableKeyboard(false)
     elseif self._readOnly then
         self:SetAlpha(1)
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Base"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Base"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.EditBox:SetTextColor(T:GetColor("Color.Accent.Primary"))
@@ -78,8 +79,8 @@ function TextBoxMixin:OnStateChanged(newState, prevState)
         field.EditBox:EnableKeyboard(false)
     elseif state == "Focused" then
         self:SetAlpha(1)
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Focus"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Focus"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Accent.Light"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Accent.Primary"))
         field.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
@@ -89,8 +90,8 @@ function TextBoxMixin:OnStateChanged(newState, prevState)
         field.EditBox:EnableKeyboard(true)
     elseif state == "Hover" then
         self:SetAlpha(1)
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Overlay"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Default"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Focus"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
@@ -100,8 +101,8 @@ function TextBoxMixin:OnStateChanged(newState, prevState)
         field.EditBox:EnableKeyboard(true)
     else
         self:SetAlpha(1)
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
@@ -224,6 +225,10 @@ function FWoWTextBox_OnLoad(self)
     self._readOnly = false
     self._multiline = false
     self._multilineHeight = nil
+    local field = self.Field
+    lib.SetupTexture(field.BG, Tex.RR4, 4)
+    lib.SetupTexture(field.Border, Tex.RR4_Border, 4)
+    lib.SetupTexture(field.Shadow, Tex.RR4_Shadow, 4)
     self.Field.ClearBtn.X:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self.Field.ClearBtn.X:SetText(Icons.Cancel)
     self.Field.ClearBtn.X:SetTextColor(T:GetColor("Color.Text.Secondary"))

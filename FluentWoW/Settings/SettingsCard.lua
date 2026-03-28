@@ -11,6 +11,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -61,12 +62,12 @@ local function applyVisuals(self, state)
     if state == "Pressed"  then bgKey = "Color.Surface.Elevated"
     elseif state == "Disabled" then bgKey = "Color.Surface.Raised" end
 
-    self.BG:SetColorTexture(T:GetColor(bgKey))
-    self.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+    self.BG:SetVertexColor(T:GetColor(bgKey))
+    self.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
 
     -- Hover overlay
     if state == "Hover" then
-        self.Hover:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+        self.Hover:SetVertexColor(T:GetColor("Color.Overlay.Hover"))
         self.Hover:Show()
     else
         self.Hover:Hide()
@@ -180,6 +181,10 @@ function FWoWSettingsCard_OnLoad(self)
     self._clickable = false
     self._actionControl = nil
     self._themeListenerRegistered = false
+
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Border, Tex.RR4_Border, 4)
+    lib.SetupTexture(self.Hover, Tex.RR4, 4)
 
     -- Typography
     local titleFont = T:Get("Typography.Body")

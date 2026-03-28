@@ -8,6 +8,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -34,7 +35,7 @@ local BadgeMixin = {}
 function BadgeMixin:OnStateChanged(newState, prevState)
     local app = self._appearance or APPEARANCES.Accent
 
-    self.BG:SetColorTexture(T:GetColor(app.bg))
+    self.BG:SetVertexColor(T:GetColor(app.bg))
     self.Label:SetTextColor(T:GetColor(app.label))
     if self.Icon:IsShown() then
         self.Icon:SetTextColor(T:GetColor(app.label))
@@ -99,6 +100,8 @@ function FWoWBadge_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, BadgeMixin)
     self:FWoWInit()
     self._appearance = APPEARANCES.Accent
+
+    lib.SetupTexture(self.BG, Tex.BadgePill, 10)
 
     local font = T:Get("Typography.Caption")
     if font then

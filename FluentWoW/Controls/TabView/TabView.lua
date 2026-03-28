@@ -7,6 +7,7 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
+local Tex = lib.Textures
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
@@ -118,7 +119,8 @@ function TabViewMixin:_RefreshTabs()
 
         if i == self._selectedIndex then
             btn.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-            btn.Indicator:SetColorTexture(T:GetColor("Color.Accent.Primary"))
+            btn.Indicator:SetTexture(Tex.TabIndicator)
+            btn.Indicator:SetVertexColor(T:GetColor("Color.Accent.Primary"))
             btn.Indicator:Show()
             btn.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
         else

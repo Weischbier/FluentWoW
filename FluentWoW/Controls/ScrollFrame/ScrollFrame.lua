@@ -6,6 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Tex = lib.Textures
 
 local function SCROLL_STEP()
     return T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")  -- 40
@@ -28,7 +29,8 @@ end
 
 function ScrollMixin:_ApplyTokens()
     self.ScrollBar.Track:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-    self.ScrollBar.Thumb.BG:SetColorTexture(T:GetColor("Color.Border.Default"))
+    lib.SetupTexture(self.ScrollBar.Thumb.BG, Tex.ScrollThumb, 4)
+    self.ScrollBar.Thumb.BG:SetVertexColor(T:GetColor("Color.Border.Default"))
 end
 
 function ScrollMixin:_UpdateThumb()

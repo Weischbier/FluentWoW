@@ -108,3 +108,47 @@ function ControlBase:ShowTooltip()
     end
     GameTooltip:Show()
 end
+
+-------------------------------------------------------------------------------
+-- Shared texture asset paths
+-------------------------------------------------------------------------------
+
+lib.Textures = {
+    RR4          = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_RoundRect4_64x64",
+    RR4_Border   = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_RoundRect4_Border_64x64",
+    RR4_Shadow   = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_RoundRect4_Shadow_96x96",
+    RR8          = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_RoundRect8_64x64",
+    RR8_Border   = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_RoundRect8_Border_64x64",
+    RR8_Shadow   = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_RoundRect8_Shadow_96x96",
+    RoundSquare  = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_RoundSquare_20x20",
+    RoundSquareFill = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_RoundSquare_Filled_20x20",
+    CircleRing   = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_CircleRing_20x20",
+    CircleDot    = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_CircleDot_10x10",
+    Circle14     = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_Circle_14x14",
+    Circle20     = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_Circle_20x20",
+    CircleShadow = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_Circle_Shadow_24x24",
+    PillTrack    = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_PillTrack_32x8",
+    PillFill     = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_PillFill_32x8",
+    Pill         = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_Pill_44x20",
+    PillBorder   = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_Pill_Border_44x20",
+    BadgePill    = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_Badge_Pill_48x20",
+    NavIndicator = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_NavIndicator_3x16",
+    TabIndicator = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_TabIndicator_32x3",
+    ScrollThumb  = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_ScrollThumb_8x32",
+    ProgressRing = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_ProgressRing_32x32",
+    ArrowUp      = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_Arrow_Up_16x8",
+    FocusRect4   = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_FocusRect4_64x64",
+    FocusRect8   = "Interface\\AddOns\\FluentWoW\\Assets\\Textures\\FWoW_FocusRect8_64x64",
+}
+
+--- Set up a texture region with a 9-slice image for shaped backgrounds.
+---@param tex Texture
+---@param path string
+---@param margin number  9-slice inset in pixels (corner radius)
+function lib.SetupTexture(tex, path, margin)
+    tex:SetTexture(path)
+    if margin and margin > 0 then
+        tex:SetTextureSliceMode(Enum.UITextureSliceMode.Stretched)
+        tex:SetTextureSliceMargins(margin, margin, margin, margin)
+    end
+end

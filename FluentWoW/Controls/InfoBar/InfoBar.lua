@@ -11,6 +11,7 @@ local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- Severity token maps
@@ -97,7 +98,7 @@ end
 
 function InfoBarMixin:_ApplySeverity()
     local sev = SEVERITY[self._severity] or SEVERITY.Info
-    self.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+    self.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
     self.LeftEdge:SetColorTexture(T:GetColor(sev.edge))
     self.Icon:SetText(Icons[sev.glyph])
     self.Icon:SetTextColor(T:GetColor(sev.icon))
@@ -187,6 +188,7 @@ function FWoWInfoBar_OnLoad(self)
     self._closable = true
     self._iconVisible = true
     self._actionControl = nil
+    lib.SetupTexture(self.BG, Tex.RR4, 4)
     self.Icon:SetFont(ICON_FONT, T:GetNumber("Icon.MD"), "")
     self.CloseBtn.X:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self.CloseBtn.X:SetText(Icons.ChromeClose)

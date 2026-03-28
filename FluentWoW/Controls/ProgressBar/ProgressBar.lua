@@ -6,6 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- ProgressBar Mixin
@@ -26,14 +27,14 @@ end
 
 function BarMixin:OnStateChanged(newState, prevState)
     if newState == "Disabled" then
-        self.Bar.Track:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-        self.Bar.Fill:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
+        self.Bar.Track:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+        self.Bar.Fill:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
         self:_StopIndeterminate()
     else
         self:SetAlpha(1)
-        self.Bar.Track:SetColorTexture(T:GetColor("Color.Border.Subtle"))
-        self.Bar.Fill:SetColorTexture(T:GetColor(currentBarColorKey(self)))
+        self.Bar.Track:SetVertexColor(T:GetColor("Color.Border.Subtle"))
+        self.Bar.Fill:SetVertexColor(T:GetColor(currentBarColorKey(self)))
         if self._indeterminate then
             self:_StartIndeterminate()
         end
@@ -159,6 +160,8 @@ function FWoWProgressBar_OnLoad(self)
     self._indeterminate = false
     self._indeterminateRunning = false
     self._visualState = "Running"
+    lib.SetupTexture(self.Bar.Track, Tex.PillTrack, 2)
+    lib.SetupTexture(self.Bar.Fill, Tex.PillFill, 2)
     self.Bar:SetValue(0)
     self:OnStateChanged("Normal")
 end
@@ -172,7 +175,8 @@ function FWoWProgressRing_OnLoad(self)
     self:FWoWInit()
     self._active = true
     self._angle = 0
-    self.Ring:SetColorTexture(T:GetColor("Color.Base.White"))
+    self.Ring:SetTexture(Tex.ProgressRing)
+    self.Ring:SetVertexColor(T:GetColor("Color.Base.White"))
     self:OnStateChanged("Normal")
     self:SetScript("OnUpdate", FWoWProgressRing_OnUpdate)
 end

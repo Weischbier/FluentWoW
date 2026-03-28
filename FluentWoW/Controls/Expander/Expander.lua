@@ -10,6 +10,7 @@ local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
+local Tex = lib.Textures
 
 -- Header height derived from tokens: XXXL(32) + XL(16) = 48
 local function HEADER_H()
@@ -27,20 +28,20 @@ function ExpanderMixin:OnStateChanged(newState, prevState)
     local state = newState
 
     if state == "Disabled" then
-        self.Header.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+        self.Header.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
         self.Header.Label:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self.Header.Chevron:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
     else
         self:SetAlpha(1)
         local bgKey = (state == "Hover") and "Color.Surface.Elevated" or "Color.Surface.Raised"
-        self.Header.BG:SetColorTexture(T:GetColor(bgKey))
+        self.Header.BG:SetVertexColor(T:GetColor(bgKey))
         self.Header.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
         self.Header.Chevron:SetTextColor(T:GetColor("Color.Text.Secondary"))
-        self.Header.Hover:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+        self.Header.Hover:SetVertexColor(T:GetColor("Color.Overlay.Hover"))
     end
 
-    self.Content.ContentBG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+    self.Content.ContentBG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
 
     if self._expanded then
         self.Header.Chevron:SetText(Icons.ChevronDown)
@@ -134,6 +135,9 @@ function FWoWExpander_OnLoad(self)
     self:FWoWInit()
     self._expanded = false
     self._contentHeight = 100
+    lib.SetupTexture(self.Header.BG, Tex.RR4, 4)
+    lib.SetupTexture(self.Header.Hover, Tex.RR4, 4)
+    lib.SetupTexture(self.Content.ContentBG, Tex.RR4, 4)
     self.Header.Chevron:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self:OnStateChanged("Normal")
 end

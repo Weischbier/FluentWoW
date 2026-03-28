@@ -10,6 +10,7 @@ local Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
+local Tex = lib.Textures
 
 -------------------------------------------------------------------------------
 -- NumberBox Mixin
@@ -47,11 +48,11 @@ function NumberBoxMixin:OnStateChanged(newState, prevState)
     local field = self.Field
 
     local sr, sg, sb = T:GetColor("Color.Surface.Base")
-    field.Shadow:SetColorTexture(sr, sg, sb, 0.85)
+    field.Shadow:SetVertexColor(sr, sg, sb, 0.85)
 
     if state == "Disabled" then
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Default"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.EditBox:SetTextColor(T:GetColor("Color.Text.Disabled"))
@@ -61,8 +62,8 @@ function NumberBoxMixin:OnStateChanged(newState, prevState)
         field.EditBox:EnableKeyboard(false)
     elseif state == "Focused" then
         self:SetAlpha(1)
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Focus"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Focus"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Accent.Light"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Accent.Primary"))
         field.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
@@ -71,8 +72,8 @@ function NumberBoxMixin:OnStateChanged(newState, prevState)
         field.EditBox:EnableKeyboard(true)
     elseif state == "Hover" then
         self:SetAlpha(1)
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Overlay"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Default"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Overlay"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Default"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Focus"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
@@ -81,8 +82,8 @@ function NumberBoxMixin:OnStateChanged(newState, prevState)
         field.EditBox:EnableKeyboard(true)
     else
         self:SetAlpha(1)
-        field.BG:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        field.Border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+        field.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
+        field.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
         field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
         field.EditBox:SetTextColor(T:GetColor("Color.Text.Primary"))
@@ -181,6 +182,11 @@ function FWoWNumberBox_OnLoad(self)
     self._min = nil
     self._max = nil
     self._step = 1
+
+    local field = self.Field
+    lib.SetupTexture(field.BG, Tex.RR4, 4)
+    lib.SetupTexture(field.Border, Tex.RR4_Border, 4)
+    lib.SetupTexture(field.Shadow, Tex.RR4_Shadow, 4)
 
     if ICON_FONT then
         self.Field.SpinUp.Arrow:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
