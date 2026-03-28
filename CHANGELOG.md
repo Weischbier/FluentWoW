@@ -5,6 +5,16 @@ All notable changes to FluentWoW will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Removed the discarded review-only texture packs, audit outputs, and alternative comparison generators after retaining `FluentWoW/Assets/Textures` as the canonical runtime pack
+
+### Fixed
+
+- Cleaned up the active texture-pack notes to match the post-review asset layout
+
 ## [1.4.0] - 2026-03-27
 
 ### Added
@@ -84,7 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2025-01-01
 
-### Added (v1.0.0)
+### Added
 
 - Core runtime: Bootstrap, Utils, EventBus, StateMachine, FramePool
 - Token registry with override → theme → default resolution
