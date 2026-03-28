@@ -7,10 +7,47 @@
 ## DefaultState: enabled
 
 Gallery.lua
+
+# Basic Input
 Pages/ButtonPage.lua
-Pages/InputPage.lua
-Pages/FeedbackPage.lua
-Pages/LayoutPage.lua
-Pages/SettingsPage.lua
-Pages/NavigationPage.lua
-Pages/AdvancedPage.lua
+Pages/CheckBoxPage.lua
+Pages/RadioButtonPage.lua
+Pages/ToggleSwitchPage.lua
+Pages/SliderPage.lua
+Pages/ComboBoxPage.lua
+Pages/NumberBoxPage.lua
+Pages/SegmentedControlPage.lua
+
+# Text
+Pages/TextBlockPage.lua
+Pages/TextBoxPage.lua
+
+# Status & Info
+Pages/ProgressBarPage.lua
+Pages/InfoBarPage.lua
+Pages/BadgePage.lua
+Pages/TeachingTipPage.lua
+
+# Dialogs & Flyouts
+Pages/ContentDialogPage.lua
+
+# Navigation
+Pages/NavigationViewPage.lua
+Pages/BreadcrumbBarPage.lua
+Pages/TabViewPage.lua
+
+# Layout
+Pages/StackLayoutPage.lua
+Pages/ScrollFramePage.lua
+Pages/ExpanderPage.lua
+
+# Menus & Toolbars
+Pages/CommandBarPage.lua
+
+# Collections
+Pages/EmptyStatePage.lua
+Pages/SkeletonPage.lua
+
+# Settings
+Pages/SettingsCardPage.lua
+Pages/SettingsExpanderPage.lua
