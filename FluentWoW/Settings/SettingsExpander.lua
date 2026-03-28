@@ -33,6 +33,11 @@ local function unregisterThemeListener(self)
 end
 
 local function updateHeaderLayout(self)
+    if self._updatingHeader then return end
+    self._updatingHeader = true
+
+    self.Header.TitleLabel:SetWordWrap(true)
+    self.Header.DescLabel:SetWordWrap(true)
     self.Header.TitleLabel:ClearAllPoints()
     if self.Header.Icon:IsShown() then
         self.Header.TitleLabel:SetPoint("TOPLEFT", self.Header.Icon, "TOPRIGHT", T:GetNumber("Spacing.LG"), 0)
@@ -44,6 +49,20 @@ local function updateHeaderLayout(self)
     self.Header.DescLabel:ClearAllPoints()
     self.Header.DescLabel:SetPoint("TOPLEFT", self.Header.TitleLabel, "BOTTOMLEFT", 0, -T:GetNumber("Spacing.LG"))
     self.Header.DescLabel:SetPoint("RIGHT", self.Header.TitleLabel, "RIGHT", 0, 0)
+
+    local padTop = T:GetNumber("Spacing.LG")
+    local padBottom = T:GetNumber("Spacing.LG")
+    local gap = self.Header.DescLabel:IsShown() and T:GetNumber("Spacing.LG") or 0
+    local titleHeight = self.Header.TitleLabel:GetStringHeight() or 0
+    local descHeight = self.Header.DescLabel:IsShown() and (self.Header.DescLabel:GetStringHeight() or 0) or 0
+    local iconHeight = self.Header.Icon:IsShown() and (self.Header.Icon:GetHeight() or 20) or 0
+    local desiredHeight = math.max(48, padTop + math.max(iconHeight, titleHeight + gap + descHeight) + padBottom)
+
+    if math.abs((self.Header:GetHeight() or 0) - desiredHeight) > 0.5 then
+        self.Header:SetHeight(desiredHeight)
+    end
+
+    self._updatingHeader = false
 end
 
 local function applyVisuals(self, state)
@@ -112,13 +131,17 @@ function ExpanderMixin:_LayoutCards()
         card:ClearAllPoints()
         card:SetPoint("TOPLEFT", self.Content, "TOPLEFT", 0, -yOff)
         card:SetPoint("RIGHT", self.Content, "RIGHT")
+        card:SetShown(self._expanded)
         yOff = yOff + card:GetHeight()
         if i < #self._cards then yOff = yOff + CARD_GAP end
     end
-    self._contentHeight = yOff
+    self._contentHeight = math.max(1, yOff)
     if self._expanded then
         self.Content:SetHeight(self._contentHeight)
         self:SetHeight(self.Header:GetHeight() + self._contentHeight)
+    else
+        self.Content:SetHeight(1)
+        self:SetHeight(self.Header:GetHeight())
     end
 end
 
@@ -127,6 +150,13 @@ function ExpanderMixin:AddCard(card)
     if not self._cards then self._cards = {} end
     card:SetParent(self.Content)
     table.insert(self._cards, card)
+    card:SetShown(self._expanded)
+    if not card._fwowExpanderLayoutHooked then
+        card._fwowExpanderLayoutHooked = true
+        card:HookScript("OnSizeChanged", function()
+            self:_LayoutCards()
+        end)
+    end
     self:_LayoutCards()
 end
 
@@ -156,7 +186,23 @@ end
 ---@param expanded boolean
 ---@param instant? boolean  skip animation
 function ExpanderMixin:SetExpanded(expanded, instant)
-    if expanded == self._expanded then return end
+    if expanded == self._expanded then
+        local headerH = self.Header:GetHeight()
+        local contentH = self._contentHeight or 0
+        for _, card in ipairs(self._cards or {}) do
+            card:SetShown(expanded)
+        end
+        if expanded then
+            self.Content:Show()
+            self.Content:SetHeight(contentH)
+            self:SetHeight(headerH + contentH)
+        else
+            self.Content:Hide()
+            self.Content:SetHeight(1)
+            self:SetHeight(headerH)
+        end
+        return
+    end
     self._expanded = expanded
 
     local hdr = self.Header
@@ -166,6 +212,9 @@ function ExpanderMixin:SetExpanded(expanded, instant)
     local contentH = self._contentHeight or 0
 
     if expanded then
+        for _, card in ipairs(self._cards or {}) do
+            card:Show()
+        end
         self.Content:Show()
         if instant or Mot.reducedMotion then
             self.Content:SetHeight(contentH)
@@ -178,11 +227,17 @@ function ExpanderMixin:SetExpanded(expanded, instant)
         end
     else
         if instant or Mot.reducedMotion then
+            for _, card in ipairs(self._cards or {}) do
+                card:Hide()
+            end
             self.Content:Hide()
             self.Content:SetHeight(1)
             self:SetHeight(headerH)
         else
             Mot:HeightTo(self.Content, contentH, 1, nil, function()
+                for _, card in ipairs(self._cards or {}) do
+                    card:Hide()
+                end
                 self.Content:Hide()
             end)
             Mot:HeightTo(self, headerH + contentH, headerH)
@@ -205,6 +260,8 @@ end
 ---@param text string
 function ExpanderMixin:SetTitle(text)
     self.Header.TitleLabel:SetText(text or "")
+    updateHeaderLayout(self)
+    self:_LayoutCards()
 end
 
 ---@param text string
@@ -212,16 +269,11 @@ function ExpanderMixin:SetDescription(text)
     if text and text ~= "" then
         self.Header.DescLabel:SetText(text)
         self.Header.DescLabel:Show()
-        local padT  = T:GetNumber("Spacing.LG")   -- 12
-        local gap   = T:GetNumber("Spacing.LG")   -- 12
-        local padB  = T:GetNumber("Spacing.LG")    -- 12
-        local minH  = T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.XL")  -- 48
-        local h = padT + self.Header.TitleLabel:GetStringHeight() + gap + self.Header.DescLabel:GetStringHeight() + padB
-        self.Header:SetHeight(math.max(minH, h))
     else
         self.Header.DescLabel:Hide()
-        self.Header:SetHeight(T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.XL"))  -- 48
     end
+    updateHeaderLayout(self)
+    self:_LayoutCards()
 end
 
 ---@param path string|number
@@ -250,6 +302,7 @@ function FWoWSettingsExpander_OnLoad(self)
     self._expanded = false
     self._cards = {}
     self._contentHeight = 0
+    self._updatingHeader = false
     self._themeListenerRegistered = false
 
     -- Typography
@@ -267,6 +320,7 @@ function FWoWSettingsExpander_OnLoad(self)
     lib.SetupTexture(self.Header.Border, Tex.RR4_Border, 4)
     lib.SetupTexture(self.Header.Hover, Tex.RR4, 4)
     lib.SetupTexture(self.Content.ContentBG, Tex.RR4, 4)
+    self.Content:SetClipsChildren(true)
     updateHeaderLayout(self)
 
     applyVisuals(self)

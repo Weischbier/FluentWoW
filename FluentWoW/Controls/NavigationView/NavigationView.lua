@@ -15,6 +15,21 @@ local ICON_FONT = lib.FLUENT_ICON_FONT
 local PANE_WIDTH_EXPANDED  = 200
 local PANE_WIDTH_COLLAPSED = 48
 
+local function updateNavItemLayout(btn, expanded)
+    btn.Icon:ClearAllPoints()
+    btn.Label:ClearAllPoints()
+
+    if expanded then
+        btn.Icon:SetPoint("LEFT", btn, "LEFT", 12, 0)
+        btn.Label:SetPoint("LEFT", btn.Icon, "RIGHT", 12, 0)
+        btn.Label:SetPoint("RIGHT", btn, "RIGHT", -8, 0)
+        btn.Label:Show()
+    else
+        btn.Icon:SetPoint("CENTER", btn, "CENTER", 0, 0)
+        btn.Label:Hide()
+    end
+end
+
 -------------------------------------------------------------------------------
 -- NavigationView Mixin
 -------------------------------------------------------------------------------
@@ -81,7 +96,7 @@ function NavViewMixin:SetPaneExpanded(expanded, instant)
     end
 
     for _, btn in ipairs(self._navButtons or {}) do
-        btn.Label:SetShown(expanded)
+        updateNavItemLayout(btn, expanded)
     end
 
     if self.Pane.ToggleBtn then
@@ -125,7 +140,7 @@ function NavViewMixin:_BuildItems()
         end
 
         btn.Label:SetText(item.label or "")
-        btn.Label:SetShown(self._paneExpanded)
+        updateNavItemLayout(btn, self._paneExpanded)
 
         local font = T:Get("Typography.Body")
         if font then

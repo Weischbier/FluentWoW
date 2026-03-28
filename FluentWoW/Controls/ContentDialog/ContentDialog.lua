@@ -15,6 +15,26 @@ local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
 local Tex = lib.Textures
 
+local function updateButtonRow(self)
+    local row = self.Card.ButtonRow
+    local hasPrimary = self._primaryText ~= nil and self._primaryText ~= ""
+    local hasSecondary = self._secondaryText ~= nil and self._secondaryText ~= ""
+
+    row:SetShown(hasPrimary or hasSecondary)
+    row.PrimaryBtn:SetShown(hasPrimary)
+    row.SecondaryBtn:SetShown(hasSecondary)
+
+    row.PrimaryBtn:ClearAllPoints()
+    row.PrimaryBtn:SetPoint("RIGHT", row, "RIGHT", 0, 0)
+
+    row.SecondaryBtn:ClearAllPoints()
+    if hasPrimary then
+        row.SecondaryBtn:SetPoint("RIGHT", row.PrimaryBtn, "LEFT", -8, 0)
+    else
+        row.SecondaryBtn:SetPoint("RIGHT", row, "RIGHT", 0, 0)
+    end
+end
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -48,23 +68,27 @@ end
 ---@param text string
 ---@param callback? function
 function DialogMixin:SetPrimaryButton(text, callback)
+    self._primaryText = text
     self.Card.ButtonRow.PrimaryBtn:SetText(text)
     self._primaryCallback = callback
     self.Card.ButtonRow.PrimaryBtn:SetOnClick(function()
         if callback then lib.Utils.SafeCall(callback) end
         self:Close("Primary")
     end)
+    updateButtonRow(self)
 end
 
 ---@param text string
 ---@param callback? function
 function DialogMixin:SetSecondaryButton(text, callback)
+    self._secondaryText = text
     self.Card.ButtonRow.SecondaryBtn:SetText(text)
     self._secondaryCallback = callback
     self.Card.ButtonRow.SecondaryBtn:SetOnClick(function()
         if callback then lib.Utils.SafeCall(callback) end
         self:Close("Secondary")
     end)
+    updateButtonRow(self)
 end
 
 ---@param closable boolean
@@ -119,9 +143,12 @@ function FWoWContentDialog_OnLoad(self)
     self:FWoWInit()
     self._closable = true
     self._dismissOnOverlay = false
+    self._primaryText = nil
+    self._secondaryText = nil
     lib.SetupTexture(self.Card.BG, Tex.RR8, 8)
     self.Card.CloseBtn.X:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self.Card.CloseBtn.X:SetText(Icons.ChromeClose)
+    updateButtonRow(self)
     self:_ApplyTokens()
 end
 

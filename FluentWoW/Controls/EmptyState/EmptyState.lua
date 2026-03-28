@@ -11,6 +11,36 @@ local Mot = lib.Motion
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
 
+local function updateLayout(self)
+    self.TitleLabel:SetWordWrap(true)
+    self.DescLabel:SetWordWrap(true)
+
+    self.TitleLabel:ClearAllPoints()
+    if self.Icon:IsShown() then
+        self.TitleLabel:SetPoint("TOP", self.Icon, "BOTTOM", 0, -16)
+    else
+        self.TitleLabel:SetPoint("TOP", self, "TOP", 0, -24)
+    end
+    self.TitleLabel:SetPoint("LEFT", self, "LEFT", 24, 0)
+    self.TitleLabel:SetPoint("RIGHT", self, "RIGHT", -24, 0)
+
+    self.DescLabel:ClearAllPoints()
+    self.DescLabel:SetPoint("TOP", self.TitleLabel, "BOTTOM", 0, -8)
+    self.DescLabel:SetPoint("LEFT", self, "LEFT", 24, 0)
+    self.DescLabel:SetPoint("RIGHT", self, "RIGHT", -24, 0)
+
+    self.ActionSlot:ClearAllPoints()
+    self.ActionSlot:SetPoint("TOP", self.DescLabel, "BOTTOM", 0, -16)
+    self.ActionSlot:SetPoint("LEFT", self, "LEFT", 24, 0)
+    self.ActionSlot:SetPoint("RIGHT", self, "RIGHT", -24, 0)
+
+    local iconH = self.Icon:IsShown() and (self.Icon:GetStringHeight() or T:GetNumber("Icon.XL")) or 0
+    local titleH = self.TitleLabel:GetStringHeight() or 0
+    local descH = self.DescLabel:GetStringHeight() or 0
+    local actionH = self.ActionSlot:IsShown() and (self.ActionSlot:GetHeight() + 16) or 0
+    self:SetHeight(math.max(120, 24 + iconH + 16 + titleH + 8 + descH + actionH + 24))
+end
+
 -------------------------------------------------------------------------------
 -- EmptyState Mixin
 -------------------------------------------------------------------------------
@@ -41,11 +71,13 @@ function EmptyStateMixin:SetIcon(icon)
     else
         self.Icon:Hide()
     end
+    updateLayout(self)
 end
 
 ---@param title string
 function EmptyStateMixin:SetTitle(title)
     self.TitleLabel:SetText(title)
+    updateLayout(self)
 end
 
 ---@return string
@@ -56,6 +88,7 @@ end
 ---@param desc string
 function EmptyStateMixin:SetDescription(desc)
     self.DescLabel:SetText(desc)
+    updateLayout(self)
 end
 
 ---@return string
@@ -74,6 +107,7 @@ function EmptyStateMixin:SetActionControl(control)
     else
         self.ActionSlot:Hide()
     end
+    updateLayout(self)
 end
 
 -------------------------------------------------------------------------------
@@ -95,6 +129,7 @@ function FWoWEmptyState_OnLoad(self)
     end
 
     self.ActionSlot:Hide()
+    updateLayout(self)
     self:OnStateChanged("Normal")
 end
 

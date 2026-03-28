@@ -37,13 +37,13 @@ Gallery:RegisterControlPage("NavigationView", function(parent, item)
 
     local contentArea = nav:GetContentArea()
 
-    -- Create content frames for each page
-    local pages = {}
     local pageItems = {
         { key = "home",     label = "Home",     icon = Icons.Home },
         { key = "settings", label = "Settings", icon = Icons.Settings },
         { key = "profile",  label = "Profile",  icon = Icons.Edit },
     }
+
+    nav:SetItems(pageItems)
 
     for _, pi in ipairs(pageItems) do
         local page = CreateFrame("Frame", nil, contentArea)
@@ -54,21 +54,10 @@ Gallery:RegisterControlPage("NavigationView", function(parent, item)
         pageLabel:SetStyle("Subtitle")
         pageLabel:SetText(pi.label .. " Page")
         pageLabel:SetPoint("CENTER")
-        pages[pi.key] = page
-        pi.content = page
+        nav:SetItemContent(pi.key, page)
     end
 
-    nav:SetItems(pageItems)
     nav:SelectItem("home")
-
-    nav:SetOnSelectionChanged(function(_, key)
-        for k, p in pairs(pages) do
-            p:SetShown(k == key)
-        end
-    end)
-
-    -- Show home initially
-    pages.home:Show()
 
     stack:AddChild(ex1.block)
 

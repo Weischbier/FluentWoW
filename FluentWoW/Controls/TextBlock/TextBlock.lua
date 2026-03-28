@@ -7,6 +7,14 @@
 local lib = FluentWoW
 local T   = lib.Tokens
 
+local function refreshHeight(self)
+    if self._refreshingHeight then return end
+
+    self._refreshingHeight = true
+    self:SetHeight(math.max(1, self.Label:GetStringHeight() or 0))
+    self._refreshingHeight = false
+end
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -28,7 +36,7 @@ end
 ---@param text string
 function TextBlockMixin:SetText(text)
     self.Label:SetText(text)
-    self:SetHeight(self.Label:GetStringHeight())
+    refreshHeight(self)
 end
 
 ---@return string
@@ -41,7 +49,7 @@ function TextBlockMixin:SetStyle(style)
     self._typographyKey = style
     local font, size, flags = T:GetFont(style)
     self.Label:SetFont(font, size, flags)
-    self:SetHeight(self.Label:GetStringHeight())
+    refreshHeight(self)
 end
 
 ---@param key string token key for colour, e.g. "Color.Text.Secondary"
@@ -52,10 +60,9 @@ end
 
 ---@param wrapping boolean
 function TextBlockMixin:SetWrapping(wrapping)
+    self._wrapping = wrapping == true
     self.Label:SetWordWrap(wrapping)
-    if wrapping then
-        self:SetHeight(self.Label:GetStringHeight())
-    end
+    refreshHeight(self)
 end
 
 -------------------------------------------------------------------------------
@@ -67,9 +74,17 @@ function FWoWTextBlock_OnLoad(self)
     self:FWoWInit()
     self._colorKey = "Color.Text.Primary"
     self._typographyKey = "Body"
+    self._wrapping = false
+    self._refreshingHeight = false
     local font, size, flags = T:GetFont("Body")
     self.Label:SetFont(font, size, flags)
     self.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
+    self:HookScript("OnSizeChanged", function(frame, width)
+        if frame._wrapping and width and width > 0 then
+            refreshHeight(frame)
+        end
+    end)
+    refreshHeight(self)
 end
 
 -------------------------------------------------------------------------------

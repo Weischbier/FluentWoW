@@ -50,6 +50,46 @@ end
 -------------------------------------------------------------------------------
 
 local _activeCombo
+local _deferredRestore = {}
+local _combatWatcher = CreateFrame("Frame")
+local restoreDropdown
+
+local function flushDeferredRestores()
+    for combo in pairs(_deferredRestore) do
+        _deferredRestore[combo] = nil
+        if combo and combo.Dropdown then
+            combo.Dropdown:Hide()
+            restoreDropdown(combo)
+        end
+    end
+    _combatWatcher:UnregisterEvent("PLAYER_REGEN_ENABLED")
+    _combatWatcher:SetScript("OnEvent", nil)
+end
+
+local function queueRestore(combo)
+    _deferredRestore[combo] = true
+    _combatWatcher:RegisterEvent("PLAYER_REGEN_ENABLED")
+    _combatWatcher:SetScript("OnEvent", flushDeferredRestores)
+end
+
+local function attachDropdown(self)
+    if self.Dropdown:GetParent() ~= UIParent then
+        self._dropdownParent = self.Dropdown:GetParent()
+    end
+
+    self.Dropdown:SetParent(UIParent)
+    self.Dropdown:SetFrameStrata("TOOLTIP")
+    self.Dropdown:ClearAllPoints()
+    self.Dropdown:SetPoint("TOPLEFT", self.Field, "BOTTOMLEFT", 0, -2)
+end
+
+restoreDropdown = function(self)
+    local parent = self._dropdownParent or self
+    self.Dropdown:SetParent(parent)
+    self.Dropdown:ClearAllPoints()
+    self.Dropdown:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -2)
+    self.Dropdown:SetFrameStrata("DIALOG")
+end
 
 -------------------------------------------------------------------------------
 -- Mixin
@@ -117,11 +157,16 @@ function ComboMixin:GetItems()
 end
 
 ---@param index integer
-function ComboMixin:SetSelectedIndex(index)
+---@param suppressCallback? boolean
+function ComboMixin:SetSelectedIndex(index, suppressCallback)
     local items = self._items or {}
     if index < 1 or index > #items then return end
+    local changed = self._selectedIndex ~= index
     self._selectedIndex = index
     updateText(self)
+    if changed and suppressCallback ~= true and self._onSelectionChanged then
+        lib.Utils.SafeCall(self._onSelectionChanged, self, index, items[index])
+    end
 end
 
 ---@return integer|nil
@@ -165,6 +210,7 @@ function ComboMixin:_Open()
     end
     _activeCombo = self
     self:_BuildDropdown()
+    attachDropdown(self)
     self.Dropdown.DropBG:SetVertexColor(T:GetColor("Color.Surface.Overlay"))
     Mot:FadeIn(self.Dropdown)
     self._vsm:SetState("Expanded")
@@ -172,7 +218,17 @@ end
 
 function ComboMixin:_Close()
     if _activeCombo == self then _activeCombo = nil end
-    Mot:FadeOut(self.Dropdown)
+    if InCombatLockdown() then
+        if self.Dropdown:IsShown() then
+            self.Dropdown:Hide()
+        end
+        queueRestore(self)
+        self._vsm:SetState("Normal")
+        return
+    end
+    Mot:FadeOut(self.Dropdown, nil, function()
+        restoreDropdown(self)
+    end)
     self._vsm:SetState("Normal")
 end
 
@@ -268,9 +324,21 @@ function FWoWComboBox_OnLeave(self)
 end
 
 function FWoWComboBox_OnHide(self)
+    if InCombatLockdown() then
+        if self.Dropdown:IsShown() then
+            self.Dropdown:Hide()
+        end
+        queueRestore(self)
+        if _activeCombo == self then _activeCombo = nil end
+        if self._vsm:GetState() == "Expanded" then
+            self._vsm:SetState("Normal")
+        end
+        return
+    end
     if self.Dropdown:IsShown() then
         self.Dropdown:Hide()
     end
+    restoreDropdown(self)
     if _activeCombo == self then _activeCombo = nil end
     if self._vsm:GetState() == "Expanded" then
         self._vsm:SetState("Normal")
@@ -282,9 +350,6 @@ function FWoWComboBoxItem_OnClick(self)
     if not combo then return end
     combo:SetSelectedIndex(self._itemIndex)
     combo:_Close()
-    if combo._onSelectionChanged then
-        lib.Utils.SafeCall(combo._onSelectionChanged, combo, self._itemIndex)
-    end
 end
 
 function FWoWComboBoxItem_OnEnter(self)

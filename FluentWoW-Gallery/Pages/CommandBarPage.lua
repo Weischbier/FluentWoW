@@ -38,10 +38,10 @@ Gallery:RegisterControlPage("CommandBar", function(parent, item)
     ex1.outputLabel:SetText("")
     cb:SetCommands({
         { key = "add",     icon = Icons.Add,     label = "Add",     tooltip = "Add new item",      onClick = function() ex1.outputLabel:SetText("Add clicked") end },
-        { key = "edit",    icon = Icons.Edit,     label = "Edit",    tooltip = "Edit selected item", onClick = function() ex1.outputLabel:SetText("Edit clicked") end },
-        { key = "delete",  icon = Icons.Delete,   label = "Delete",  tooltip = "Delete item",        onClick = function() ex1.outputLabel:SetText("Delete clicked") end },
-        { key = "share",   icon = Icons.Share,    label = "Share",   tooltip = "Share item",         onClick = function() ex1.outputLabel:SetText("Share clicked") end },
-        { key = "refresh", icon = Icons.Refresh,  label = "Refresh", tooltip = "Refresh list",       onClick = function() ex1.outputLabel:SetText("Refresh clicked") end },
+        { key = "edit",    icon = Icons.Edit,    label = "Edit",    tooltip = "Edit item",          onClick = function() ex1.outputLabel:SetText("Edit clicked") end },
+        { key = "delete",  icon = Icons.Delete,  label = "Delete",  tooltip = "Delete item",        onClick = function() ex1.outputLabel:SetText("Delete clicked") end },
+        { key = "done",    icon = Icons.CheckMark, label = "Done",   tooltip = "Mark complete",      onClick = function() ex1.outputLabel:SetText("Done clicked") end },
+        { key = "cancel",  icon = Icons.Cancel,  label = "Cancel",  tooltip = "Cancel action",      onClick = function() ex1.outputLabel:SetText("Cancel clicked") end },
     })
 
     stack:AddChild(ex1.block)
@@ -59,10 +59,10 @@ Gallery:RegisterControlPage("CommandBar", function(parent, item)
     local cb2 = lib:CreateCommandBar(ex2.example)
     cb2:SetPoint("TOPLEFT", ex2.example, "TOPLEFT", 12, -12)
     cb2:SetCommands({
-        { key = "copy",  icon = Icons.Copy,  tooltip = "Copy",  onClick = function() end },
-        { key = "save",  icon = Icons.Save,  tooltip = "Save",  onClick = function() end },
-        { key = "sort",  icon = Icons.Sort,  tooltip = "Sort",  onClick = function() end },
-        { key = "filter", icon = Icons.Filter, tooltip = "Filter", onClick = function() end },
+        { key = "add",      icon = Icons.Add,      tooltip = "Add",      onClick = function() end },
+        { key = "edit",     icon = Icons.Edit,     tooltip = "Edit",     onClick = function() end },
+        { key = "delete",   icon = Icons.Delete,   tooltip = "Delete",   onClick = function() end },
+        { key = "done",     icon = Icons.CheckMark, tooltip = "Done",    onClick = function() end },
     })
 
     stack:AddChild(ex2.block)

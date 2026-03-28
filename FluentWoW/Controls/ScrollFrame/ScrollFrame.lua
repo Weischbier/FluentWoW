@@ -12,6 +12,12 @@ local function SCROLL_STEP()
     return T:GetNumber("Spacing.XXXL") + T:GetNumber("Spacing.MD")  -- 40
 end
 
+local function refreshThumb(self)
+    if not self or not self._UpdateThumb then return end
+    self.ScrollFrame:UpdateScrollChildRect()
+    self:_UpdateThumb()
+end
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -29,6 +35,7 @@ end
 
 function ScrollMixin:_ApplyTokens()
     self.ScrollBar.Track:SetColorTexture(T:GetColor("Color.Surface.Stroke"))
+    self.ScrollBar.Track:SetAlpha(T:GetNumber("Opacity.Disabled"))
     lib.SetupTexture(self.ScrollBar.Thumb.BG, Tex.ScrollThumb, 4)
     self.ScrollBar.Thumb.BG:SetVertexColor(T:GetColor("Color.Border.Default"))
 end
@@ -38,13 +45,17 @@ function ScrollMixin:_UpdateThumb()
     local scrollRange = sf:GetVerticalScrollRange()
     local barHeight = self.ScrollBar:GetHeight()
 
+    if barHeight <= 0 then return end
+
     if scrollRange <= 0 then
         self.ScrollBar:Hide()
         return
     end
     self.ScrollBar:Show()
+    self.ScrollBar.Thumb:Show()
 
-    local contentRatio = sf:GetHeight() / (sf:GetHeight() + scrollRange)
+    local contentHeight = math.max(sf:GetHeight() + scrollRange, 1)
+    local contentRatio = sf:GetHeight() / contentHeight
     local thumbHeight = math.max(T:GetNumber("Spacing.XL") + T:GetNumber("Spacing.SM"), barHeight * contentRatio)  -- min 20
     self.ScrollBar.Thumb:SetHeight(thumbHeight)
 
@@ -83,13 +94,13 @@ end
 ---@param height number
 function ScrollMixin:SetContentHeight(height)
     self.ScrollFrame.Child:SetHeight(height)
-    self:_UpdateThumb()
+    refreshThumb(self)
 end
 
 ---@param offset number
 function ScrollMixin:SetScrollOffset(offset)
     self.ScrollFrame:SetVerticalScroll(offset)
-    self:_UpdateThumb()
+    refreshThumb(self)
 end
 
 ---@return number
@@ -105,6 +116,16 @@ function FWoWScrollFrame_OnLoad(self)
     Mixin(self, lib._controls.ControlBase, ScrollMixin)
     self:FWoWInit()
     self:_ApplyTokens()
+    self.ScrollFrame:EnableMouseWheel(true)
+
+    self:HookScript("OnShow", refreshThumb)
+    self:HookScript("OnSizeChanged", refreshThumb)
+    self.ScrollFrame:HookScript("OnSizeChanged", function()
+        refreshThumb(self)
+    end)
+    self.ScrollBar:HookScript("OnSizeChanged", function()
+        refreshThumb(self)
+    end)
 
     self:SetScript("OnHide", function()
         if self._draggingThumb then
@@ -120,12 +141,12 @@ end
 
 function FWoWScrollFrame_OnRangeChanged(self, xRange, yRange)
     local parent = self:GetParent()
-    parent:_UpdateThumb()
+    refreshThumb(parent)
 end
 
 function FWoWScrollFrame_OnVerticalScroll(self, offset)
     local parent = self:GetParent()
-    parent:_UpdateThumb()
+    refreshThumb(parent)
 end
 
 function FWoWScrollFrame_OnMouseWheel(self, delta)
@@ -135,7 +156,7 @@ function FWoWScrollFrame_OnMouseWheel(self, delta)
     local newScroll = current - (delta * SCROLL_STEP())
     newScroll = math.max(0, math.min(newScroll, maxScroll))
     self:SetVerticalScroll(newScroll)
-    parent:_UpdateThumb()
+    refreshThumb(parent)
 end
 
 function FWoWScrollFrame_Thumb_OnMouseDown(self)

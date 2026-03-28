@@ -12,6 +12,24 @@ local Tex = lib.Textures
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
 
+local function updateLayout(self)
+    local font = T:Get("Typography.Body")
+    if font then
+        self.Label:SetFont(font.font, font.size, font.flags)
+    end
+
+    self.Check:ClearAllPoints()
+    self.Check:SetPoint("CENTER", self.Box, "CENTER", 0, 0)
+
+    self.Label:ClearAllPoints()
+    self.Label:SetPoint("LEFT", self.Box, "RIGHT", T:GetNumber("Spacing.MD"), 0)
+    self.Label:SetPoint("RIGHT", self, "RIGHT", 0, 0)
+
+    local labelW = self.Label:GetStringWidth() or 0
+    local extra = labelW > 0 and (T:GetNumber("Spacing.MD") + labelW) or 0
+    self:SetSize(math.max(20 + extra, 20), 20)
+end
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -114,6 +132,7 @@ end
 ---@param text string
 function CheckBoxMixin:SetText(text)
     self.Label:SetText(text)
+    updateLayout(self)
 end
 
 ---@return string
@@ -138,6 +157,7 @@ function FWoWCheckBox_OnLoad(self)
     self._threeState = false
     self.Box:SetTexture(Tex.RoundSquare)
     self.Check:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+    updateLayout(self)
     self:OnStateChanged("Normal")
 end
 

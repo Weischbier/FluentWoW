@@ -102,11 +102,12 @@ Gallery:RegisterControlPage("ProgressBar", function(parent, item)
     ---------------------------------------------------------------------------
     local ex4 = Gallery:CreateControlExample(stack, {
         headerText = "A ProgressRing for non-blocking loading indicators.",
-        exampleHeight = 120,
+        exampleHeight = 140,
         noOutput = true,
     })
 
     local ring = lib:CreateProgressRing(ex4.example)
+    ring:SetSize(48, 48)
     ring:SetActive(true)
     ring:SetPoint("CENTER")
 

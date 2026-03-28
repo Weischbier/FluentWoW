@@ -27,7 +27,7 @@ Gallery:RegisterControlPage("SettingsExpander", function(parent, item)
     ---------------------------------------------------------------------------
     local ex1 = Gallery:CreateControlExample(stack, {
         headerText = "A SettingsExpander with nested SettingsCards.",
-        exampleHeight = 300,
+        exampleHeight = 340,
         noOptions = true,
     })
 
@@ -50,12 +50,14 @@ Gallery:RegisterControlPage("SettingsExpander", function(parent, item)
     child2:SetTitle("Font size")
     child2:SetDescription("Adjust the base font size.")
     local fontSlider = lib:CreateSlider(expander1)
+    fontSlider:SetWidth(120)
     fontSlider:SetRange(8, 24)
     fontSlider:SetValue(12)
     fontSlider:SetStep(1)
     fontSlider:SetShowValue(true)
     child2:SetActionControl(fontSlider)
     expander1:AddCard(child2)
+    expander1:SetExpanded(true, true)
 
     ex1.outputLabel:SetText("")
     expander1:SetOnToggled(function(_, expanded)
@@ -69,7 +71,7 @@ Gallery:RegisterControlPage("SettingsExpander", function(parent, item)
     ---------------------------------------------------------------------------
     local ex2 = Gallery:CreateControlExample(stack, {
         headerText = "A collapsed SettingsExpander.",
-        exampleHeight = 120,
+        exampleHeight = 140,
         noOutput = true,
         noOptions = true,
     })
@@ -77,7 +79,6 @@ Gallery:RegisterControlPage("SettingsExpander", function(parent, item)
     local expander2 = lib:CreateSettingsExpander(ex2.example)
     expander2:SetTitle("Advanced")
     expander2:SetDescription("Advanced settings for power users.")
-    expander2:SetExpanded(false, true)
     expander2:SetPoint("TOPLEFT", ex2.example, "TOPLEFT", 12, -12)
     expander2:SetPoint("RIGHT", ex2.example, "RIGHT", -12, 0)
 
@@ -88,6 +89,7 @@ Gallery:RegisterControlPage("SettingsExpander", function(parent, item)
     debugToggle:SetIsOn(false)
     advCard:SetActionControl(debugToggle)
     expander2:AddCard(advCard)
+    expander2:SetExpanded(false, true)
 
     stack:AddChild(ex2.block)
 

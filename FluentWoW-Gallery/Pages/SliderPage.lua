@@ -26,7 +26,7 @@ Gallery:RegisterControlPage("Slider", function(parent, item)
     ---------------------------------------------------------------------------
     local ex1 = Gallery:CreateControlExample(stack, {
         headerText = "A simple Slider.",
-        exampleHeight = 120,
+        exampleHeight = 148,
     })
 
     local slider1 = lib:CreateSlider(ex1.example)
@@ -55,7 +55,7 @@ Gallery:RegisterControlPage("Slider", function(parent, item)
     ---------------------------------------------------------------------------
     local ex2 = Gallery:CreateControlExample(stack, {
         headerText = "A Slider with tick marks and step values.",
-        exampleHeight = 120,
+        exampleHeight = 140,
         noOptions = true,
     })
 
@@ -81,7 +81,7 @@ Gallery:RegisterControlPage("Slider", function(parent, item)
     ---------------------------------------------------------------------------
     local ex3 = Gallery:CreateControlExample(stack, {
         headerText = "A Slider with a custom range and formatted value.",
-        exampleHeight = 120,
+        exampleHeight = 136,
         noOutput = true,
         noOptions = true,
     })

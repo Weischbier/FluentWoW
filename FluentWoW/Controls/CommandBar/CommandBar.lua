@@ -50,6 +50,10 @@ function CommandBarMixin:_BuildItems()
             btn._cmdBar = nil
             btn._cmdKey = nil
             btn._cmdData = nil
+            btn.Label:Hide()
+            btn.Label:SetText("")
+            btn.Icon:ClearAllPoints()
+            btn.Icon:SetPoint("CENTER", btn, "CENTER", 0, 0)
         end)
     end
     self._cmdPool:ReleaseAll()
@@ -57,7 +61,7 @@ function CommandBarMixin:_BuildItems()
 
     local container = self.PrimaryContainer
     local xOff = 0
-    local gap = T:GetNumber("Spacing.XS")
+    local gap = T:GetNumber("Spacing.LG")
 
     for i, cmd in ipairs(self._commands or {}) do
         local btn = self._cmdPool:Acquire()
@@ -75,13 +79,23 @@ function CommandBarMixin:_BuildItems()
         end
 
         if cmd.label then
+            btn.Icon:ClearAllPoints()
+            btn.Icon:SetPoint("TOP", btn, "TOP", 0, -6)
             btn.Label:SetText(cmd.label)
             btn.Label:Show()
+            btn.Label:ClearAllPoints()
+            btn.Label:SetPoint("TOP", btn.Icon, "BOTTOM", 0, -2)
+            btn.Label:SetPoint("LEFT", btn, "LEFT", 2, 0)
+            btn.Label:SetPoint("RIGHT", btn, "RIGHT", -2, 0)
             local font = T:Get("Typography.Caption")
             if font then btn.Label:SetFont(font.font, font.size, font.flags) end
             btn.Label:SetTextColor(T:GetColor("Color.Text.Secondary"))
-            btn:SetWidth(math.max(btn.Label:GetStringWidth() + 8, 40))
-            btn:SetHeight(40)
+            btn:SetWidth(math.max(btn.Label:GetStringWidth() + 24, 56))
+            btn:SetHeight(44)
+        else
+            btn.Label:Hide()
+            btn.Icon:ClearAllPoints()
+            btn.Icon:SetPoint("CENTER", btn, "CENTER", 0, 0)
         end
 
         btn:Show()
@@ -126,6 +140,7 @@ function FWoWCommandBar_OnLoad(self)
     self:FWoWInit()
     self._commands = {}
     self._cmdButtons = {}
+    self:SetHeight(48)
     lib.SetupTexture(self.BG, Tex.RR4, 4)
     self:OnStateChanged("Normal")
 end

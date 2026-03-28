@@ -27,7 +27,7 @@ Gallery:RegisterControlPage("SettingsCard", function(parent, item)
     ---------------------------------------------------------------------------
     local ex1 = Gallery:CreateControlExample(stack, {
         headerText = "A SettingsCard with a ToggleSwitch action.",
-        exampleHeight = 120,
+        exampleHeight = 152,
         noOptions = true,
     })
 
@@ -54,7 +54,7 @@ Gallery:RegisterControlPage("SettingsCard", function(parent, item)
     ---------------------------------------------------------------------------
     local ex2 = Gallery:CreateControlExample(stack, {
         headerText = "A SettingsCard with a Slider action.",
-        exampleHeight = 120,
+        exampleHeight = 164,
         noOutput = true,
         noOptions = true,
     })
@@ -66,10 +66,15 @@ Gallery:RegisterControlPage("SettingsCard", function(parent, item)
     card2:SetPoint("RIGHT", ex2.example, "RIGHT", -12, 0)
 
     local cardSlider = lib:CreateSlider(ex2.example)
+    cardSlider:SetWidth(120)
     cardSlider:SetRange(0, 100)
     cardSlider:SetValue(80)
     cardSlider:SetShowValue(true)
     card2:SetActionControl(cardSlider)
+    card2:SetAlpha(0.8)
+    cardSlider:SetOnValueChanged(function(_, value)
+        card2:SetAlpha(math.max(0.2, value / 100))
+    end)
 
     stack:AddChild(ex2.block)
 
@@ -78,7 +83,7 @@ Gallery:RegisterControlPage("SettingsCard", function(parent, item)
     ---------------------------------------------------------------------------
     local ex3 = Gallery:CreateControlExample(stack, {
         headerText = "A clickable SettingsCard.",
-        exampleHeight = 120,
+        exampleHeight = 136,
         noOptions = true,
     })
 

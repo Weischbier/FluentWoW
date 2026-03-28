@@ -272,6 +272,8 @@ function FWoWMainFrame_OnLoad(self)
     self._themeListenerRegistered = false
     self.TitleBar.LeftSlot:SetWidth(1)
     self.TitleBar.RightSlot:SetWidth(1)
+    self.CloseBtn:SetFrameLevel(self:GetFrameLevel() + 10)
+    self.CloseBtn:EnableMouse(true)
 
     -- Register for ESC-to-close
     if self:GetName() then
@@ -306,7 +308,11 @@ end
 
 -- Title bar drag
 function FWoWMainFrame_TitleBar_OnMouseDown(self)
-    self:GetParent():StartMoving()
+    local frame = self:GetParent()
+    if MouseIsOver(frame.CloseBtn) then return end
+    if frame.TitleBar.LeftSlot:IsShown() and MouseIsOver(frame.TitleBar.LeftSlot) then return end
+    if frame.TitleBar.RightSlot:IsShown() and MouseIsOver(frame.TitleBar.RightSlot) then return end
+    frame:StartMoving()
 end
 
 function FWoWMainFrame_TitleBar_OnMouseUp(self)
@@ -318,7 +324,15 @@ end
 -- Close button
 function FWoWMainFrame_CloseBtn_OnClick(self)
     PlaySound(SOUNDKIT and SOUNDKIT.IG_MAINMENU_CLOSE or 851)
-    self:GetParent():Close()
+    local frame = self:GetParent()
+    if frame.StopMovingOrSizing then
+        frame:StopMovingOrSizing()
+    end
+    if frame.Close then
+        frame:Close()
+    else
+        frame:Hide()
+    end
 end
 
 function FWoWMainFrame_CloseBtn_OnEnter(self)

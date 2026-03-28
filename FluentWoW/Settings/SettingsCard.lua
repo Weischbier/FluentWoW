@@ -33,14 +33,22 @@ local function unregisterThemeListener(self)
 end
 
 local function updateLayout(self)
-    local actionMinWidth = T:GetNumber("Spacing.XXXL") * 5
-    local actionWidth = actionMinWidth
+    if self._updatingLayout then return end
+    self._updatingLayout = true
+
+    local actionMinWidth = self._actionControl and T:GetNumber("Spacing.XXXL") or 0
+    local actionWidth = 0
+    local actionHeight = 0
 
     if self._actionControl then
         actionWidth = math.max(actionMinWidth, self._actionControl:GetWidth())
+        actionHeight = self._actionControl:GetHeight() or 0
     end
 
     self.Action:SetWidth(actionWidth)
+    self.Action:SetHeight(math.max(32, actionHeight))
+    self.TitleLabel:SetWordWrap(true)
+    self.DescLabel:SetWordWrap(true)
 
     self.TitleLabel:ClearAllPoints()
     if self.Icon:IsShown() then
@@ -48,11 +56,30 @@ local function updateLayout(self)
     else
         self.TitleLabel:SetPoint("TOPLEFT", self, "TOPLEFT", T:GetNumber("Spacing.XL"), -T:GetNumber("Spacing.LG"))
     end
-    self.TitleLabel:SetPoint("RIGHT", self.Action, "LEFT", -T:GetNumber("Spacing.XL"), 0)
+    if actionWidth > 0 then
+        self.TitleLabel:SetPoint("RIGHT", self.Action, "LEFT", -T:GetNumber("Spacing.XL"), 0)
+    else
+        self.TitleLabel:SetPoint("RIGHT", self, "RIGHT", -T:GetNumber("Spacing.XL"), 0)
+    end
 
     self.DescLabel:ClearAllPoints()
     self.DescLabel:SetPoint("TOPLEFT", self.TitleLabel, "BOTTOMLEFT", 0, -T:GetNumber("Spacing.LG"))
     self.DescLabel:SetPoint("RIGHT", self.TitleLabel, "RIGHT", 0, 0)
+
+    local padTop = T:GetNumber("Spacing.LG")
+    local padBottom = T:GetNumber("Spacing.XL")
+    local gap = self.DescLabel:IsShown() and T:GetNumber("Spacing.LG") or 0
+    local titleHeight = self.TitleLabel:GetStringHeight() or 0
+    local descHeight = self.DescLabel:IsShown() and (self.DescLabel:GetStringHeight() or 0) or 0
+    local textHeight = titleHeight + gap + descHeight
+    local iconHeight = self.Icon:IsShown() and (self.Icon:GetHeight() or 20) or 0
+    local desiredHeight = math.max(52, padTop + math.max(textHeight, iconHeight, actionHeight) + padBottom)
+
+    if math.abs((self:GetHeight() or 0) - desiredHeight) > 0.5 then
+        self:SetHeight(desiredHeight)
+    end
+
+    self._updatingLayout = false
 end
 
 local function applyVisuals(self, state)
@@ -106,6 +133,7 @@ end
 ---@param text string
 function CardMixin:SetTitle(text)
     self.TitleLabel:SetText(text or "")
+    updateLayout(self)
 end
 
 ---@param text string
@@ -113,19 +141,10 @@ function CardMixin:SetDescription(text)
     if text and text ~= "" then
         self.DescLabel:SetText(text)
         self.DescLabel:Show()
-        -- Expand height for two-line card
-        local padT  = T:GetNumber("Spacing.LG")   -- 12
-        local gap   = T:GetNumber("Spacing.LG")   -- 12
-        local padB  = T:GetNumber("Spacing.XL")    -- 16
-        local h = padT + self.TitleLabel:GetStringHeight() + gap + self.DescLabel:GetStringHeight() + padB
-        local minH = padT + self.TitleLabel:GetStringHeight() + padB
-        self:SetHeight(math.max(minH, h))
     else
         self.DescLabel:Hide()
-        local padT = T:GetNumber("Spacing.LG")
-        local padB = T:GetNumber("Spacing.XL")
-        self:SetHeight(padT + self.TitleLabel:GetStringHeight() + padB)
     end
+    updateLayout(self)
 end
 
 ---@param path string|number  texture path or fileID
@@ -150,7 +169,14 @@ function CardMixin:SetActionControl(control)
         control:SetParent(self.Action)
         control:ClearAllPoints()
         control:SetPoint("RIGHT", self.Action, "RIGHT")
+        control:SetPoint("CENTER", self.Action, "CENTER", 0, 0)
         control:Show()
+        if not control._fwowSettingsCardLayoutHooked then
+            control._fwowSettingsCardLayoutHooked = true
+            control:HookScript("OnSizeChanged", function()
+                updateLayout(self)
+            end)
+        end
     end
     updateLayout(self)
 end
@@ -180,6 +206,7 @@ function FWoWSettingsCard_OnLoad(self)
     self:FWoWInit()
     self._clickable = false
     self._actionControl = nil
+    self._updatingLayout = false
     self._themeListenerRegistered = false
 
     lib.SetupTexture(self.BG, Tex.RR4, 4)
@@ -208,6 +235,9 @@ function FWoWSettingsCard_OnLoad(self)
     end)
     self:HookScript("OnHide", function(frame)
         unregisterThemeListener(frame)
+    end)
+    self:HookScript("OnSizeChanged", function(frame)
+        updateLayout(frame)
     end)
 end
 

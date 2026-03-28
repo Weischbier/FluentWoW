@@ -108,7 +108,7 @@
             </Frame>
 
             <!-- Close button (× in title bar) -->
-            <Button name="$parent_CloseBtn" parentKey="CloseBtn">
+            <Button name="$parent_CloseBtn" parentKey="CloseBtn" enableMouse="true" registerForClicks="AnyUp">
                 <Size x="46" y="32"/>
                 <Anchors>
                     <Anchor point="TOPRIGHT" x="0" y="-4"/>

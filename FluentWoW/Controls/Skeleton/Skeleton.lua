@@ -9,6 +9,18 @@ local T   = lib.Tokens
 local Mot = lib.Motion
 local Tex = lib.Textures
 
+local function applyShape(self)
+    if self._shape == "circle" then
+        local size = math.min(self:GetWidth(), self:GetHeight())
+        self:SetSize(size, size)
+        self.BG:SetTexture(Tex.Circle20)
+    elseif self._shape == "line" then
+        lib.SetupTexture(self.BG, Tex.PillTrack, 2)
+    else
+        lib.SetupTexture(self.BG, Tex.RR4, 4)
+    end
+end
+
 -------------------------------------------------------------------------------
 -- Skeleton Mixin
 -------------------------------------------------------------------------------
@@ -51,11 +63,7 @@ end
 ---@param shape string "rect"|"circle"|"line"
 function SkeletonMixin:SetShape(shape)
     self._shape = shape
-    -- Circle: make it square and use approximate visual (WoW has no native round mask)
-    if shape == "circle" then
-        local size = math.min(self:GetWidth(), self:GetHeight())
-        self:SetSize(size, size)
-    end
+    applyShape(self)
 end
 
 function SkeletonMixin:_StartShimmer()
@@ -101,7 +109,7 @@ function FWoWSkeleton_OnLoad(self)
     self._shimmerRunning = false
     self._shimmerPhase = 0
     self._shape = "rect"
-    lib.SetupTexture(self.BG, Tex.RR4, 4)
+    applyShape(self)
     self:SetClipsChildren(true)
     self:OnStateChanged("Normal")
     self:_StartShimmer()

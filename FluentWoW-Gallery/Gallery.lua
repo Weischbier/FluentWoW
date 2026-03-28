@@ -318,6 +318,59 @@ function Gallery:CreateSurface(parent, colorKey)
     return createSurface(parent, colorKey)
 end
 
+local function measurePaneContentHeight(pane, minHeight)
+    if not pane or not pane:IsShown() then
+        return minHeight or 1
+    end
+
+    local top = pane:GetTop()
+    if not top then
+        return minHeight or 1
+    end
+
+    local lowestBottom = nil
+
+    for _, child in ipairs({ pane:GetChildren() }) do
+        if child.IsShown and child:IsShown() and child.GetBottom then
+            local bottom = child:GetBottom()
+            if bottom and (not lowestBottom or bottom < lowestBottom) then
+                lowestBottom = bottom
+            end
+        end
+    end
+
+    if not lowestBottom then
+        return minHeight or 1
+    end
+
+    return math.max(minHeight or 1, math.ceil((top - lowestBottom) + 12))
+end
+
+local function refreshControlExampleLayout(controlExample)
+    if not controlExample or controlExample._refreshingLayout then return end
+
+    controlExample._refreshingLayout = true
+
+    local bodyHeight = controlExample._minBodyHeight or 180
+    local headerHeight = controlExample.header and (controlExample.header:GetHeight() or 0) or 0
+    local headerGap = controlExample._headerGap or T:GetNumber("Spacing.MD")
+    local outputHeight = controlExample.output and measurePaneContentHeight(controlExample.output, controlExample._outputMinHeight) or 0
+    local optionsHeight = controlExample.options and measurePaneContentHeight(controlExample.options, controlExample._optionsMinHeight) or 0
+
+    if controlExample.output and controlExample.options then
+        controlExample.output:SetHeight(outputHeight)
+        bodyHeight = math.max(bodyHeight, outputHeight + optionsHeight + 36)
+    elseif controlExample.output then
+        bodyHeight = math.max(bodyHeight, outputHeight + 24)
+    elseif controlExample.options then
+        bodyHeight = math.max(bodyHeight, optionsHeight + 24)
+    end
+
+    controlExample.body:SetHeight(bodyHeight)
+    controlExample.block:SetHeight(bodyHeight + headerHeight + headerGap)
+    controlExample._refreshingLayout = false
+end
+
 -------------------------------------------------------------------------------
 -- ControlExample  (mirrors WinUI Gallery ControlExample control)
 --   opts.headerText    - section header string
@@ -334,6 +387,12 @@ function Gallery:CreateControlExample(parent, opts)
     local noOutput      = opts.noOutput
     local noOptions     = opts.noOptions
     local outputHeight  = opts.outputHeight or 72
+    local optionsMinHeight = opts.optionsMinHeight or 56
+    local headerGap = T:GetNumber("Spacing.MD")
+
+    if not noOutput and not noOptions then
+        exampleHeight = math.max(exampleHeight, outputHeight + optionsMinHeight + 36)
+    end
 
     local totalHeight = exampleHeight + 36
     local block = CreateFrame("Frame", nil, parent)
@@ -341,9 +400,12 @@ function Gallery:CreateControlExample(parent, opts)
 
     local header = lib:CreateTextBlock(block)
     header:SetStyle("BodyBold")
+    header:SetWrapping(true)
     header:SetText(headerText)
     header:SetPoint("TOPLEFT", block, "TOPLEFT", 0, 0)
     header:SetPoint("TOPRIGHT", block, "TOPRIGHT", 0, 0)
+
+    block:SetHeight(exampleHeight + (header:GetHeight() or 0) + headerGap)
 
     local body = createSurface(block)
     body:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -8)
@@ -351,6 +413,7 @@ function Gallery:CreateControlExample(parent, opts)
     body:SetHeight(exampleHeight)
 
     local hasRightPane = (not noOutput) or (not noOptions)
+    local pageRefresh = parent and parent._FWoWRefreshPage
     local exampleArea = createSurface(body, "Color.Surface.Base")
     exampleArea:SetPoint("TOPLEFT", body, "TOPLEFT", 12, -12)
     exampleArea:SetPoint("BOTTOMLEFT", body, "BOTTOMLEFT", 12, 12)
@@ -362,8 +425,13 @@ function Gallery:CreateControlExample(parent, opts)
 
     local result = {
         block   = block,
+        header  = header,
         body    = body,
         example = exampleArea,
+        _headerGap = headerGap,
+        _minBodyHeight = exampleHeight,
+        _outputMinHeight = outputHeight,
+        _optionsMinHeight = optionsMinHeight,
     }
 
     if hasRightPane then
@@ -431,6 +499,22 @@ function Gallery:CreateControlExample(parent, opts)
         end
     end
 
+    result.RefreshLayout = function()
+        refreshControlExampleLayout(result)
+    end
+    block._FWoWRefreshLayout = result.RefreshLayout
+
+    if result.outputLabel then
+        local setText = result.outputLabel.SetText
+        result.outputLabel.SetText = function(label, text)
+            setText(label, text)
+            result.RefreshLayout()
+            if pageRefresh then
+                pageRefresh()
+            end
+        end
+    end
+
     return result
 end
 
@@ -439,8 +523,16 @@ end
 -------------------------------------------------------------------------------
 
 local function refreshDemoPage(scroll, content, stack, parent)
-    stack:Refresh()
     content:SetWidth(math.max(1, parent:GetWidth() - 24))
+
+    stack:Refresh()
+    for _, child in ipairs(stack:GetChildren()) do
+        if child._FWoWRefreshLayout then
+            child._FWoWRefreshLayout()
+        end
+    end
+    stack:Refresh()
+
     content:SetHeight(math.max(parent:GetHeight(), stack:GetHeight() + 48))
     scroll:SetContentHeight(content:GetHeight())
 end
@@ -466,7 +558,9 @@ function Gallery:CreateDemoPage(parent)
     end
 
     scroll.RefreshLayout = refresh
+    stack._FWoWRefreshPage = refresh
     parent:HookScript("OnShow", refresh)
+    parent:HookScript("OnSizeChanged", refresh)
 
     return scroll, content, stack, refresh
 end
@@ -739,10 +833,9 @@ local function EnsureFrame()
     -- Title bar controls
     ---------------------------------------------------------------------------
     local backButton = lib:CreateButton(mainFrame, nil, "Subtle")
-    backButton:SetText(Icons.ChromeBack)
-    local backLabel = backButton:GetFontString()
-    if backLabel then
-        backLabel:SetFont(lib.FLUENT_ICON_FONT, 12, "")
+    backButton:SetText(Icons.Back)
+    if backButton.Label then
+        backButton.Label:SetFont(lib.FLUENT_ICON_FONT, 12, "")
     end
     backButton:SetOnClick(function()
         local previous = table.remove(history)
@@ -770,6 +863,173 @@ end
 -------------------------------------------------------------------------------
 -- HomePage builder
 -------------------------------------------------------------------------------
+
+local GALLERY_TILE_IDEAL_WIDTH = 200
+local GALLERY_TILE_MIN_WIDTH = 148
+local GALLERY_TILE_MIN_HEIGHT = 72
+local GALLERY_TILE_COMPACT_PREVIEW_WIDTH = 136
+
+local function getGalleryTileGap()
+    return T:GetNumber("Spacing.LG")
+end
+
+local function getGalleryTilePadding()
+    return T:GetNumber("Spacing.LG")
+end
+
+local function refreshGalleryTile(tile, width)
+    local appliedWidth = math.max(1, width or tile._idealWidth or GALLERY_TILE_IDEAL_WIDTH)
+    local compact = appliedWidth < (tile._minWidth or GALLERY_TILE_MIN_WIDTH)
+    local padding = compact and T:GetNumber("Spacing.MD") or getGalleryTilePadding()
+    local textRight = -padding
+    local previewHeight = 0
+
+    tile:SetWidth(appliedWidth)
+
+    if tile._preview then
+        if appliedWidth < GALLERY_TILE_COMPACT_PREVIEW_WIDTH then
+            tile._preview:Hide()
+        else
+            local previewSize = appliedWidth < 176 and 32 or 44
+            tile._preview:Show()
+            tile._preview:ClearAllPoints()
+            tile._preview:SetPoint("RIGHT", tile, "RIGHT", -padding, 0)
+            tile._preview:SetSize(previewSize, previewSize)
+            previewHeight = previewSize
+            textRight = -(previewSize + padding + T:GetNumber("Spacing.MD"))
+        end
+    end
+
+    tile._title:ClearAllPoints()
+    tile._title:SetPoint("TOPLEFT", tile, "TOPLEFT", padding, -padding)
+    tile._title:SetPoint("RIGHT", tile, "RIGHT", textRight, 0)
+
+    tile._subtitle:ClearAllPoints()
+    tile._subtitle:SetPoint("TOPLEFT", tile._title, "BOTTOMLEFT", 0, -T:GetNumber("Spacing.XS"))
+    tile._subtitle:SetPoint("RIGHT", tile, "RIGHT", textRight, 0)
+
+    local contentHeight = (padding * 2)
+        + (tile._title:GetStringHeight() or 0)
+        + T:GetNumber("Spacing.XS")
+        + (tile._subtitle:GetStringHeight() or 0)
+
+    tile:SetHeight(math.max(GALLERY_TILE_MIN_HEIGHT, math.ceil(contentHeight), (padding * 2) + previewHeight))
+end
+
+local function refreshGalleryTileGrid(grid)
+    if not grid or grid._refreshingTiles then return end
+
+    grid._refreshingTiles = true
+
+    local tiles = grid._tiles or {}
+    local gap = grid._gap or getGalleryTileGap()
+    local measuredWidth = grid:GetWidth() or 0
+    local availableWidth = measuredWidth > 0 and measuredWidth or (grid._idealWidth or GALLERY_TILE_IDEAL_WIDTH)
+
+    if #tiles == 0 then
+        grid:SetHeight(1)
+        grid._refreshingTiles = false
+        return
+    end
+
+    local minWidth = grid._minWidth or GALLERY_TILE_MIN_WIDTH
+    local maxColumns = availableWidth < minWidth
+        and 1
+        or math.max(1, math.floor((availableWidth + gap) / (minWidth + gap)))
+    local columns = math.min(#tiles, maxColumns)
+    local tileWidth = math.max(1, math.floor((availableWidth - (gap * (columns - 1))) / columns))
+    tileWidth = math.min(grid._idealWidth or GALLERY_TILE_IDEAL_WIDTH, tileWidth)
+
+    local xOff = 0
+    local yOff = 0
+    local rowHeight = 0
+
+    for _, tile in ipairs(tiles) do
+        refreshGalleryTile(tile, tileWidth)
+
+        if xOff > 0 and (xOff + tile:GetWidth()) > availableWidth then
+            xOff = 0
+            yOff = yOff + rowHeight + gap
+            rowHeight = 0
+        end
+
+        tile:ClearAllPoints()
+        tile:SetPoint("TOPLEFT", grid, "TOPLEFT", xOff, -yOff)
+
+        rowHeight = math.max(rowHeight, tile:GetHeight())
+        xOff = xOff + tile:GetWidth() + gap
+    end
+
+    grid:SetHeight(math.max(1, yOff + rowHeight))
+    grid._refreshingTiles = false
+end
+
+local function createGalleryTile(parent, item, onClick)
+    local padding = getGalleryTilePadding()
+    local tile = CreateFrame("Button", nil, parent)
+    tile:SetSize(GALLERY_TILE_IDEAL_WIDTH, GALLERY_TILE_MIN_HEIGHT)
+    tile._idealWidth = GALLERY_TILE_IDEAL_WIDTH
+    tile._minWidth = GALLERY_TILE_MIN_WIDTH
+
+    local border = tile:CreateTexture(nil, "BORDER")
+    border:SetPoint("TOPLEFT", -1, 1)
+    border:SetPoint("BOTTOMRIGHT", 1, -1)
+    border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
+
+    local inner = tile:CreateTexture(nil, "ARTWORK", nil, -1)
+    inner:SetAllPoints()
+    inner:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+
+    if item.imagePath then
+        tile._preview = tile:CreateTexture(nil, "ARTWORK")
+        tile._preview:SetTexture(item.imagePath)
+    end
+
+    tile._title = tile:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    tile._title:SetJustifyH("LEFT")
+    tile._title:SetWordWrap(true)
+    if tile._title.SetNonSpaceWrap then tile._title:SetNonSpaceWrap(true) end
+    tile._title:SetText(item.title)
+    tile._title:SetTextColor(T:GetColor("Color.Text.Primary"))
+    local bf = T:Get("Typography.BodyBold")
+    if bf then tile._title:SetFont(bf.font, bf.size, bf.flags) end
+
+    tile._subtitle = tile:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    tile._subtitle:SetJustifyH("LEFT")
+    tile._subtitle:SetWordWrap(true)
+    if tile._subtitle.SetNonSpaceWrap then tile._subtitle:SetNonSpaceWrap(true) end
+    tile._subtitle:SetText(item.subtitle or "")
+    tile._subtitle:SetTextColor(T:GetColor("Color.Text.Secondary"))
+    local cf = T:Get("Typography.Caption")
+    if cf then tile._subtitle:SetFont(cf.font, cf.size, cf.flags) end
+
+    tile:SetScript("OnEnter", function()
+        inner:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
+    end)
+    tile:SetScript("OnLeave", function()
+        inner:SetColorTexture(T:GetColor("Color.Surface.Raised"))
+    end)
+    tile:SetScript("OnClick", onClick)
+
+    refreshGalleryTile(tile, GALLERY_TILE_IDEAL_WIDTH)
+
+    return tile
+end
+
+local function createGalleryTileGrid(parent)
+    local grid = CreateFrame("Frame", nil, parent)
+    grid._tiles = {}
+    grid._gap = getGalleryTileGap()
+    grid._idealWidth = GALLERY_TILE_IDEAL_WIDTH
+    grid._minWidth = GALLERY_TILE_MIN_WIDTH
+    grid._FWoWRefreshLayout = function()
+        refreshGalleryTileGrid(grid)
+    end
+    grid:HookScript("OnSizeChanged", function(frame)
+        refreshGalleryTileGrid(frame)
+    end)
+    return grid
+end
 
 function Gallery:BuildHomePage(parent)
     local _, _, stack, refresh = self:CreateDemoPage(parent)
@@ -804,55 +1064,18 @@ function Gallery:BuildHomePage(parent)
         sectionHeader:SetText(group.title)
         stack:AddChild(sectionHeader)
 
-        local tileRow = lib:CreateStackLayout(stack, nil, "HORIZONTAL")
-        tileRow:SetGap(12)
-        tileRow:SetHeight(80)
-        stack:AddChild(tileRow)
+        local tileGrid = createGalleryTileGrid(stack)
+        stack:AddChild(tileGrid)
 
         for _, item in ipairs(group.items) do
-            local tile = CreateFrame("Button", nil, tileRow)
-            tile:SetSize(200, 72)
-
-            local border = tile:CreateTexture(nil, "BORDER")
-            border:SetPoint("TOPLEFT", -1, 1)
-            border:SetPoint("BOTTOMRIGHT", 1, -1)
-            border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
-
-            local inner = tile:CreateTexture(nil, "ARTWORK", nil, -1)
-            inner:SetAllPoints()
-            inner:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-
-            local tileTitle = tile:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            tileTitle:SetPoint("TOPLEFT", 12, -12)
-            tileTitle:SetPoint("RIGHT", tile, "RIGHT", -12, 0)
-            tileTitle:SetJustifyH("LEFT")
-            tileTitle:SetText(item.title)
-            tileTitle:SetTextColor(T:GetColor("Color.Text.Primary"))
-            local bf = T:Get("Typography.BodyBold")
-            if bf then tileTitle:SetFont(bf.font, bf.size, bf.flags) end
-
-            local tileSub = tile:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            tileSub:SetPoint("TOPLEFT", tileTitle, "BOTTOMLEFT", 0, -4)
-            tileSub:SetPoint("RIGHT", tile, "RIGHT", -12, 0)
-            tileSub:SetJustifyH("LEFT")
-            tileSub:SetWordWrap(true)
-            tileSub:SetText(item.subtitle or "")
-            tileSub:SetTextColor(T:GetColor("Color.Text.Secondary"))
-            local cf = T:Get("Typography.Caption")
-            if cf then tileSub:SetFont(cf.font, cf.size, cf.flags) end
-
-            tile:SetScript("OnEnter", function()
-                inner:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
-            end)
-            tile:SetScript("OnLeave", function()
-                inner:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-            end)
-            tile:SetScript("OnClick", function()
+            local tile = createGalleryTile(tileGrid, item, function()
                 self.navigateTo("item", item.uniqueId)
             end)
-
-            tileRow:AddChild(tile)
+            tile:SetParent(tileGrid)
+            table.insert(tileGrid._tiles, tile)
         end
+
+        tileGrid._FWoWRefreshLayout()
     end
 
     refresh()
@@ -887,60 +1110,18 @@ function Gallery:BuildSectionPage(parent, groupId)
     header:SetText(title)
     stack:AddChild(header)
 
-    local TILE_W, TILE_H, GAP = 200, 72, 12
-    local TILES_PER_ROW = 3
-    local row
-    for i, item in ipairs(items) do
-        if (i - 1) % TILES_PER_ROW == 0 then
-            row = lib:CreateStackLayout(stack, nil, "HORIZONTAL")
-            row:SetGap(GAP)
-            row:SetHeight(TILE_H + 8)
-            stack:AddChild(row)
-        end
+    local tileGrid = createGalleryTileGrid(stack)
+    stack:AddChild(tileGrid)
 
-        local tile = CreateFrame("Button", nil, row)
-        tile:SetSize(TILE_W, TILE_H)
-
-        local border = tile:CreateTexture(nil, "BORDER")
-        border:SetPoint("TOPLEFT", -1, 1)
-        border:SetPoint("BOTTOMRIGHT", 1, -1)
-        border:SetColorTexture(T:GetColor("Color.Border.Subtle"))
-
-        local inner = tile:CreateTexture(nil, "ARTWORK", nil, -1)
-        inner:SetAllPoints()
-        inner:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-
-        local tileTitle = tile:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        tileTitle:SetPoint("TOPLEFT", 12, -12)
-        tileTitle:SetPoint("RIGHT", tile, "RIGHT", -12, 0)
-        tileTitle:SetJustifyH("LEFT")
-        tileTitle:SetText(item.title)
-        tileTitle:SetTextColor(T:GetColor("Color.Text.Primary"))
-        local bf = T:Get("Typography.BodyBold")
-        if bf then tileTitle:SetFont(bf.font, bf.size, bf.flags) end
-
-        local tileSub = tile:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        tileSub:SetPoint("TOPLEFT", tileTitle, "BOTTOMLEFT", 0, -4)
-        tileSub:SetPoint("RIGHT", tile, "RIGHT", -12, 0)
-        tileSub:SetJustifyH("LEFT")
-        tileSub:SetWordWrap(true)
-        tileSub:SetText(item.subtitle or "")
-        tileSub:SetTextColor(T:GetColor("Color.Text.Secondary"))
-        local cf = T:Get("Typography.Caption")
-        if cf then tileSub:SetFont(cf.font, cf.size, cf.flags) end
-
-        tile:SetScript("OnEnter", function()
-            inner:SetColorTexture(T:GetColor("Color.Overlay.Hover"))
-        end)
-        tile:SetScript("OnLeave", function()
-            inner:SetColorTexture(T:GetColor("Color.Surface.Raised"))
-        end)
-        tile:SetScript("OnClick", function()
+    for _, item in ipairs(items) do
+        local tile = createGalleryTile(tileGrid, item, function()
             self.navigateTo("item", item.uniqueId)
         end)
-
-        row:AddChild(tile)
+        tile:SetParent(tileGrid)
+        table.insert(tileGrid._tiles, tile)
     end
+
+    tileGrid._FWoWRefreshLayout()
 
     refresh()
 end

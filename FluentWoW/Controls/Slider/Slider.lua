@@ -23,6 +23,35 @@ local function trackInset()
     return T:GetNumber("Spacing.MD")
 end
 
+local function formatValue(self, value)
+    if self._valueFormatter then
+        return tostring(self._valueFormatter(value))
+    end
+    return tostring(math.floor(value + 0.5))
+end
+
+local function setBubbleShown(self, shown)
+    self._bubbleShown = shown == true
+    self.ValueBubble:SetShown(self._showValue and self._bubbleShown)
+end
+
+local function updateValueDisplay(self, value)
+    local text = formatValue(self, value)
+    self.ValueLabel:SetText(text)
+    self.ValueBubble.Label:SetText(text)
+    self.ValueBubble:SetWidth(math.max(36, self.ValueBubble.Label:GetStringWidth() + T:GetNumber("Spacing.XL")))
+end
+
+local function updateValueBubble(self)
+    self.ValueBubble:ClearAllPoints()
+    if self._orientation == "VERTICAL" then
+        self.ValueBubble:SetPoint("LEFT", self.SliderFrame.Thumb, "RIGHT", T:GetNumber("Spacing.MD"), 0)
+    else
+        self.ValueBubble:SetPoint("BOTTOM", self.SliderFrame.Thumb, "TOP", 0, T:GetNumber("Spacing.MD"))
+    end
+    self.ValueBubble:SetShown(self._showValue and self._bubbleShown)
+end
+
 local function updateSliderLayout(self)
     local slider = self.SliderFrame
     local topInset = headerHeight(self)
@@ -54,6 +83,8 @@ local function updateSliderLayout(self)
         self.TickContainer:SetPoint("TOPRIGHT", slider.Track, "BOTTOMRIGHT", 0, -T:GetNumber("Spacing.XS"))
         self.TickContainer:SetHeight(T:GetNumber("Spacing.SM") + T:GetNumber("Spacing.XS"))  -- 4+2 = 6: WinUI tick height
     end
+
+    updateValueBubble(self)
 end
 
 function SliderMixin:OnStateChanged(newState, prevState)
@@ -65,12 +96,18 @@ function SliderMixin:OnStateChanged(newState, prevState)
         self.SliderFrame.Thumb:SetVertexColor(T:GetColor("Color.Icon.Disabled"))
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self.ValueLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self.ValueBubble.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
+        self.ValueBubble.Border:SetVertexColor(T:GetColor("Color.Border.Default"))
+        self.ValueBubble.Label:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
     else
         self:SetAlpha(1)
         self.SliderFrame.Track:SetVertexColor(T:GetColor("Color.Border.Subtle"))
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
         self.ValueLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
+        self.ValueBubble.BG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
+        self.ValueBubble.Border:SetVertexColor(T:GetColor("Color.Border.Subtle"))
+        self.ValueBubble.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
 
         local fillKey = (state == "Hover") and "Color.Accent.Hover" or "Color.Accent.Primary"
         self.SliderFrame.Fill:SetVertexColor(T:GetColor(fillKey))
@@ -102,6 +139,8 @@ function SliderMixin:_UpdateFill()
         slider.Fill:SetPoint("BOTTOM", slider.Track, "BOTTOM", 0, 0)
         slider.Fill:SetWidth(math.max(1, width))
     end
+    updateValueDisplay(self, val)
+    updateValueBubble(self)
     self:_RefreshTicks()
 end
 
@@ -133,11 +172,12 @@ function SliderMixin:_RefreshTicks()
         local pct = (value - min) / (max - min)
         if self._orientation == "VERTICAL" then
             tick:SetSize(T:GetNumber("Spacing.LG"), 1)
-            tick:SetPoint("BOTTOMLEFT", self.TickContainer, "BOTTOMLEFT", 0, span * pct)
+            tick:SetPoint("LEFT", self.TickContainer, "BOTTOMLEFT", 0, span * pct)
         else
             tick:SetSize(1, T:GetNumber("Spacing.LG"))
-            tick:SetPoint("TOPLEFT", self.TickContainer, "TOPLEFT", span * pct, 0)
+            tick:SetPoint("TOP", self.TickContainer, "TOPLEFT", span * pct, 0)
         end
+        tick:Show()
         value = value + tickFrequency
     end
 end
@@ -200,16 +240,14 @@ end
 ---@param show boolean
 function SliderMixin:SetShowValue(show)
     self._showValue = show
-    if show then
-        self.ValueLabel:Show()
-    else
-        self.ValueLabel:Hide()
-    end
+    self.ValueLabel:SetShown(show == true)
+    updateValueBubble(self)
 end
 
 ---@param formatter function
 function SliderMixin:SetValueFormatter(formatter)
     self._valueFormatter = formatter
+    updateValueDisplay(self, self.SliderFrame:GetValue())
 end
 
 -------------------------------------------------------------------------------
@@ -223,11 +261,25 @@ function FWoWSlider_OnLoad(self)
     self._orientation = "HORIZONTAL"
     self._tickFrequency = nil
     self._snapToTicks = false
+    self._bubbleShown = false
     lib.SetupTexture(self.SliderFrame.Track, Tex.PillTrack, 2)
     lib.SetupTexture(self.SliderFrame.Fill, Tex.PillFill, 2)
     self.SliderFrame.Thumb:SetTexture(Tex.Circle20)
+    lib.SetupTexture(self.ValueBubble.BG, Tex.Pill, 10)
+    lib.SetupTexture(self.ValueBubble.Border, Tex.PillBorder, 10)
     self.HeaderLabel:Hide()
+    self.ValueBubble:Hide()
+    self:HookScript("OnShow", function(frame)
+        frame:_UpdateFill()
+    end)
+    self:HookScript("OnSizeChanged", function(frame)
+        frame:_UpdateFill()
+    end)
+    self.SliderFrame:HookScript("OnSizeChanged", function()
+        self:_UpdateFill()
+    end)
     updateSliderLayout(self)
+    updateValueDisplay(self, self.SliderFrame:GetValue())
     self:OnStateChanged("Normal")
 end
 
@@ -245,12 +297,8 @@ function FWoWSlider_OnValueChanged(self, value, userInput)
         value = snapped
     end
     parent:_UpdateFill()
-    if parent._showValue then
-        if parent._valueFormatter then
-            parent.ValueLabel:SetText(parent._valueFormatter(value))
-        else
-            parent.ValueLabel:SetText(tostring(math.floor(value + 0.5)))
-        end
+    if userInput then
+        setBubbleShown(parent, true)
     end
     if parent._onValueChanged then
         lib.Utils.SafeCall(parent._onValueChanged, parent, value, userInput)
@@ -261,6 +309,7 @@ function FWoWSlider_OnEnter(self)
     local parent = self:GetParent()
     if not parent._enabled then return end
     parent._vsm:SetState("Hover")
+    setBubbleShown(parent, true)
     parent:ShowTooltip()
 end
 
@@ -268,6 +317,7 @@ function FWoWSlider_OnLeave(self)
     local parent = self:GetParent()
     if not parent._enabled then return end
     parent._vsm:SetState("Normal")
+    setBubbleShown(parent, false)
     GameTooltip:Hide()
 end
 
@@ -275,6 +325,7 @@ function FWoWSlider_OnMouseDown(self)
     local parent = self:GetParent()
     if not parent._enabled then return end
     parent._vsm:SetState("Pressed")
+    setBubbleShown(parent, true)
 end
 
 function FWoWSlider_OnMouseUp(self)
@@ -282,6 +333,7 @@ function FWoWSlider_OnMouseUp(self)
     if not parent._enabled then return end
     local isOver = self:IsMouseOver()
     parent._vsm:SetState(isOver and "Hover" or "Normal")
+    setBubbleShown(parent, isOver)
 end
 
 -------------------------------------------------------------------------------

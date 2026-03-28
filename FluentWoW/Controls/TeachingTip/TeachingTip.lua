@@ -11,6 +11,90 @@ local Mot = lib.Motion
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
 local Tex = lib.Textures
+local _deferredRestore = {}
+local _combatWatcher = CreateFrame("Frame")
+local restoreParent
+
+local function updateLayout(self)
+    local card = self.Card
+    local actionSlot = card.ActionSlot
+    local title = card.TitleLabel
+    local body = card.BodyLabel
+    local actionHeight = 0
+
+    title:SetWordWrap(true)
+    body:SetWordWrap(true)
+
+    if self._actionControl and actionSlot:IsShown() then
+        actionHeight = math.max(actionSlot:GetHeight() or 0, self._actionControl:GetHeight() or 0)
+        actionSlot:SetHeight(actionHeight)
+    else
+        actionSlot:SetHeight(1)
+    end
+
+    title:ClearAllPoints()
+    title:SetPoint("TOPLEFT", card, "TOPLEFT", 16, -16)
+    title:SetPoint("RIGHT", card.CloseBtn, "LEFT", -12, 0)
+
+    body:ClearAllPoints()
+    body:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
+    body:SetPoint("RIGHT", card, "RIGHT", -16, 0)
+    if actionSlot:IsShown() then
+        body:SetPoint("BOTTOM", actionSlot, "TOP", 0, 12)
+    else
+        body:SetPoint("BOTTOM", card, "BOTTOM", 0, 16)
+    end
+
+    local titleH = title:GetStringHeight() or 0
+    local bodyH = body:GetStringHeight() or 0
+    local totalH = 16 + titleH + 8 + bodyH + 16
+    if actionSlot:IsShown() then
+        totalH = totalH + 12 + actionHeight
+    end
+
+    self:SetHeight(math.max(totalH, 80))
+end
+
+local function flushDeferredRestores()
+    for tip in pairs(_deferredRestore) do
+        _deferredRestore[tip] = nil
+        if tip then
+            tip:Hide()
+            restoreParent(tip)
+            if tip._deferredCloseCallback and tip._onClosed then
+                lib.Utils.SafeCall(tip._onClosed, tip)
+            end
+            tip._deferredCloseCallback = nil
+        end
+    end
+    _combatWatcher:UnregisterEvent("PLAYER_REGEN_ENABLED")
+    _combatWatcher:SetScript("OnEvent", nil)
+end
+
+local function queueRestore(tip, invokeCloseCallback)
+    _deferredRestore[tip] = true
+    tip._deferredCloseCallback = invokeCloseCallback == true
+    _combatWatcher:RegisterEvent("PLAYER_REGEN_ENABLED")
+    _combatWatcher:SetScript("OnEvent", flushDeferredRestores)
+end
+
+local function attachToOverlay(self)
+    if self:GetParent() ~= UIParent then
+        self._originalParent = self:GetParent()
+    end
+    self._originalStrata = self._originalStrata or self:GetFrameStrata()
+    self:SetParent(UIParent)
+    self:SetFrameStrata("TOOLTIP")
+end
+
+restoreParent = function(self)
+    if self._originalParent and self:GetParent() ~= self._originalParent then
+        self:SetParent(self._originalParent)
+    end
+    if self._originalStrata then
+        self:SetFrameStrata(self._originalStrata)
+    end
+end
 
 -------------------------------------------------------------------------------
 -- TeachingTip Mixin
@@ -64,7 +148,14 @@ function TeachingTipMixin:SetActionControl(control)
         control:SetParent(self.Card.ActionSlot)
         control:ClearAllPoints()
         control:SetPoint("LEFT", self.Card.ActionSlot, "LEFT", 0, 0)
+        control:SetPoint("CENTER", self.Card.ActionSlot, "CENTER", 0, 0)
         self.Card.ActionSlot:Show()
+        if not control._fwowTeachingTipLayoutHooked then
+            control._fwowTeachingTipLayoutHooked = true
+            control:HookScript("OnSizeChanged", function()
+                self:_UpdateHeight()
+            end)
+        end
     else
         self.Card.ActionSlot:Hide()
     end
@@ -83,9 +174,15 @@ function TeachingTipMixin:SetOnClosed(fn)
     self._onClosed = fn
 end
 
+---@param fn function(self)
+function TeachingTipMixin:SetOnClose(fn)
+    self:SetOnClosed(fn)
+end
+
 ---@param closable boolean
 function TeachingTipMixin:SetClosable(closable)
     self.Card.CloseBtn:SetShown(closable ~= false)
+    self:_UpdateHeight()
 end
 
 function TeachingTipMixin:Open()
@@ -94,12 +191,18 @@ function TeachingTipMixin:Open()
         return
     end
 
+    attachToOverlay(self)
     self:_Position()
     Mot:FadeIn(self)
 end
 
 function TeachingTipMixin:Close()
+    if InCombatLockdown() then
+        queueRestore(self, true)
+        return
+    end
     Mot:FadeOut(self, nil, function()
+        restoreParent(self)
         if self._onClosed then
             lib.Utils.SafeCall(self._onClosed, self)
         end
@@ -143,12 +246,7 @@ function TeachingTipMixin:_Position()
 end
 
 function TeachingTipMixin:_UpdateHeight()
-    local titleH = self.Card.TitleLabel:GetStringHeight() or 0
-    local bodyH = self.Card.BodyLabel:GetStringHeight() or 0
-    local actionH = self.Card.ActionSlot:IsShown() and (self.Card.ActionSlot:GetHeight() + T:GetNumber("Spacing.XL")) or 0
-    local padding = 16 + 16 + 8  -- top + bottom + gap between title and body
-    local totalH = math.max(padding + titleH + bodyH + actionH, 80)
-    self:SetHeight(totalH)
+    updateLayout(self)
 end
 
 -------------------------------------------------------------------------------
@@ -163,7 +261,19 @@ function FWoWTeachingTip_OnLoad(self)
     lib.SetupTexture(self.Card.BG, Tex.RR8, 8)
     lib.SetupTexture(self.Card.Border, Tex.RR8_Border, 8)
     self.Arrow.Tex:SetTexture(Tex.ArrowUp)
+    self.Card.ActionSlot:Hide()
+    self:HookScript("OnHide", function(frame)
+        if InCombatLockdown() then
+            queueRestore(frame)
+            return
+        end
+        restoreParent(frame)
+    end)
+    self:HookScript("OnShow", function(frame)
+        frame:_UpdateHeight()
+    end)
     self:OnStateChanged("Normal")
+    self:_UpdateHeight()
 end
 
 function FWoWTeachingTip_Close_OnClick(self)

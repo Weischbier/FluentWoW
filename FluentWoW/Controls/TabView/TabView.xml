@@ -90,12 +90,18 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture name="$parent_Icon" parentKey="Icon" hidden="true">
+                <Texture name="$parent_IconTexture" parentKey="IconTexture" hidden="true">
                     <Size x="14" y="14"/>
                     <Anchors>
                         <Anchor point="LEFT" x="12" y="0"/>
                     </Anchors>
                 </Texture>
+                <FontString name="$parent_Icon" parentKey="Icon"
+                    inherits="GameFontNormalSmall" justifyH="CENTER" hidden="true">
+                    <Anchors>
+                        <Anchor point="LEFT" x="12" y="0"/>
+                    </Anchors>
+                </FontString>
                 <FontString name="$parent_Label" parentKey="Label"
                     inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>

@@ -63,6 +63,7 @@ local tokens = {
         Text = {
             Primary   = RAW.Gray10,
             Secondary = RAW.Gray8,
+            Tertiary  = RAW.Gray6,
             Disabled  = RAW.Gray6,
             OnAccent  = RAW.White,
             Error     = RAW.Red,

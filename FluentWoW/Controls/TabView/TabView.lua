@@ -12,6 +12,11 @@ local Tex = lib.Textures
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT
 
+local function isTextureIcon(icon)
+    return type(icon) == "number"
+    or (type(icon) == "string" and (icon:find("\\", 1, true) or icon:find("/", 1, true) or icon:find(".", 1, true)))
+end
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -86,11 +91,23 @@ function TabViewMixin:_RefreshTabs()
 
         btn.Label:ClearAllPoints()
         if tab.icon then
-            btn.Icon:SetTexture(tab.icon)
-            btn.Icon:Show()
-            btn.Label:SetPoint("LEFT", btn.Icon, "RIGHT", 8, 0)
+            if isTextureIcon(tab.icon) then
+                btn.Icon:Hide()
+                btn.IconTexture:SetTexture(tab.icon)
+                btn.IconTexture:Show()
+                btn.Label:SetPoint("LEFT", btn.IconTexture, "RIGHT", 8, 0)
+            else
+                btn.IconTexture:Hide()
+                btn.Icon:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+                btn.Icon:SetText(tab.icon)
+                btn.Icon:SetTextColor(T:GetColor(i == self._selectedIndex and "Color.Accent.Primary" or "Color.Text.Secondary"))
+                btn.Icon:Show()
+                btn.Label:SetPoint("LEFT", btn.Icon, "RIGHT", 8, 0)
+            end
         else
+            btn.Icon:SetText("")
             btn.Icon:Hide()
+            btn.IconTexture:Hide()
             btn.Label:SetPoint("LEFT", btn, "LEFT", 12, 0)
         end
 
@@ -123,10 +140,16 @@ function TabViewMixin:_RefreshTabs()
             btn.Indicator:SetVertexColor(T:GetColor("Color.Accent.Primary"))
             btn.Indicator:Show()
             btn.Label:SetTextColor(T:GetColor("Color.Text.Primary"))
+            if tab.icon and not isTextureIcon(tab.icon) then
+                btn.Icon:SetTextColor(T:GetColor("Color.Accent.Primary"))
+            end
         else
             btn.BG:SetColorTexture(T:GetColor("Color.Surface.Base"))
             btn.Indicator:Hide()
             btn.Label:SetTextColor(T:GetColor("Color.Text.Secondary"))
+            if tab.icon and not isTextureIcon(tab.icon) then
+                btn.Icon:SetTextColor(T:GetColor("Color.Text.Secondary"))
+            end
         end
     end
 end

@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Gallery panel sizing**: Fixed the shared demo output and options pane relayout so repeated interactions no longer re-measure the pane background and grow panels taller on every refresh, and kept wrapped output text and example headers in sync with width-driven relayouts
+- **Gallery tile flow**: Fixed home and section page entries so control tiles wrap onto new rows at narrow widths, shrink within the available content area instead of clipping off-screen, and keep token-driven gaps between tiles
+- **Scroll / Slider / Progress**: Fixed ScrollFrame thumb refresh so the scroll indicator tracks content correctly, added a themed Slider value bubble, repaired Slider tick positioning after layout changes, and made the ProgressRing demo more visible in the gallery
+- **ComboBox / NavigationView / Gallery assets**: Fixed ComboBox selection callbacks so gallery demos apply selected values reliably, corrected NavigationView demo page switching so collapsed-pane content no longer overlaps, and surfaced available control preview images on gallery tiles
+- **Settings / Skeleton**: Fixed SettingsCard and SettingsExpander auto-sizing so titles, descriptions, and action controls stop clipping or leaking when expanded/collapsed, and restored distinct Skeleton rect, line, and circle showcase shapes
+- **Gallery / MainFrame**: Fixed several screenshot-reported gallery regressions, including the main window close button not reliably closing via the title-bar X, missing sidebar tertiary text tokens, and right-panel demo layouts whose output/options panes were too short and clipped toggle or disabled-state showcase controls
+- **Popup controls**: Fixed ComboBox dropdown and TeachingTip popup clipping by moving their overlays to `UIParent` while open, preserving the documented callback behavior, and deferring restore work safely until combat ends when needed
+- **CheckBox / RadioButton / EmptyState / CommandBar / TabView**: Fixed multiple control-level layout and icon rendering issues causing missing labels, overlapping command labels, unsupported demo glyphs, and TabView icon rendering failures when tabs use Fluent glyphs or texture paths
+- **ContentDialog / SettingsExpander**: Fixed dialog button-row visibility and SettingsExpander expanded/collapsed synchronization so examples render their intended states correctly
 - **Button**: Replaced flat 1px `TopEdge`/`BottomEdge` `SetColorTexture` strips with a proper `RR4_Border` 9-slice rounded border texture — buttons now display correct rounded corners matching all other controls (Accent, Subtle, Destructive, and Toggle variants)
 - **ComboBox**: Fixed nil error on `self.SelectedLabel` → `self.Field.SelectedLabel` (3 call sites: `updateText`, `OnStateChanged` Disabled branch, `OnLoad` font setup)
 - **Slider**: Added early-return guard in `FWoWSlider_OnValueChanged` — WoW fires `OnValueChanged` during `CreateFrame` before `OnLoad` applies the mixin, causing a nil `_UpdateFill` call

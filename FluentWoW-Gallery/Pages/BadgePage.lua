@@ -58,7 +58,7 @@ Gallery:RegisterControlPage("Badge", function(parent, item)
 
     local iconBadge = lib:CreateBadge(ex2.example)
     iconBadge:SetText("New")
-    iconBadge:SetIcon(lib.Icons.FavoriteStar)
+    iconBadge:SetIcon(lib.Icons.CheckMark)
     iconBadge:SetAppearance("Accent")
     iconBadge:SetPoint("CENTER")
 

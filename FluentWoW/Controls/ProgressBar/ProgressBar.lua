@@ -176,7 +176,8 @@ function FWoWProgressRing_OnLoad(self)
     self._active = true
     self._angle = 0
     self.Ring:SetTexture(Tex.ProgressRing)
-    self.Ring:SetVertexColor(T:GetColor("Color.Base.White"))
+    self.Ring:SetBlendMode("BLEND")
+    self.Ring:SetVertexColor(T:GetColor("Color.Accent.Primary"))
     self:OnStateChanged("Normal")
     self:SetScript("OnUpdate", FWoWProgressRing_OnUpdate)
 end

@@ -73,6 +73,26 @@
                 </FontString>
             </Layer>
         </Layers>
+        <Frames>
+            <Frame name="$parent_ValueBubble" parentKey="ValueBubble" hidden="true">
+                <Size x="44" y="24"/>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="$parent_BG" parentKey="BG" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture name="$parent_Border" parentKey="Border" setAllPoints="true"/>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parent_Label" parentKey="Label" inherits="GameFontNormalSmall" justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnLoad function="FWoWSlider_OnLoad"/>
         </Scripts>

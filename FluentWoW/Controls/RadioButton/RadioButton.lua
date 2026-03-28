@@ -8,6 +8,24 @@ local lib = FluentWoW
 local T   = lib.Tokens
 local Tex = lib.Textures
 
+local function updateLayout(self)
+    local font = T:Get("Typography.Body")
+    if font then
+        self.Label:SetFont(font.font, font.size, font.flags)
+    end
+
+    self.Dot:ClearAllPoints()
+    self.Dot:SetPoint("CENTER", self.Circle, "CENTER", 0, 0)
+
+    self.Label:ClearAllPoints()
+    self.Label:SetPoint("LEFT", self.Circle, "RIGHT", T:GetNumber("Spacing.MD"), 0)
+    self.Label:SetPoint("RIGHT", self, "RIGHT", 0, 0)
+
+    local labelW = self.Label:GetStringWidth() or 0
+    local extra = labelW > 0 and (T:GetNumber("Spacing.MD") + labelW) or 0
+    self:SetSize(math.max(20 + extra, 20), 20)
+end
+
 -------------------------------------------------------------------------------
 -- Group tracking
 -------------------------------------------------------------------------------
@@ -107,6 +125,7 @@ end
 ---@param text string
 function RadioMixin:SetText(text)
     self.Label:SetText(text)
+    updateLayout(self)
 end
 
 ---@return string
@@ -131,6 +150,7 @@ function FWoWRadioButton_OnLoad(self)
     self.Circle:SetTexture(Tex.CircleRing)
     self.Dot:SetTexture(Tex.CircleDot)
     registerInGroup(self, "default")
+    updateLayout(self)
     self:HookScript("OnHide", function(frame)
         if frame._group then
             unregisterFromGroup(frame, frame._group)
