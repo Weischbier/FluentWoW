@@ -5,6 +5,7 @@
 local lib = LibStub("FluentWoW-1.0")
 local T = lib.Tokens
 local Gallery = lib._gallery
+local Icons = lib.Icons
 
 Gallery:RegisterControlPage("Button", function(parent, item)
     local _, _, stack, refresh = Gallery:CreateDemoPage(parent)
@@ -61,12 +62,10 @@ Gallery:RegisterControlPage("Button", function(parent, item)
     local graphicBtn = lib:CreateButton(ex2.example, nil, "Subtle")
     graphicBtn:SetSize(56, 56)
     graphicBtn:SetPoint("CENTER")
-    graphicBtn:SetText("")
-    local slice = graphicBtn:CreateTexture(nil, "ARTWORK")
-    slice:SetSize(28, 28)
-    slice:SetPoint("CENTER")
-    slice:SetTexture("Interface\\AddOns\\FluentWoW-Gallery\\Assets\\SampleMedia\\Slices")
-    slice:SetVertexColor(T:GetColor("Color.Accent.Primary"))
+    graphicBtn:SetText(Icons.PhotoCollection)
+    if graphicBtn.Label then
+        graphicBtn.Label:SetFont(lib.FLUENT_ICON_FONT, 20, "")
+    end
 
     ex2.outputLabel:SetText("No interaction yet")
     graphicBtn:SetOnClick(function()

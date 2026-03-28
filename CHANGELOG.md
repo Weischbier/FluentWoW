@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **CommandBar gallery**: Replaced broken demo glyphs with known-good Segoe Fluent icons already used elsewhere in the gallery so the command examples no longer show tofu boxes
+- **Button gallery**: Fixed the graphical-content button example so it renders with the bundled Segoe Fluent Icons font instead of depending on a gallery texture that could show up empty
+- **CheckBox**: Fixed three-state CheckBox visuals so the indeterminate state refreshes immediately when cycling from checked and uses the correct active styling instead of leaving the previous checked mark rendered
 - **Gallery panel sizing**: Fixed the shared demo output and options pane relayout so repeated interactions no longer re-measure the pane background and grow panels taller on every refresh, and kept wrapped output text and example headers in sync with width-driven relayouts
 - **Gallery tile flow**: Fixed home and section page entries so control tiles wrap onto new rows at narrow widths, shrink within the available content area instead of clipping off-screen, and keep token-driven gaps between tiles
 - **Scroll / Slider / Progress**: Fixed ScrollFrame thumb refresh so the scroll indicator tracks content correctly, added a themed Slider value bubble, repaired Slider tick positioning after layout changes, and made the ProgressRing demo more visible in the gallery

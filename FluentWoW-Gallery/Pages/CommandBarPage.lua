@@ -37,11 +37,11 @@ Gallery:RegisterControlPage("CommandBar", function(parent, item)
 
     ex1.outputLabel:SetText("")
     cb:SetCommands({
-        { key = "add",     icon = Icons.Add,     label = "Add",     tooltip = "Add new item",      onClick = function() ex1.outputLabel:SetText("Add clicked") end },
-        { key = "edit",    icon = Icons.Edit,    label = "Edit",    tooltip = "Edit item",          onClick = function() ex1.outputLabel:SetText("Edit clicked") end },
-        { key = "delete",  icon = Icons.Delete,  label = "Delete",  tooltip = "Delete item",        onClick = function() ex1.outputLabel:SetText("Delete clicked") end },
-        { key = "done",    icon = Icons.CheckMark, label = "Done",   tooltip = "Mark complete",      onClick = function() ex1.outputLabel:SetText("Done clicked") end },
-        { key = "cancel",  icon = Icons.Cancel,  label = "Cancel",  tooltip = "Cancel action",      onClick = function() ex1.outputLabel:SetText("Cancel clicked") end },
+        { key = "add",      icon = Icons.Add,        label = "Add",      tooltip = "Add new item",   onClick = function() ex1.outputLabel:SetText("Add clicked") end },
+        { key = "search",   icon = Icons.Search,     label = "Search",   tooltip = "Search items",   onClick = function() ex1.outputLabel:SetText("Search clicked") end },
+        { key = "settings", icon = Icons.Settings,   label = "Settings", tooltip = "Open settings",  onClick = function() ex1.outputLabel:SetText("Settings clicked") end },
+        { key = "done",     icon = Icons.CheckMark,  label = "Done",     tooltip = "Mark complete",  onClick = function() ex1.outputLabel:SetText("Done clicked") end },
+        { key = "cancel",   icon = Icons.Cancel,     label = "Cancel",   tooltip = "Cancel action",  onClick = function() ex1.outputLabel:SetText("Cancel clicked") end },
     })
 
     stack:AddChild(ex1.block)
@@ -59,10 +59,10 @@ Gallery:RegisterControlPage("CommandBar", function(parent, item)
     local cb2 = lib:CreateCommandBar(ex2.example)
     cb2:SetPoint("TOPLEFT", ex2.example, "TOPLEFT", 12, -12)
     cb2:SetCommands({
-        { key = "add",      icon = Icons.Add,      tooltip = "Add",      onClick = function() end },
-        { key = "edit",     icon = Icons.Edit,     tooltip = "Edit",     onClick = function() end },
-        { key = "delete",   icon = Icons.Delete,   tooltip = "Delete",   onClick = function() end },
-        { key = "done",     icon = Icons.CheckMark, tooltip = "Done",    onClick = function() end },
+        { key = "add",      icon = Icons.Add,        tooltip = "Add",       onClick = function() end },
+        { key = "search",   icon = Icons.Search,     tooltip = "Search",    onClick = function() end },
+        { key = "settings", icon = Icons.Settings,   tooltip = "Settings",  onClick = function() end },
+        { key = "done",     icon = Icons.CheckMark,  tooltip = "Done",      onClick = function() end },
     })
 
     stack:AddChild(ex2.block)

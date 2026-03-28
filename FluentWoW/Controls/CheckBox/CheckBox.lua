@@ -30,6 +30,21 @@ local function updateLayout(self)
     self:SetSize(math.max(20 + extra, 20), 20)
 end
 
+local function updateVisualState(self, state)
+    local targetState = state or self._vsm:GetState() or "Normal"
+    local active = self._checked or self._indeterminate
+
+    if self._vsm:GetState() ~= targetState then
+        self._vsm:SetState(targetState)
+    else
+        self:OnStateChanged(targetState, targetState)
+    end
+
+    if active and targetState == "Normal" then
+        self:OnStateChanged("Checked", targetState)
+    end
+end
+
 -------------------------------------------------------------------------------
 -- Mixin
 -------------------------------------------------------------------------------
@@ -48,7 +63,7 @@ function CheckBoxMixin:OnStateChanged(newState, prevState)
     else
         self:SetAlpha(1)
         labelKey = "Color.Text.Primary"
-        if self._checked then
+        if self._checked or self._indeterminate then
             boxKey = "Color.Accent.Primary"
             if state == "Hover" then boxKey = "Color.Accent.Hover" end
         else
@@ -83,9 +98,9 @@ function CheckBoxMixin:SetChecked(checked)
     self._checked = checked
     self._indeterminate = false
     if checked then
-        self._vsm:SetState("Checked")
+        updateVisualState(self, "Checked")
     else
-        self._vsm:SetState("Normal")
+        updateVisualState(self, "Normal")
     end
 end
 
@@ -100,7 +115,11 @@ function CheckBoxMixin:SetIndeterminate(indeterminate)
     if indeterminate then
         self._checked = false
     end
-    self:OnStateChanged(self._vsm:GetState())
+    if indeterminate then
+        updateVisualState(self, "Checked")
+    else
+        updateVisualState(self, self._checked and "Checked" or "Normal")
+    end
 end
 
 ---@return boolean
@@ -179,11 +198,7 @@ function FWoWCheckBox_OnClick(self)
         self._checked = not self._checked
     end
 
-    if self._checked or self._indeterminate then
-        self._vsm:SetState("Checked")
-    else
-        self._vsm:SetState("Normal")
-    end
+    updateVisualState(self, (self._checked or self._indeterminate) and "Checked" or "Normal")
     if self._onChanged then
         lib.Utils.SafeCall(self._onChanged, self, self._checked, self:GetCheckState())
     end
@@ -197,11 +212,7 @@ end
 
 function FWoWCheckBox_OnLeave(self)
     if not self._enabled then return end
-    if self._checked or self._indeterminate then
-        self._vsm:SetState("Checked")
-    else
-        self._vsm:SetState("Normal")
-    end
+    updateVisualState(self, (self._checked or self._indeterminate) and "Checked" or "Normal")
     GameTooltip:Hide()
 end
 
