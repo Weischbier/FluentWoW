@@ -45,13 +45,15 @@
             </Layer>
         </Layers>
 
-        <!-- Action control region (right side) -->
-        <Frame name="$parent_Action" parentKey="Action">
-            <Size x="160" y="32"/>
-            <Anchors>
-                <Anchor point="RIGHT" x="-16" y="0"/>
-            </Anchors>
-        </Frame>
+        <Frames>
+            <!-- Action control region (right side) -->
+            <Frame name="$parent_Action" parentKey="Action">
+                <Size x="160" y="32"/>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-16" y="0"/>
+                </Anchors>
+            </Frame>
+        </Frames>
 
         <Scripts>
             <OnLoad function="FWoWSettingsCard_OnLoad"/>

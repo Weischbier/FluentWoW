@@ -248,7 +248,8 @@ function FWoWSearchBox_OnLoad(self)
 end
 
 function FWoWTextBox_OnTextChanged(self, userInput)
-    local parent = self:GetParent()
+    local parent = self:GetParent():GetParent()
+    if not parent._UpdatePlaceholder then return end
     parent:_UpdatePlaceholder()
     parent:_UpdateClear()
     if parent._onTextChanged then
@@ -257,7 +258,8 @@ function FWoWTextBox_OnTextChanged(self, userInput)
 end
 
 function FWoWTextBox_OnFocusGained(self)
-    local parent = self:GetParent()
+    local parent = self:GetParent():GetParent()
+    if not parent._vsm then return end
     if parent._readOnly then
         self:ClearFocus()
         return
@@ -266,12 +268,14 @@ function FWoWTextBox_OnFocusGained(self)
 end
 
 function FWoWTextBox_OnFocusLost(self)
-    local parent = self:GetParent()
+    local parent = self:GetParent():GetParent()
+    if not parent._vsm then return end
     parent._vsm:SetState("Normal")
 end
 
 function FWoWTextBox_OnEnterPressed(self)
-    local parent = self:GetParent()
+    local parent = self:GetParent():GetParent()
+    if not parent._vsm then return end
     if parent._multiline then
         self:Insert("\n")
         return
@@ -287,9 +291,9 @@ function FWoWTextBox_OnEscapePressed(self)
 end
 
 function FWoWTextBox_OnClear(self)
-    local parent = self:GetParent()
-    parent.Field.EditBox:SetText("")
-    parent.Field.EditBox:SetFocus()
+    local field = self:GetParent()
+    field.EditBox:SetText("")
+    field.EditBox:SetFocus()
 end
 
 function FWoWTextBox_OnEnter(self)

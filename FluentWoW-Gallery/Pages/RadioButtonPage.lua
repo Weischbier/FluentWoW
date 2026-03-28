@@ -53,9 +53,9 @@ Gallery:RegisterControlPage("RadioButton", function(parent, item)
             ex1.outputLabel:SetText("Selected: " .. text)
         end
     end
-    rb1:SetOnChanged(function(_, sel) onSelect(nil, sel, "Option 1") end)
-    rb2:SetOnChanged(function(_, sel) onSelect(nil, sel, "Option 2") end)
-    rb3:SetOnChanged(function(_, sel) onSelect(nil, sel, "Option 3") end)
+    rb1:SetOnSelected(function() onSelect(nil, true, "Option 1") end)
+    rb2:SetOnSelected(function() onSelect(nil, true, "Option 2") end)
+    rb3:SetOnSelected(function() onSelect(nil, true, "Option 3") end)
 
     stack:AddChild(ex1.block)
 

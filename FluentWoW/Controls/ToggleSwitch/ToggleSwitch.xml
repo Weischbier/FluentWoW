@@ -19,9 +19,6 @@
             <Layer level="ARTWORK">
                 <FontString name="$parent_StateLabel" parentKey="StateLabel"
                     inherits="GameFontNormalSmall" justifyH="RIGHT">
-                    <Anchors>
-                        <Anchor point="RIGHT" relativeTo="$parent_Track" relativePoint="LEFT" x="-12" y="0"/>
-                    </Anchors>
                 </FontString>
             </Layer>
         </Layers>

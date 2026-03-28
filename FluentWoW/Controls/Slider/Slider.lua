@@ -233,6 +233,7 @@ end
 
 function FWoWSlider_OnValueChanged(self, value, userInput)
     local parent = self:GetParent()
+    if not parent._UpdateFill then return end
     if userInput and parent._snapToTicks and parent._tickFrequency and parent._tickFrequency > 0 then
         local min = select(1, self:GetMinMaxValues())
         local tick = parent._tickFrequency

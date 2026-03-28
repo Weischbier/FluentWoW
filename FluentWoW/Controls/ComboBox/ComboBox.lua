@@ -34,12 +34,14 @@ end
 local function updateText(self)
     local items = self._items or {}
     local item = self._selectedIndex and items[self._selectedIndex] or nil
+    local label = self.Field and self.Field.SelectedLabel
+    if not label then return end
     if item and item.text and item.text ~= "" then
-        self.SelectedLabel:SetText(item.text)
-        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Primary"))
+        label:SetText(item.text)
+        label:SetTextColor(T:GetColor("Color.Text.Primary"))
     else
-        self.SelectedLabel:SetText(self._placeholderText or "")
-        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
+        label:SetText(self._placeholderText or "")
+        label:SetTextColor(T:GetColor("Color.Text.Secondary"))
     end
 end
 
@@ -69,7 +71,7 @@ function ComboMixin:OnStateChanged(newState, prevState)
         self.Field.Border:SetVertexColor(T:GetColor("Color.Border.Default"))
         self.Field.TopEdge:SetColorTexture(T:GetColor("Color.Border.Subtle"))
         self.Field.BottomEdge:SetColorTexture(T:GetColor("Color.Border.Default"))
-        self.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
+        self.Field.SelectedLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self.Field.Arrow:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -232,9 +234,9 @@ function FWoWComboBox_OnLoad(self)
     lib.SetupTexture(self.Dropdown.DropBorder, Tex.RR4_Border, 4)
     local font = T:Get("Typography.BodyBold")
     if font then
-        self.SelectedLabel:SetFont(font.font, font.size, font.flags)
+        field.SelectedLabel:SetFont(font.font, font.size, font.flags)
     end
-    self.Field.Arrow:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
+    field.Arrow:SetFont(ICON_FONT, T:GetNumber("Icon.SM"), "")
     self.Field.Arrow:SetText(Icons.ChevronDown)
     applyLayout(self)
     self:OnStateChanged("Normal")

@@ -139,6 +139,8 @@ function FWoWToggleSwitch_OnLoad(self)
     lib.SetupTexture(self.Track.BG, Tex.Pill, 10)
     self.Thumb.Dot:SetTexture(Tex.Circle14)
     self.Thumb.Shadow:SetTexture(Tex.CircleShadow)
+    -- Anchor StateLabel to Track (can't do in XML because Layers parse before Frames)
+    self.StateLabel:SetPoint("RIGHT", self.Track, "LEFT", -12, 0)
     self:OnStateChanged("Normal")
 end
 
