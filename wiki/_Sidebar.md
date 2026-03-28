@@ -18,6 +18,7 @@
 * [Settings Controls](Settings-Controls)
 
 **Framework**
+* [Architecture](Architecture)
 * [Token System](Token-System)
 * [Theming](Theming)
 * [Motion & Animation](Motion-and-Animation)

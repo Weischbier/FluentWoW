@@ -7,10 +7,10 @@ FluentWoW ships with an interactive showcase addon (**FluentWoW-Gallery**) that 
 ## Opening the Gallery
 
 ```
-/wuil
+/fwow
 ```
 
-Type `/wuil` in the WoW chat box to toggle the gallery window open or closed.
+Type `/fwow` in the WoW chat box to toggle the gallery window open or closed.
 
 ---
 
@@ -30,14 +30,16 @@ Both must be in your AddOns folder. The Gallery's TOC declares `Dependencies: Fl
 
 ## Pages
 
-The gallery organises controls into five themed pages:
+The gallery organises controls into seven themed pages:
 
 | Page | File | Controls Demonstrated |
 | --- | --- | --- |
 | **Button** | `Pages/ButtonPage.lua` | Button (Accent, Subtle, Destructive), IconButton, ToggleButton |
 | **Input** | `Pages/InputPage.lua` | CheckBox, RadioButton, ToggleSwitch, TextBox, SearchBox, Slider, ComboBox |
 | **Feedback** | `Pages/FeedbackPage.lua` | ProgressBar, ProgressRing, InfoBar, ContentDialog |
-| **Layout** | `Pages/LayoutPage.lua` | StackLayout (VStack / HStack), Expander, TabView, ScrollFrame |
+| **Navigation** | `Pages/NavigationPage.lua` | NavigationView, BreadcrumbBar, TabView, Expander, ScrollFrame, MainFrame |
+| **Layout** | `Pages/LayoutPage.lua` | StackLayout (VStack / HStack) |
+| **Advanced** | `Pages/AdvancedPage.lua` | NumberBox, TeachingTip, CommandBar, SegmentedControl, Badge, EmptyState, Skeleton |
 | **Settings** | `Pages/SettingsPage.lua` | SettingsCard, SettingsExpander |
 
 Each page contains:
@@ -121,7 +123,7 @@ The page will appear in the sidebar navigation automatically.
 
 ## Screenshots
 
-Open the gallery in-game with `/wuil` to see:
+Open the gallery in-game with `/fwow` to see:
 - All button variants side by side
 - Interactive input controls with live state feedback
 - All four InfoBar severities

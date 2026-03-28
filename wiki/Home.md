@@ -11,7 +11,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 | Section | Description |
 | --- | --- |
 | **[Getting Started](Getting-Started)** | Installation, dependencies, your first control |
-| **[Controls Overview](Controls-Overview)** | Summary of all 22+ controls with status |
+| **[Controls Overview](Controls-Overview)** | Summary of all 30+ controls with status |
 | **[API Reference](API-Reference)** | Quick-reference table of every factory method |
 
 ### Control Documentation
@@ -24,6 +24,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 | **[Navigation Controls](Navigation-Controls)** | TabView, Expander, ScrollFrame, MainFrame |
 | **[Layout](Layout)** | StackLayout (VStack / HStack) |
 | **[Settings Controls](Settings-Controls)** | SettingsCard, SettingsExpander |
+| **[Advanced Controls](Advanced-Controls)** | NavigationView, BreadcrumbBar, NumberBox, TeachingTip, CommandBar, SegmentedControl, Badge, EmptyState, Skeleton |
 
 ### Framework Internals
 
@@ -34,12 +35,13 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 | **[Motion & Animation](Motion-and-Animation)** | Tweening engine, presets, easing functions |
 | **[Core Modules](Core-Modules)** | EventBus, StateMachine, FramePool, Utils |
 | **[Icons](Icons)** | Segoe Fluent Icons glyph map |
+| **[Architecture](Architecture)** | Library bootstrap, embed protocol, file layout |
 
 ### Extras
 
 | Page | Description |
 | --- | --- |
-| **[Gallery](Gallery)** | Interactive showcase addon (`/wuil`) |
+| **[Gallery](Gallery)** | Interactive showcase addon (`/fwow`) |
 | **[FAQ & Troubleshooting](FAQ)** | Common issues, combat lockdown, debugging |
 | **[Design Principles](Design-Principles)** | WinUI → WoW translation matrix |
 
@@ -47,18 +49,18 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 
 ## At a Glance
 
-- **22 controls** across 6 categories — buttons, inputs, feedback, navigation, layout, settings
+- **30+ controls** across 7 categories — buttons, inputs, feedback, navigation, layout, settings, advanced
 - **Token-driven theming** — dark theme (default), light theme, and runtime overrides
 - **Motion engine** — flux-based tweening with 27 easing functions and preset animations
 - **Combat-safe** — all controls respect `InCombatLockdown()` constraints
-- **Library-first** — embed via TOC dependency, use the `FluentWoW` global namespace
+- **Library-first** — obtain via `LibStub("FluentWoW-1.0")`, embed into AceAddon, or TOC dependency
 - **Gallery addon** — live interactive showcase for every control
 
 ---
 
 ## Version
 
-**FluentWoW 1.0.0** · Interface 120005 / 120001 · MIT License
+**FluentWoW 1.4.0** · Interface 120005 / 120001 · MIT License
 
 ---
 

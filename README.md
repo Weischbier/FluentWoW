@@ -23,15 +23,33 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 
 ## Quick Start
 
-### 1. Declare dependency in your TOC
+### 1. Declare the dependency
+
+In your addon's `.toc`:
 
 ```text
-Dependencies: FluentWoW
+## Dependencies: FluentWoW
 ```
 
-### 2. Create controls in Lua
+### 2. Access the library (Ace3 / LibStub pattern)
 
 ```lua
+-- Standard LibStub access (recommended)
+local FluentWoW = LibStub("FluentWoW-1.0")
+```
+
+If your addon uses **AceAddon**, you can embed FluentWoW directly:
+
+```lua
+local MyAddon = LibStub("AceAddon-3.0"):NewAddon("MyAddon", "FluentWoW-1.0")
+-- All FluentWoW Create* methods are now mixed into MyAddon
+```
+
+### 3. Create controls
+
+```lua
+local FluentWoW = LibStub("FluentWoW-1.0")
+
 -- Button
 local btn = FluentWoW:CreateButton(parent, nil, "Accent")
 btn:SetText("Save Settings")
@@ -49,14 +67,15 @@ card:SetDescription("Turn the addon on or off without /reload.")
 card:SetActionControl(ts)
 ```
 
-### 3. Use tokens for consistent styling
+### 4. Use tokens for consistent styling
 
 ```lua
+local FluentWoW = LibStub("FluentWoW-1.0")
 local r, g, b, a = FluentWoW.Tokens:GetColor("Color.Accent.Primary")
 local gap         = FluentWoW.Tokens:GetSpacing("MD")  -- 8 px
 ```
 
-### 4. Override tokens for a custom theme
+### 5. Override tokens for a custom theme
 
 ```lua
 FluentWoW.Tokens:Override({
@@ -86,7 +105,7 @@ FluentWoW-Gallery/      Interactive showcase addon (/fwow)
   Pages/               ButtonPage, InputPage, FeedbackPage, LayoutPage, SettingsPage
 ```
 
-See the **[Wiki](https://github.com/Weischbier/WinUILib/wiki)** for complete
+See the **[Wiki](https://github.com/Weischbier/FluentWoW/wiki)** for complete
 control documentation, API reference, theming guide, and tutorials.
 
 ---

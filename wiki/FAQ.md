@@ -8,15 +8,18 @@ Common questions and solutions for FluentWoW addon development.
 
 ### How do I access FluentWoW?
 
-```lua
--- Direct global (simplest)
-local lib = FluentWoW
+FluentWoW follows the standard Ace3 / LibStub pattern:
 
--- Via LibStub (Ace3 pattern)
-local lib = LibStub("FluentWoW-1.0")
+```lua
+local FluentWoW = LibStub("FluentWoW-1.0")
 ```
 
-Both return the same singleton table.
+If your addon uses AceAddon, you can embed FluentWoW directly:
+
+```lua
+local MyAddon = LibStub("AceAddon-3.0"):NewAddon("MyAddon", "FluentWoW-1.0")
+-- All Create* methods are now available on MyAddon
+```
 
 ### What WoW versions are supported?
 
@@ -30,9 +33,16 @@ No — FluentWoW loads as its own addon. Declare it as a dependency in your `.to
 ## Dependencies: FluentWoW
 ```
 
+Then access it via `LibStub("FluentWoW-1.0")`. If you prefer to bundle it inside your addon (Ace3 embed style), add it as an external in your `.pkgmeta`:
+
+```yaml
+externals:
+  MyAddon/Libs/FluentWoW: https://github.com/Weischbier/FluentWoW.git
+```
+
 ### Can I ship FluentWoW bundled with my addon?
 
-Yes. Use LibStub to avoid conflicts. The version negotiation in Bootstrap.lua ensures only the newest copy runs when multiple addons embed it.
+Yes. FluentWoW registers with LibStub, so version negotiation ensures only the newest copy runs when multiple addons embed it. Add it as an external in your `.pkgmeta` and access it via `LibStub("FluentWoW-1.0")`.
 
 ---
 
@@ -127,12 +137,12 @@ All FluentWoW controls **must** be descendants of a `MainFrame` created via `Cre
 **Fix:** Create a MainFrame first and parent your controls inside it:
 
 ```lua
-local lib = FluentWoW
-local frame = lib:CreateMainFrame("MyAddonFrame", "My Addon")
+local FluentWoW = LibStub("FluentWoW-1.0")
+local frame = FluentWoW:CreateMainFrame("MyAddonFrame", "My Addon")
 local content = frame:GetContentArea()
 
 -- Create controls parented to the MainFrame's content area
-local btn = lib:CreateButton(content, nil, "Accent")
+local btn = FluentWoW:CreateButton(content, nil, "Accent")
 ```
 
 The only controls exempt from this rule are **ContentDialog** and **TeachingTip**, which are fullscreen overlays that attach to UIParent.

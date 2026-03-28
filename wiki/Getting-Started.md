@@ -56,15 +56,38 @@ This ensures FluentWoW loads before your addon. The global `FluentWoW` table wil
 
 ## Access the Library
 
-```lua
--- Direct global access (simplest)
-local lib = FluentWoW
+FluentWoW follows the standard Ace3 library pattern. Access it via **LibStub**:
 
--- Or via LibStub (if you use Ace3 patterns)
-local lib = LibStub("FluentWoW-1.0")
+```lua
+local FluentWoW = LibStub("FluentWoW-1.0")
 ```
 
-Both methods return the same singleton table.
+### AceAddon Embed (optional)
+
+If your addon uses AceAddon, you can embed FluentWoW directly. All `Create*` factory methods, `Tokens`, `EventBus`, and `Motion` are mixed into your addon table automatically:
+
+```lua
+local MyAddon = LibStub("AceAddon-3.0"):NewAddon("MyAddon", "FluentWoW-1.0")
+
+function MyAddon:OnInitialize()
+    -- All FluentWoW methods are available on self
+    local frame = self:CreateMainFrame("MyAddonFrame", "My Addon")
+    local content = frame:GetContentArea()
+    local btn = self:CreateButton(content, nil, "Accent")
+    btn:SetText("Hello from Ace3!")
+end
+```
+
+### Consumer .pkgmeta
+
+If you ship FluentWoW bundled inside your addon (Ace3 embed style), add it as an external in your `.pkgmeta`:
+
+```yaml
+externals:
+  MyAddon/Libs/FluentWoW: https://github.com/Weischbier/FluentWoW.git
+```
+
+Otherwise, just list FluentWoW as a dependency in your TOC and let users install it separately.
 
 ---
 
@@ -81,16 +104,16 @@ Both methods return the same singleton table.
 > fullscreen overlays that attach to UIParent by design.
 
 ```lua
-local lib = FluentWoW
+local FluentWoW = LibStub("FluentWoW-1.0")
 
 -- Step 1: Always create a MainFrame first
-local frame = lib:CreateMainFrame("MyAddonFrame", "My Addon")
+local frame = FluentWoW:CreateMainFrame("MyAddonFrame", "My Addon")
 
 -- Step 2: Get its content area — this is where your controls go
 local content = frame:GetContentArea()
 
 -- Step 3: Create controls inside the MainFrame hierarchy
-local btn = lib:CreateButton(content, nil, "Accent")
+local btn = FluentWoW:CreateButton(content, nil, "Accent")
 btn:SetText("Click Me")
 btn:SetPoint("CENTER")
 btn:SetOnClick(function(self, mouseButton)
@@ -108,14 +131,14 @@ frame:Open()
 ### A Simple Button
 
 ```lua
-local lib = FluentWoW
+local FluentWoW = LibStub("FluentWoW-1.0")
 
 -- Create the MainFrame (required root for all controls)
-local frame = lib:CreateMainFrame("MyAddonFrame", "My Addon")
+local frame = FluentWoW:CreateMainFrame("MyAddonFrame", "My Addon")
 local content = frame:GetContentArea()
 
 -- Create an accent button inside the MainFrame
-local btn = lib:CreateButton(content, nil, "Accent")
+local btn = FluentWoW:CreateButton(content, nil, "Accent")
 btn:SetText("Click Me")
 btn:SetPoint("CENTER")
 btn:SetOnClick(function(self, mouseButton)
@@ -130,7 +153,7 @@ frame:Open()
 ```lua
 local content = frame:GetContentArea()
 
-local toggle = lib:CreateToggleSwitch(content)
+local toggle = FluentWoW:CreateToggleSwitch(content)
 toggle:SetHeader("Enable Feature")
 toggle:SetOnContent("Enabled")
 toggle:SetOffContent("Disabled")
@@ -146,12 +169,12 @@ end)
 local content = frame:GetContentArea()
 
 -- Create a toggle switch as the action control
-local ts = lib:CreateToggleSwitch(content)
+local ts = FluentWoW:CreateToggleSwitch(content)
 ts:SetOnContent("On")
 ts:SetOffContent("Off")
 
 -- Create a settings card with the toggle embedded
-local card = lib:CreateSettingsCard(content)
+local card = FluentWoW:CreateSettingsCard(content)
 card:SetTitle("Enable Notifications")
 card:SetDescription("Show popup notifications for important events.")
 card:SetActionControl(ts)
@@ -166,26 +189,26 @@ card:SetSize(360, 0)  -- height auto-adjusts
 Here's a more realistic example — a full settings panel using MainFrame, StackLayout, and Settings controls:
 
 ```lua
-local lib = FluentWoW
+local FluentWoW = LibStub("FluentWoW-1.0")
 
 -- Create the main window
-local frame = lib:CreateMainFrame("MyAddonSettings", "My Addon — Settings")
+local frame = FluentWoW:CreateMainFrame("MyAddonSettings", "My Addon \u2014 Settings")
 
 -- Get the content area
 local content = frame:GetContentArea()
 
 -- Create a vertical stack for layout
-local stack = lib:CreateStackLayout(content, nil, "VERTICAL")
+local stack = FluentWoW:CreateStackLayout(content, nil, "VERTICAL")
 stack:SetGap(8)
 stack:SetPadding(16, 16, 16, 16)
 stack:SetAllPoints(content)
 
 -- Settings card 1: Toggle feature
-local ts1 = lib:CreateToggleSwitch(stack)
+local ts1 = FluentWoW:CreateToggleSwitch(stack)
 ts1:SetOnContent("On")
 ts1:SetOffContent("Off")
 
-local card1 = lib:CreateSettingsCard(stack)
+local card1 = FluentWoW:CreateSettingsCard(stack)
 card1:SetTitle("Auto-Track")
 card1:SetDescription("Automatically track new quests when they are accepted.")
 card1:SetActionControl(ts1)
@@ -193,7 +216,7 @@ card1:SetSize(0, 0)
 stack:AddChild(card1)
 
 -- Settings card 2: Dropdown
-local cb = lib:CreateComboBox(stack)
+local cb = FluentWoW:CreateComboBox(stack)
 cb:SetItems({
     { text = "Small",  value = 0.8 },
     { text = "Normal", value = 1.0 },
@@ -201,7 +224,7 @@ cb:SetItems({
 })
 cb:SetSelectedIndex(2)
 
-local card2 = lib:CreateSettingsCard(stack)
+local card2 = FluentWoW:CreateSettingsCard(stack)
 card2:SetTitle("UI Scale")
 card2:SetDescription("Adjust the overall size of the interface.")
 card2:SetActionControl(cb)
@@ -209,13 +232,13 @@ card2:SetSize(0, 0)
 stack:AddChild(card2)
 
 -- Settings card 3: Slider
-local sl = lib:CreateSlider(stack)
+local sl = FluentWoW:CreateSlider(stack)
 sl:SetRange(0, 100)
 sl:SetValue(75)
 sl:SetStep(5)
 sl:SetShowValue(true)
 
-local card3 = lib:CreateSettingsCard(stack)
+local card3 = FluentWoW:CreateSettingsCard(stack)
 card3:SetTitle("Opacity")
 card3:SetDescription("Set the transparency of the frame.")
 card3:SetActionControl(sl)
@@ -233,6 +256,7 @@ frame:Open()
 If you need to style custom frames to match FluentWoW's design language:
 
 ```lua
+local FluentWoW = LibStub("FluentWoW-1.0")
 local T = FluentWoW.Tokens
 
 -- Get a colour (returns r, g, b, a)
@@ -270,4 +294,4 @@ end)
 - Browse the **[Controls Overview](Controls-Overview)** to see everything available
 - Check the **[Token System](Token-System)** for the full token reference
 - Read about **[Theming](Theming)** to create your own colour scheme
-- Open the **[Gallery](Gallery)** in-game with `/wuil` to see live demos
+- Open the **[Gallery](Gallery)** in-game with `/fwow` to see live demos

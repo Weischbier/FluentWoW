@@ -79,31 +79,31 @@ FluentWoW:CreateStackLayout(parent, name?, orientation?)
 ### Example — Settings Panel
 
 ```lua
-local lib = FluentWoW
+local FluentWoW = LibStub("FluentWoW-1.0")
 
-local stack = lib:CreateStackLayout(content, nil, "VERTICAL")
+local stack = FluentWoW:CreateStackLayout(content, nil, "VERTICAL")
 stack:SetGap(4)
 stack:SetPadding(0, 0, 0, 0)
 stack:SetAllPoints(content)
 
 -- Each settings card stretches to full width
-local card1 = lib:CreateSettingsCard(stack)
+local card1 = FluentWoW:CreateSettingsCard(stack)
 card1:SetTitle("Option A")
 card1:SetDescription("Description of option A.")
 stack:AddChild(card1)
 
-local card2 = lib:CreateSettingsCard(stack)
+local card2 = FluentWoW:CreateSettingsCard(stack)
 card2:SetTitle("Option B")
 card2:SetDescription("Description of option B.")
 stack:AddChild(card2)
 
 -- Expander with nested cards
-local exp = lib:CreateSettingsExpander(stack)
+local exp = FluentWoW:CreateSettingsExpander(stack)
 exp:SetTitle("Advanced")
 exp:SetDescription("More options")
 stack:AddChild(exp)
 
-local advCard = lib:CreateSettingsCard(exp:GetContentFrame())
+local advCard = FluentWoW:CreateSettingsCard(exp:GetContentFrame())
 advCard:SetTitle("Debug Mode")
 exp:AddCard(advCard)
 ```

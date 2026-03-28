@@ -11,7 +11,7 @@ FluentWoW is **not** a XAML clone. It extracts the **transferable design princip
 - **Token-driven** — all visual constants flow from a central registry, not hard-coded values
 - **State-machine driven** — every control has explicit visual states with clean transitions
 - **Combat-aware** — all UI mutations respect `InCombatLockdown()`
-- **Library-first** — designed to be embedded as a dependency, not as a standalone addon
+- **Library-first** — designed to be consumed via `LibStub("FluentWoW-1.0")` or embedded through AceAddon
 
 ---
 
@@ -34,7 +34,7 @@ FluentWoW is **not** a XAML clone. It extracts the **transferable design princip
 | **Accessibility** | ⚠️ Partial | Tooltip text, keyboard nav | WoW screen-reader support is limited |
 | **Responsive layout** | ⚠️ Adapted | `StackLayout` OnSizeChanged re-layout | No media queries; manual breakpoints |
 | **Page transitions** | ✅ Adapted | `Motion:FadeIn/FadeOut` between frames | No connected animation |
-| **Navigation structures** | ✅ Adapted | `TabView` + sidebar nav in Gallery | NavigationView planned for Phase 2 |
+| **Navigation structures** | ✅ Adapted | `TabView`, `NavigationView`, sidebar nav | Full parity with WinUI nav patterns |
 | **Data binding** | ❌ Not viable | Lua callbacks / event bus | No reactive binding engine in WoW |
 
 ---

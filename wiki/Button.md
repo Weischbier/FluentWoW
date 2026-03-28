@@ -37,10 +37,10 @@ State transitions drive background, label, edge, and overlay colour changes — 
 ### Creation
 
 ```lua
-local lib = FluentWoW
+local FluentWoW = LibStub("FluentWoW-1.0")
 
 -- Accent (primary action)
-local save = lib:CreateButton(parent, "SaveBtn", "Accent")
+local save = FluentWoW:CreateButton(parent, "SaveBtn", "Accent")
 save:SetText("Save")
 save:SetPoint("BOTTOMRIGHT", -16, 16)
 save:SetOnClick(function(self)
@@ -48,11 +48,11 @@ save:SetOnClick(function(self)
 end)
 
 -- Subtle (secondary action)
-local cancel = lib:CreateButton(parent, "CancelBtn", "Subtle")
+local cancel = FluentWoW:CreateButton(parent, "CancelBtn", "Subtle")
 cancel:SetText("Cancel")
 
 -- Destructive (dangerous action)
-local delete = lib:CreateButton(parent, "DeleteBtn", "Destructive")
+local delete = FluentWoW:CreateButton(parent, "DeleteBtn", "Destructive")
 delete:SetText("Delete All")
 ```
 
@@ -84,7 +84,7 @@ A square button displaying only an icon — ideal for toolbars, close buttons, a
 ### Creation
 
 ```lua
-local btn = lib:CreateIconButton(parent, "CloseBtn")
+local btn = FluentWoW:CreateIconButton(parent, "CloseBtn")
 btn:SetIcon("Interface\\AddOns\\FluentWoW\\Assets\\Fonts\\icon.tga")
 btn:SetPoint("TOPRIGHT", -4, -4)
 btn:SetOnClick(function(self)
@@ -113,7 +113,7 @@ A button that alternates between checked and unchecked states on each click.
 ### Creation
 
 ```lua
-local toggle = lib:CreateToggleButton(parent, "BoldBtn")
+local toggle = FluentWoW:CreateToggleButton(parent, "BoldBtn")
 toggle:SetText("Bold")
 toggle:SetOnToggle(function(self, isChecked)
     editor:SetBold(isChecked)

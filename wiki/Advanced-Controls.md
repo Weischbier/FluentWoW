@@ -1,6 +1,6 @@
 # Advanced Controls
 
-Phase 2 controls that extend FluentWoW's vocabulary with data-entry helpers, status indicators, loading placeholders, and contextual UI.
+Controls that extend FluentWoW's vocabulary with data-entry helpers, status indicators, loading placeholders, and contextual UI.
 
 ---
 

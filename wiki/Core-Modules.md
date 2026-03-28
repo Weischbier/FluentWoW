@@ -36,11 +36,11 @@ The entry point for the entire framework. Handles:
 ### Usage Patterns
 
 ```lua
--- Direct global
-local lib = FluentWoW
+-- Standard access via LibStub (recommended)
+local FluentWoW = LibStub("FluentWoW-1.0")
 
--- LibStub (Ace3 pattern)
-local lib = LibStub("FluentWoW-1.0")
+-- AceAddon embed (all Create* methods mixed into your addon)
+local MyAddon = LibStub("AceAddon-3.0"):NewAddon("MyAddon", "FluentWoW-1.0")
 
 -- Enable debug logging
 FluentWoW.debug = true

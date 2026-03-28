@@ -55,7 +55,7 @@ FluentWoW provides 30+ controls across 7 categories, each faithfully adapted fro
 
 → **[Navigation Controls page](Navigation-Controls)**
 
-### Advanced (Phase 2)
+### Advanced
 
 | Control | Template | Factory | Description |
 | --- | --- | --- | --- |
@@ -123,15 +123,4 @@ Controls that are shown before combat continues to work; only new show/hide oper
 
 ---
 
-## Planned Controls (Phase 2+)
-
-- NavigationView sidebar
-- BreadcrumbBar
-- NumberBox (validated numeric input)
-- TeachingTip (coach marks)
-- CommandBar / Toolbar
-- SegmentedControl
-- Badge / status pill
-- EmptyState placeholder
-- Skeleton loading state
-- Virtualized list (true row recycling)
+## Planned Controls (Phase 3+)\n\n- Virtualized list (true row recycling)\n- Grid layout container\n- Responsive width classes\n- Connected animation helpers

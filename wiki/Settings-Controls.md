@@ -13,10 +13,10 @@ A horizontal card with an icon, title, description, and a trailing action contro
 ### Creation
 
 ```lua
-local lib = FluentWoW
+local FluentWoW = LibStub("FluentWoW-1.0")
 
 -- Card with a ToggleSwitch action
-local toggle = lib:CreateToggleSwitch(parent)
+local toggle = FluentWoW:CreateToggleSwitch(parent)
 toggle:SetOnContent("On")
 toggle:SetOffContent("Off")
 toggle:SetIsOn(MyDB.enabled)
@@ -24,7 +24,7 @@ toggle:SetOnToggled(function(self, isOn)
     MyDB.enabled = isOn
 end)
 
-local card = lib:CreateSettingsCard(parent, "EnableCard")
+local card = FluentWoW:CreateSettingsCard(parent, "EnableCard")
 card:SetTitle("Enable Addon")
 card:SetDescription("Turn the addon on or off globally.")
 card:SetIconTexture("Interface\\Icons\\INV_Misc_Gear_01")
@@ -36,7 +36,7 @@ card:SetSize(400, 0)  -- height auto-adjusts based on description text
 ### Card With ComboBox
 
 ```lua
-local dd = lib:CreateComboBox(parent)
+local dd = FluentWoW:CreateComboBox(parent)
 dd:SetItems({
     { text = "English",  value = "en" },
     { text = "Deutsch",  value = "de" },
@@ -44,7 +44,7 @@ dd:SetItems({
 })
 dd:SetSelectedIndex(1)
 
-local langCard = lib:CreateSettingsCard(parent)
+local langCard = FluentWoW:CreateSettingsCard(parent)
 langCard:SetTitle("Language")
 langCard:SetDescription("Choose your preferred display language.")
 langCard:SetActionControl(dd)
@@ -53,7 +53,7 @@ langCard:SetActionControl(dd)
 ### Clickable Card (No Action Control)
 
 ```lua
-local navCard = lib:CreateSettingsCard(parent)
+local navCard = FluentWoW:CreateSettingsCard(parent)
 navCard:SetTitle("About")
 navCard:SetDescription("Version info, credits, and license.")
 navCard:SetClickable(true)
@@ -91,9 +91,9 @@ An expandable container with a header row (icon + title + description) and colla
 ### Creation
 
 ```lua
-local lib = FluentWoW
+local FluentWoW = LibStub("FluentWoW-1.0")
 
-local expander = lib:CreateSettingsExpander(parent, "DisplayExpander")
+local expander = FluentWoW:CreateSettingsExpander(parent, "DisplayExpander")
 expander:SetTitle("Display")
 expander:SetDescription("Configure how the UI is rendered.")
 expander:SetIconTexture("Interface\\Icons\\INV_Misc_Eye_01")
@@ -101,21 +101,21 @@ expander:SetPoint("TOP", parent, "TOP", 0, -8)
 expander:SetSize(400, 0)
 
 -- Add child cards
-local scaleToggle = lib:CreateToggleSwitch(expander)
-local card1 = lib:CreateSettingsCard(expander)
+local scaleToggle = FluentWoW:CreateToggleSwitch(expander)
+local card1 = FluentWoW:CreateSettingsCard(expander)
 card1:SetTitle("Auto-Scale")
 card1:SetDescription("Automatically adjust scale based on resolution.")
 card1:SetActionControl(scaleToggle)
 expander:AddCard(card1)
 
-local slider = lib:CreateSlider(expander)
+local slider = FluentWoW:CreateSlider(expander)
 slider:SetRange(50, 200)
 slider:SetValue(100)
 slider:SetStep(10)
 slider:SetShowValue(true)
 slider:SetValueFormatter(function(v) return v .. "%" end)
 
-local card2 = lib:CreateSettingsCard(expander)
+local card2 = FluentWoW:CreateSettingsCard(expander)
 card2:SetTitle("Scale Override")
 card2:SetDescription("Manual UI scale percentage.")
 card2:SetActionControl(slider)
@@ -152,57 +152,57 @@ Child cards are stacked vertically inside the expander body, separated by 1px to
 ## Complete Settings Page Example
 
 ```lua
-local lib = FluentWoW
+local FluentWoW = LibStub("FluentWoW-1.0")
 
 -- Create a MainFrame for settings
-local frame = lib:CreateMainFrame("MyAddonSettings", "MyAddon — Settings")
+local frame = FluentWoW:CreateMainFrame("MyAddonSettings", "MyAddon \u2014 Settings")
 local content = frame:GetContentArea()
 
 -- Wrap in a scroll frame for long pages
-local scroll = lib:CreateScrollFrame(content, "SettingsScroll")
+local scroll = FluentWoW:CreateScrollFrame(content, "SettingsScroll")
 scroll:SetAllPoints(content)
 local scrollChild = scroll:GetScrollChild()
 
 -- Vertical stack
-local stack = lib:CreateStackLayout(scrollChild, nil, "VERTICAL")
+local stack = FluentWoW:CreateStackLayout(scrollChild, nil, "VERTICAL")
 stack:SetGap(4)
 stack:SetPadding(0, 0, 0, 0)
 stack:SetPoint("TOPLEFT", 0, 0)
 stack:SetPoint("TOPRIGHT", 0, 0)
 
 -- ── General section ──
-local generalExp = lib:CreateSettingsExpander(stack)
+local generalExp = FluentWoW:CreateSettingsExpander(stack)
 generalExp:SetTitle("General")
 generalExp:SetDescription("Core addon settings")
 stack:AddChild(generalExp)
 
-local enableToggle = lib:CreateToggleSwitch(generalExp)
+local enableToggle = FluentWoW:CreateToggleSwitch(generalExp)
 enableToggle:SetOnContent("On")
 enableToggle:SetOffContent("Off")
 
-local enableCard = lib:CreateSettingsCard(generalExp)
+local enableCard = FluentWoW:CreateSettingsCard(generalExp)
 enableCard:SetTitle("Enable Addon")
 enableCard:SetDescription("Turn the addon on or off.")
 enableCard:SetActionControl(enableToggle)
 generalExp:AddCard(enableCard)
 
 -- ── Appearance section ──
-local appearanceExp = lib:CreateSettingsExpander(stack)
+local appearanceExp = FluentWoW:CreateSettingsExpander(stack)
 appearanceExp:SetTitle("Appearance")
 appearanceExp:SetDescription("Visual customisation")
 stack:AddChild(appearanceExp)
 
-local themeDD = lib:CreateComboBox(appearanceExp)
+local themeDD = FluentWoW:CreateComboBox(appearanceExp)
 themeDD:SetItems({
     { text = "Dark",  value = "Dark" },
     { text = "Light", value = "Light" },
 })
 themeDD:SetSelectedIndex(1)
 themeDD:SetOnSelectionChanged(function(self, idx)
-    lib.Tokens:SetTheme(self:GetSelectedValue())
+    FluentWoW.Tokens:SetTheme(self:GetSelectedValue())
 end)
 
-local themeCard = lib:CreateSettingsCard(appearanceExp)
+local themeCard = FluentWoW:CreateSettingsCard(appearanceExp)
 themeCard:SetTitle("Theme")
 themeCard:SetDescription("Choose between dark and light modes.")
 themeCard:SetActionControl(themeDD)

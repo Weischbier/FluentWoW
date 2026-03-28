@@ -7,9 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Architecture wiki page** — rewrote the old ARCHITECTURE.md as [wiki/Architecture.md](wiki/Architecture.md) covering directory layout, module map, three-layer styling model, token resolution, control lifecycle, embed protocol, and adoption strategy
+
 ### Changed
 
-- Removed the discarded review-only texture packs, audit outputs, and alternative comparison generators after retaining `FluentWoW/Assets/Textures` as the canonical runtime pack
+- **Ace3 / LibStub access pattern** — all documentation now uses `LibStub("FluentWoW-1.0")` as the sole recommended way to access FluentWoW; the direct `FluentWoW` global is no longer documented as a primary pattern
+- **AceAddon Embed** — documented the `AceAddon:NewAddon("MyAddon", "FluentWoW-1.0")` embed pattern across Getting Started, FAQ, API Reference, Core Modules, and Architecture pages
+- **Consumer .pkgmeta** — documented how consumer addons can add FluentWoW as an external for Ace3-style embedding
+- Removed unused Ace3 external from `.pkgmeta` (FluentWoW does not use Ace3 internally; only LibStub)
+- Removed stale ARCHITECTURE.md from `.pkgmeta` ignore list (file no longer tracked)
+- Updated wiki sidebar and Home page to include Architecture and Advanced Controls links
+- Fixed Controls Overview: removed stale "Phase 2" heading, updated planned-controls to Phase 3+
+- Updated Home.md control count (22 → 30+), category count (6 → 7), version (1.0.0 → 1.4.0)
+- Updated Gallery.md page table from 5 to 7 pages (added Navigation, Advanced)
+- Updated Advanced-Controls.md to remove stale "Phase 2" label
+- Updated Design-Principles.md NavigationView row to reflect implemented status
 - Narrowed the tracked repository set to addon payloads, wiki sources, release metadata, packaging config, and the release-support workflows while keeping the wiki excluded from packaged releases
 
 ### Fixed

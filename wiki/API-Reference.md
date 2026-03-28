@@ -1,6 +1,6 @@
 # API Reference
 
-Quick-reference table of every FluentWoW factory method. All methods are called on the `FluentWoW` global (or `LibStub("FluentWoW-1.0")`).
+Quick-reference table of every FluentWoW factory method. Access the library via `LibStub("FluentWoW-1.0")`, or if using AceAddon, embed it with `LibStub("AceAddon-3.0"):NewAddon("MyAddon", "FluentWoW-1.0")`.
 
 > **MainFrame is required.** The `parent` parameter for all controls (except
 > ContentDialog and TeachingTip) must be a MainFrame or a descendant of one.
@@ -100,6 +100,8 @@ Quick-reference table of every FluentWoW factory method. All methods are called 
 | FramePool | `FluentWoW.FramePool` | [Frame recycling](Core-Modules#framepool) |
 | Utils | `FluentWoW.Utils` | [Utility functions](Core-Modules#utils) |
 | Icons | `FluentWoW.Icons` | [Icon glyph map](Icons) |
+
+> **Note:** When using AceAddon Embed, `Tokens`, `EventBus`, and `Motion` are mixed into your addon table. `self.Tokens:GetColor(...)` works directly.
 
 ---
 
