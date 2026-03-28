@@ -86,9 +86,6 @@ FluentWoW-Gallery/      Interactive showcase addon (/fwow)
   Pages/               ButtonPage, InputPage, FeedbackPage, LayoutPage, SettingsPage
 ```
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design reference, principle
-translation matrix, token system docs, roadmap, and adoption guide.
-
 See the **[Wiki](https://github.com/Weischbier/WinUILib/wiki)** for complete
 control documentation, API reference, theming guide, and tutorials.
 

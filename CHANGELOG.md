@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed the discarded review-only texture packs, audit outputs, and alternative comparison generators after retaining `FluentWoW/Assets/Textures` as the canonical runtime pack
+- Narrowed the tracked repository set to addon payloads, wiki sources, release metadata, packaging config, and the release-support workflows while keeping the wiki excluded from packaged releases
 
 ### Fixed
 

@@ -1,32 +1,47 @@
-# ==== FluentWoW .gitignore ====
+# Ignore everything by default.
+*
 
-# Local reference materials (Blizzard source, WinUI source, Ace3, etc.)
-.help/
-.docs/
-.github/agents/
-.github/instructions/
-.github/skills/
+# Keep the repo policy and release metadata tracked.
+!/.gitattributes
+!/.gitignore
+!/.luacheckrc
+!/.pkgmeta
+!/CHANGELOG.md
+!/LICENSE
+!/README.md
 
-# VS Code personal config
-.vscode/
+# Keep the addon payloads tracked.
+!/FluentWoW/
+!/FluentWoW/**
+!/FluentWoW-Gallery/
+!/FluentWoW-Gallery/**
 
-# OS junk
-Thumbs.db
-Desktop.ini
+# Keep wiki sources tracked, but release packaging excludes them.
+!/wiki/
+!/wiki/**
+
+# Keep common editor and merge artifacts out of addon trees.
+*.bak
 .DS_Store
 ._*
-
-# Lua tooling
-luac.out
-*.luac
-
-# BigWigs packager output
-.release/
-.pkgmeta.bak
-
-# Editor swap / backup
-*~
+*.orig
+*.pkgmeta.bak
+*.rej
 *.swp
 *.swo
-*.bak
-*.orig
+*.tmp
+*.temp
+*~
+*.luac
+luac.out
+.release/
+Thumbs.db
+Desktop.ini
+
+# Keep only the addon-relevant workflow tracked.
+!/.github/
+.github/*
+!/.github/workflows/
+.github/workflows/*
+!/.github/workflows/lint.yml
+!/.github/workflows/wiki-sync.yml

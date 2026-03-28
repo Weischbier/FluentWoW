@@ -16,6 +16,8 @@ ignore:
   - .gitignore
   - ARCHITECTURE.md
   - FluentWoW-Gallery
+  - wiki
+  - wiki/**
 
 externals:
   FluentWoW/Libs/LibStub: https://repos.curseforge.com/wow/libstub/trunk
