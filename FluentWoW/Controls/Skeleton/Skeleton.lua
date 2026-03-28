@@ -20,7 +20,7 @@ function SkeletonMixin:OnStateChanged(newState, prevState)
     self.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
 
     local sr, sg, sb = T:GetColor("Color.Surface.Elevated")
-    self.Shimmer:SetColorTexture(sr, sg, sb, 0.40)
+    self.Shimmer:SetColorTexture(sr, sg, sb, T:GetNumber("Opacity.Disabled"))
 
     if newState == "Disabled" then
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))

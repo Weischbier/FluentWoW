@@ -73,7 +73,7 @@ local function applyVisuals(self)
 
     if self.Shadow then
         local sr, sg, sb = T:GetColor("Color.Surface.Base")
-        self.Shadow:SetVertexColor(sr, sg, sb, 0.85)
+        self.Shadow:SetVertexColor(sr, sg, sb, T:GetNumber("Opacity.Shadow"))
     end
 
     if overlayKey then
@@ -139,7 +139,7 @@ local function applyToggleVisuals(self)
 
     if self.Shadow then
         local sr, sg, sb = T:GetColor("Color.Surface.Base")
-        self.Shadow:SetVertexColor(sr, sg, sb, 0.85)
+        self.Shadow:SetVertexColor(sr, sg, sb, T:GetNumber("Opacity.Shadow"))
     end
 
     if overlayKey then
@@ -226,7 +226,7 @@ function IconMixin:OnStateChanged(newState, prevState)
 
     if self.Shadow then
         local sr, sg, sb = T:GetColor("Color.Surface.Base")
-        self.Shadow:SetVertexColor(sr, sg, sb, 0.85)
+        self.Shadow:SetVertexColor(sr, sg, sb, T:GetNumber("Opacity.Shadow"))
     end
 
     if overlayKey then

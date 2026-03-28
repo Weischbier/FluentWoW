@@ -243,7 +243,7 @@ function FWoWNavItem_OnClick(self)
 end
 
 function FWoWNavItem_OnEnter(self)
-    if self._itemKey ~= self._navView._selectedKey then
+    if self._navView and self._itemKey ~= self._navView._selectedKey then
         lib.SetupTexture(self.BG, Tex.RR4, 4)
         self.BG:SetVertexColor(T:GetColor("Color.Overlay.Hover"))
         self.BG:Show()
@@ -251,7 +251,7 @@ function FWoWNavItem_OnEnter(self)
 end
 
 function FWoWNavItem_OnLeave(self)
-    if self._itemKey ~= self._navView._selectedKey then
+    if self._navView and self._itemKey ~= self._navView._selectedKey then
         self.BG:Hide()
     end
 end

@@ -70,6 +70,7 @@ local _DESIGN = {
         Disabled = 0.40,
         Overlay  = 0.60,
         Ghost    = 0.70,
+        Shadow   = 0.85,
     },
 
     Layer = {

@@ -231,10 +231,10 @@ end
 
 function MainFrameMixin:_SaveStatus()
     local s = self._status or self._localStatus
-    s.width  = self:GetWidth()
-    s.height = self:GetHeight()
-    s.top    = self:GetTop()
-    s.left   = self:GetLeft()
+    s.width  = self:GetWidth() or s.width
+    s.height = self:GetHeight() or s.height
+    s.top    = self:GetTop() or s.top
+    s.left   = self:GetLeft() or s.left
 end
 
 -------------------------------------------------------------------------------

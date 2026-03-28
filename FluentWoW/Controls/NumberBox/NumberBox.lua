@@ -48,7 +48,7 @@ function NumberBoxMixin:OnStateChanged(newState, prevState)
     local field = self.Field
 
     local sr, sg, sb = T:GetColor("Color.Surface.Base")
-    field.Shadow:SetVertexColor(sr, sg, sb, 0.85)
+    field.Shadow:SetVertexColor(sr, sg, sb, T:GetNumber("Opacity.Shadow"))
 
     if state == "Disabled" then
         field.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))

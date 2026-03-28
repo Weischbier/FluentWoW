@@ -35,7 +35,7 @@ function FramePool:Acquire()
         frame = CreateFrame(self._frameType, nil, self._parent, self._template)
     end
     self._active[frame] = true
-    self._activeCount = (self._activeCount or 0) + 1
+    self._activeCount = self._activeCount + 1
     frame:Show()
     return frame
 end
@@ -44,7 +44,7 @@ end
 function FramePool:Release(frame)
     if not self._active[frame] then return end
     self._active[frame] = nil
-    self._activeCount = (self._activeCount or 1) - 1
+    self._activeCount = self._activeCount - 1
     frame:Hide()
     frame:ClearAllPoints()
     if self._resetFn then

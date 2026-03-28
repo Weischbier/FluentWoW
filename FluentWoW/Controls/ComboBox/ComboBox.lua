@@ -60,7 +60,7 @@ function ComboMixin:OnStateChanged(newState, prevState)
     local state = newState
     local shadowR, shadowG, shadowB = T:GetColor("Color.Surface.Base")
 
-    self.Field.Shadow:SetVertexColor(shadowR, shadowG, shadowB, 0.85)
+    self.Field.Shadow:SetVertexColor(shadowR, shadowG, shadowB, T:GetNumber("Opacity.Shadow"))
     self.Dropdown.DropBG:SetVertexColor(T:GetColor("Color.Surface.Raised"))
     self.Dropdown.DropBorder:SetVertexColor(T:GetColor("Color.Border.Subtle"))
 

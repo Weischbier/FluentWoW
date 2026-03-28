@@ -32,7 +32,7 @@ function ToggleSwitchMixin:OnStateChanged(newState, prevState)
     if state == "Disabled" then
         self.Track.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
         self.Thumb.Dot:SetVertexColor(T:GetColor("Color.Icon.Disabled"))
-        self.Thumb.Shadow:SetVertexColor(sr, sg, sb, 0.7)
+        self.Thumb.Shadow:SetVertexColor(sr, sg, sb, T:GetNumber("Opacity.Ghost"))
         self.HeaderLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self.StateLabel:SetTextColor(T:GetColor("Color.Text.Disabled"))
         self:SetAlpha(T:GetNumber("Opacity.Disabled"))
@@ -50,7 +50,7 @@ function ToggleSwitchMixin:OnStateChanged(newState, prevState)
             self.Thumb.Dot:SetVertexColor(T:GetColor("Color.Icon.Default"))
             self.StateLabel:SetTextColor(T:GetColor("Color.Text.Secondary"))
         end
-        self.Thumb.Shadow:SetVertexColor(sr, sg, sb, 0.7)
+        self.Thumb.Shadow:SetVertexColor(sr, sg, sb, T:GetNumber("Opacity.Ghost"))
     end
 
     self:_UpdateContentLabel()

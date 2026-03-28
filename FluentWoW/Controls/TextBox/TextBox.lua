@@ -15,7 +15,7 @@ local ICON_FONT = lib.FLUENT_ICON_FONT
 local function applyLayout(self)
     local headerHeight = self._headerText ~= nil and self._headerText ~= "" and (T:GetNumber("Spacing.XL") + T:GetNumber("Spacing.SM")) or 0
     local fieldHeight = self._multiline and (self._multilineHeight or 96) or 32
-    local leftInset = self.SearchIcon and 34 or T:GetNumber("Spacing.XL")  -- 16
+    local leftInset = self.SearchIcon and (T:GetNumber("Icon.MD") + T:GetNumber("Spacing.LG") + T:GetNumber("Spacing.SM") + T:GetNumber("Spacing.XS")) or T:GetNumber("Spacing.XL")
     local rightInset = (self._multiline or self._readOnly) and 12 or 32
 
     self:SetHeight(fieldHeight + headerHeight)
@@ -53,7 +53,7 @@ function TextBoxMixin:OnStateChanged(newState, prevState)
     local field = self.Field
 
     local shadowR, shadowG, shadowB = T:GetColor("Color.Surface.Base")
-    field.Shadow:SetVertexColor(shadowR, shadowG, shadowB, 0.85)
+    field.Shadow:SetVertexColor(shadowR, shadowG, shadowB, T:GetNumber("Opacity.Shadow"))
 
     if state == "Disabled" then
         field.BG:SetVertexColor(T:GetColor("Color.Surface.Stroke"))
