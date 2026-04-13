@@ -3,8 +3,8 @@
 -------------------------------------------------------------------------------
 
 local lib = LibStub("FluentWoW-1.0")
-local T = lib.Tokens
-local Icons = lib.Icons
+local _T = lib.Tokens
+local _Icons = lib.Icons
 local Gallery = lib._gallery
 
 Gallery:RegisterControlPage("SettingsExpander", function(parent, item)

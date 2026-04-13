@@ -6,7 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
-local Mot = lib.Motion
+local _Mot = lib.Motion
 
 local Icons    = lib.Icons
 local ICON_FONT = lib.FLUENT_ICON_FONT

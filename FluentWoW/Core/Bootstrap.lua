@@ -11,9 +11,9 @@ local MAJOR, MINOR = "FluentWoW-1.0", 10000  -- 1.00.00 encoded
 -------------------------------------------------------------------------------
 
 ---@class FluentWoW
-local lib, oldMinor
+local lib, _oldMinor
 if LibStub then
-    lib, oldMinor = LibStub:NewLibrary(MAJOR, MINOR)
+    lib, _oldMinor = LibStub:NewLibrary(MAJOR, MINOR)
     if not lib then return end          -- a newer copy is already loaded
 else
     -- Fallback: direct global version guard (no LibStub available)

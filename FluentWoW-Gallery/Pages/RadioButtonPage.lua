@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------------
 
 local lib = LibStub("FluentWoW-1.0")
-local T = lib.Tokens
+local _T = lib.Tokens
 local Gallery = lib._gallery
 
 Gallery:RegisterControlPage("RadioButton", function(parent, item)

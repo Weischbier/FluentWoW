@@ -965,7 +965,7 @@ local function refreshGalleryTileGrid(grid)
 end
 
 local function createGalleryTile(parent, item, onClick)
-    local padding = getGalleryTilePadding()
+    local _padding = getGalleryTilePadding()
     local tile = CreateFrame("Button", nil, parent)
     tile:SetSize(GALLERY_TILE_IDEAL_WIDTH, GALLERY_TILE_MIN_HEIGHT)
     tile._idealWidth = GALLERY_TILE_IDEAL_WIDTH

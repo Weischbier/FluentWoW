@@ -8,8 +8,8 @@ local lib = FluentWoW
 local T   = lib.Tokens
 local Mot = lib.Motion
 
-local Icons    = lib.Icons
-local ICON_FONT = lib.FLUENT_ICON_FONT
+local _Icons    = lib.Icons
+local _ICON_FONT = lib.FLUENT_ICON_FONT
 local Tex = lib.Textures
 local _deferredRestore = {}
 local _combatWatcher = CreateFrame("Frame")

@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------------
 
 local lib = LibStub("FluentWoW-1.0")
-local T = lib.Tokens
+local _T = lib.Tokens
 local Icons = lib.Icons
 local Gallery = lib._gallery
 
@@ -35,7 +35,7 @@ Gallery:RegisterControlPage("TabView", function(parent, item)
     local tv1 = lib:CreateTabView(ex1.example)
     tv1:SetAllPoints(ex1.example)
 
-    local tabCount = 0
+    local tabCount = 3
     local function makeContent(title)
         local f = CreateFrame("Frame", nil, tv1)
         local label = lib:CreateTextBlock(f)
@@ -48,7 +48,6 @@ Gallery:RegisterControlPage("TabView", function(parent, item)
     tv1:AddTab({ text = "Home",     icon = Icons.Home,     content = makeContent("Home"),     closable = true })
     tv1:AddTab({ text = "Profile",  icon = Icons.Edit,     content = makeContent("Profile"),  closable = true })
     tv1:AddTab({ text = "Settings", icon = Icons.Settings, content = makeContent("Settings"), closable = true })
-    tabCount = 3
 
     tv1:SetAddButtonVisible(true)
     tv1:SetOnAddTab(function()

@@ -6,7 +6,7 @@
 
 local lib = FluentWoW
 local T   = lib.Tokens
-local Mot = lib.Motion
+local _Mot = lib.Motion
 local Tex = lib.Textures
 
 local Icons    = lib.Icons
@@ -54,7 +54,7 @@ local CheckBoxMixin = {}
 
 function CheckBoxMixin:OnStateChanged(newState, prevState)
     local state = newState
-    local boxKey, labelKey, checkShow
+    local boxKey, labelKey, _checkShow
 
     if state == "Disabled" then
         boxKey   = "Color.Border.Default"
