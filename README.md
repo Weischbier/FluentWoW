@@ -105,7 +105,7 @@ FluentWoW-Gallery/      Interactive showcase addon (/fwow)
   Pages/               ButtonPage, InputPage, FeedbackPage, LayoutPage, SettingsPage
 ```
 
-See the **[Wiki](https://github.com/Weischbier/FluentWoW/wiki)** for complete
+See the **[Wiki](https://github.com/TheSaltySeagull/FluentWoW/wiki)** for complete
 control documentation, API reference, theming guide, and tutorials.
 
 ---

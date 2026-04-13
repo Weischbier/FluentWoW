@@ -1,10 +1,14 @@
 ## Interface: 120005, 120001
 ## Title: FluentWoW
 ## Notes: WinUI-inspired, token-driven UI framework for World of Warcraft addon developers.
-## Version: 1.0.0
-## Author: Danny Patten
+## Version: 1.5.0
+## Author: Weischbier
 ## X-Category: Library
 ## X-License: MIT
+## X-Website: https://github.com/TheSaltySeagull/FluentWoW
+## X-Curse-Project-ID: 000000
+## X-Wago-ID: PLACEHOLDER
+## X-WoWI-ID: 00000
 ## DefaultState: enabled
 ## LoadOnDemand: 0
 

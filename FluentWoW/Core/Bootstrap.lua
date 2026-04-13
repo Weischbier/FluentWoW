@@ -3,7 +3,7 @@
 -- Mirrors the Ace3 library hand-off pattern: LibStub registration, mixins, Embed.
 -------------------------------------------------------------------------------
 
-local MAJOR, MINOR = "FluentWoW-1.0", 10000  -- 1.00.00 encoded
+local MAJOR, MINOR = "FluentWoW-1.0", 10500  -- 1.05.00 encoded
 
 -------------------------------------------------------------------------------
 -- LibStub registration  (identical to Ace3 libraries)

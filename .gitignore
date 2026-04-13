@@ -45,3 +45,4 @@ Desktop.ini
 .github/workflows/*
 !/.github/workflows/lint.yml
 !/.github/workflows/wiki-sync.yml
+!/.github/workflows/release.yml

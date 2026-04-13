@@ -60,7 +60,7 @@ FluentWoW ports the spirit, quality bar, and design language of [WinUI 3](https:
 
 ## Version
 
-**FluentWoW 1.4.0** · Interface 120005 / 120001 · MIT License
+**FluentWoW 1.5.0** · Interface 120005 / 120001 · MIT License
 
 ---
 

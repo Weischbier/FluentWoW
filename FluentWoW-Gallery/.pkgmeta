@@ -1,0 +1,22 @@
+package-as: FluentWoW-Gallery
+
+enable-nolib-creation: no
+
+ignore:
+  - .help
+  - .help/**
+  - .docs
+  - .docs/**
+  - .vscode
+  - .vscode/**
+  - .github
+  - .github/**
+  - .luacheckrc
+  - .gitattributes
+  - .gitignore
+  - FluentWoW
+  - wiki
+  - wiki/**
+
+move-folders:
+  FluentWoW/FluentWoW-Gallery: FluentWoW-Gallery

@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-04-13
+
+### Changed
+
+- **Publish readiness** — comprehensive release preparation for CurseForge, Wago, WoWInterface, and GitHub Releases distribution
+
+- **Version alignment** — TOC files, LibStub MINOR, and CHANGELOG now consistently report 1.5.0
+- **Luacheck compliance** — resolved all 213 warnings (0 warnings / 0 errors across 69 files): added missing XML handler globals and WoW API read-globals to `.luacheckrc`, prefixed intentionally unused locals with `_`, suppressed unused callback arguments
+- **TOC metadata** — added `X-Website`, `X-Curse-Project-ID`, `X-Wago-ID`, `X-WoWI-ID` placeholders; normalized author field
+- **Author field** — unified to "Weischbier" across both FluentWoW and FluentWoW-Gallery TOC files
+- **README** — corrected wiki link from `Weischbier/FluentWoW` to `TheSaltySeagull/FluentWoW`
+- **Wiki** — updated Home.md version reference to 1.5.0
+
+### Added
+
+- **Release workflow** (`.github/workflows/release.yml`) — BigWigs-style packager via `BigWigsMods/packager` action, triggered on version tags (`v*`), producing CurseForge, Wago, WoWInterface, and GitHub Releases uploads
+- **Gallery .pkgmeta** (`FluentWoW-Gallery/.pkgmeta`) — separate packaging configuration for the Gallery companion addon so it can be distributed independently
+
 ### Fixed
 
 - **CommandBar gallery**: Replaced broken demo glyphs with known-good Segoe Fluent icons already used elsewhere in the gallery so the command examples no longer show tofu boxes
